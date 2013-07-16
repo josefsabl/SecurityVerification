@@ -20,7 +20,9 @@ use Arachne\Verifier\IAnnotation;
 use Arachne\Verifier\IAnnotationHandler;
 use Nette\Application\Request;
 use Nette\Object;
+use Nette\Security\IResource;
 use Nette\Security\User;
+use Nette\Utils\Strings;
 
 class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 {
@@ -46,7 +48,7 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 	public function checkAnnotation(IAnnotation $annotation, Request $request)
 	{
 		if ($annotation instanceof Allowed) {
-			$this->checkAnnotationAllowed($annotation);
+			$this->checkAnnotationAllowed($annotation, $request);
 		} elseif ($annotation instanceof InRole) {
 			$this->checkAnnotationInRole($annotation);
 		} elseif ($annotation instanceof LoggedIn) {
@@ -57,13 +59,42 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 	}
 
 	/**
+	 * @param string $resource
+	 * @param Request $request
+	 * @return string|IResource
+	 */
+	protected function findResource($resource, Request $request)
+	{
+		if (!Strings::startsWith($resource, '$')) {
+			return $resource;
+		}
+		$parameters = $request->getParameters();
+		$parameter = substr($resource, 1);
+		if ($parameter === 'this') {
+			$presenter = $request->getPresenterName();
+			return substr($presenter, strrpos(':' . $presenter, ':'));
+		} elseif (!isset($parameters[$parameter])) {
+			throw new InvalidStateException("Missing parameter '$resource'.");
+		} elseif (!$parameters[$parameter] instanceof IResource) {
+			throw new InvalidStateException("Parameter '$resource' is not instance of \Nette\Security\IResource.");
+		} else {
+			return $parameters[$parameter];
+		}
+	}
+
+	/**
 	 * @param Allowed $annotation
+	 * @param Request $request
 	 * @throws FailedAuthorizationException
 	 */
-	protected function checkAnnotationAllowed(Allowed $annotation)
+	protected function checkAnnotationAllowed(Allowed $annotation, Request $request)
 	{
-		if (!$this->user->isAllowed($annotation->resource, $annotation->privilege)) {
-			throw new FailedAuthorizationException("Required privilege '$annotation->resource / $annotation->privilege' is not granted.");
+		$resource = $this->findResource($annotation->resource, $request);
+		if (!$this->user->isAllowed($resource, $annotation->privilege)) {
+			if ($resource instanceof IResource) {
+				$resource = $resource->getResourceId();
+			}
+			throw new FailedAuthorizationException("Required privilege '$resource / $annotation->privilege' is not granted.");
 		}
 	}
 
