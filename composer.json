@@ -1,0 +1,47 @@
+{
+	"name": "arachne/security-annotations",
+	"type": "library",
+	"keywords": [ "nette", "arachne", "security" ],
+	"homepage": "http://enumag.cz",
+	"license": [ "BSD-3-Clause", "GPL-2.0", "GPL-3.0" ],
+	"authors": [
+		{
+			"name": "Jáchym Toušek",
+			"homepage": "http://m33.cz/",
+			"email": "enumag@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"nette/nette": "@dev",
+		"arachne/verifier": "@dev",
+		"doctrine/annotations": "1.1",
+		"kdyby/doctrine-cache": "@dev",
+		"kdyby/annotations": "@dev"
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "1.*",
+		"arachne/coding-style": "@dev",
+		"codeception/codeception": "@stable",
+		"mockery/mockery": "@dev"
+	},
+	"autoload": {
+		"psr-0": {
+			"Arachne\\SecurityAnnotations": "src/"
+		}
+	},
+	"repositories": [
+		{
+            "type": "composer",
+            "url": "http://packages.m33.cz"
+        },
+		{
+			"type": "vcs",
+			"url": "https://github.com/Kdyby/Annotations.git"
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/Kdyby/DoctrineCache.git"
+		}
+	]
+}
