@@ -41,7 +41,7 @@ class SecurityAnnotationHandler extends \Nette\Object implements \Arachne\Verifi
 				throw new FailedAuthorizationException('Role \'' . $annotation->getRole() . '\' is required for this request.');
 			}
 		} elseif ($annotation instanceof LoggedIn) {
-			if ($this->user->isLoggedIn() != $annotation->getFlag()) {
+			if ($this->user->isLoggedIn() !== $annotation->getFlag()) {
 				throw new FailedAuthenticationException('User must ' . ($annotation->getFlag() ? '' : 'not ') . 'be logged in for this request.');
 			}
 		} else {
