@@ -18,7 +18,7 @@ use \Codeception\Maybe;
  * @method void lookForwardTo($role)
 */
 
-class TestGuy extends \Codeception\AbstractGuy
+class NoGuy extends \Codeception\AbstractGuy
 {
     
 }
