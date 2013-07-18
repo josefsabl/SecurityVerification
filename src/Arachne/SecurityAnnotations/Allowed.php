@@ -15,8 +15,6 @@ namespace Arachne\SecurityAnnotations;
  * @Target({"ANNOTATION"})
  * @method string|bool|null getResource()
  * @method string|bool|null getPrivilege()
- * @property-read string|bool|null $resource
- * @property-read string|bool|null $privilege
  */
 class Allowed extends \Nette\Object implements \Arachne\Verifier\IAnnotation
 {

@@ -14,7 +14,6 @@ namespace Arachne\SecurityAnnotations;
  * @Annotation
  * @Target({"ANNOTATION"})
  * @method string getRole()
- * @property-read string $role
  */
 class InRole extends \Nette\Object implements \Arachne\Verifier\IAnnotation
 {

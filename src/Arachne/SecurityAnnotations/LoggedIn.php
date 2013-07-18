@@ -14,7 +14,6 @@ namespace Arachne\SecurityAnnotations;
  * @Annotation
  * @Target({"ANNOTATION"})
  * @method bool getFlag()
- * @property-read bool $flag
  */
 class LoggedIn extends \Nette\Object implements \Arachne\Verifier\IAnnotation
 {
