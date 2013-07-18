@@ -25,7 +25,9 @@ final class SecurityAnnotationHandlerTest extends BaseTest
 
 	public function testAllowedTrue()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\Allowed('resource', 'privilege');
+		$annotation = new \Arachne\SecurityAnnotations\Allowed();
+		$annotation->resource = 'resource';
+		$annotation->privilege = 'privilege';
 		$request = new \Nette\Application\Request('Test', 'GET', []);
 
 		$this->user
@@ -43,7 +45,9 @@ final class SecurityAnnotationHandlerTest extends BaseTest
 	 */
 	public function testAllowedFalse()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\Allowed('resource', 'privilege');
+		$annotation = new \Arachne\SecurityAnnotations\Allowed();
+		$annotation->resource = 'resource';
+		$annotation->privilege = 'privilege';
 		$request = new \Nette\Application\Request('Test', 'GET', []);
 
 		$this->user
@@ -57,7 +61,8 @@ final class SecurityAnnotationHandlerTest extends BaseTest
 
 	public function testInRoleTrue()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\InRole('role');
+		$annotation = new \Arachne\SecurityAnnotations\InRole();
+		$annotation->role = 'role';
 		$request = new \Nette\Application\Request('Test', 'GET', []);
 
 		// can't redefine User::isInRole directly because it's final
@@ -76,7 +81,8 @@ final class SecurityAnnotationHandlerTest extends BaseTest
 	 */
 	public function testInRoleFalse()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\InRole('role');
+		$annotation = new \Arachne\SecurityAnnotations\InRole();
+		$annotation->role = 'role';
 		$request = new \Nette\Application\Request('Test', 'GET', []);
 
 		// can't redefine User::isInRole directly because it's final
@@ -91,7 +97,7 @@ final class SecurityAnnotationHandlerTest extends BaseTest
 
 	public function testLoggedInTrue()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\LoggedIn(TRUE);
+		$annotation = new \Arachne\SecurityAnnotations\LoggedIn();
 		$request = new \Nette\Application\Request('Test', 'GET', []);
 
 		// can't redefine User::isLoggedIn directly because it's final
@@ -106,7 +112,8 @@ final class SecurityAnnotationHandlerTest extends BaseTest
 
 	public function testNotLoggedInTrue()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\LoggedIn(FALSE);
+		$annotation = new \Arachne\SecurityAnnotations\LoggedIn();
+		$annotation->flag = FALSE;
 		$request = new \Nette\Application\Request('Test', 'GET', []);
 
 		// can't redefine User::isLoggedIn directly because it's final
@@ -125,7 +132,7 @@ final class SecurityAnnotationHandlerTest extends BaseTest
 	 */
 	public function testLoggedInFalse()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\LoggedIn(TRUE);
+		$annotation = new \Arachne\SecurityAnnotations\LoggedIn();
 		$request = new \Nette\Application\Request('Test', 'GET', []);
 
 		// can't redefine User::isLoggedIn directly because it's final
@@ -144,7 +151,8 @@ final class SecurityAnnotationHandlerTest extends BaseTest
 	 */
 	public function testNotLoggedInFalse()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\LoggedIn(FALSE);
+		$annotation = new \Arachne\SecurityAnnotations\LoggedIn();
+		$annotation->flag = FALSE;
 		$request = new \Nette\Application\Request('Test', 'GET', []);
 
 		// can't redefine User::isLoggedIn directly because it's final

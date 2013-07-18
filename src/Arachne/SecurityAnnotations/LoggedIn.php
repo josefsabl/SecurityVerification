@@ -13,21 +13,12 @@ namespace Arachne\SecurityAnnotations;
 /**
  * @Annotation
  * @Target({"ANNOTATION"})
- * @method bool getFlag()
  */
 class LoggedIn extends \Nette\Object implements \Arachne\Verifier\IAnnotation
 {
 
 	/** @var bool */
-	protected $flag;
-
-	/**
-	 * @param bool $flag
-	 */
-	public function __construct($flag = TRUE)
-	{
-		$this->flag = $flag;
-	}
+	public $flag = TRUE;
 
 	public function getHandlerClass()
 	{
