@@ -13,12 +13,22 @@ namespace Arachne\SecurityAnnotations;
 /**
  * @Annotation
  * @Target({"ANNOTATION"})
+ * @method string getRole()
+ * @property-read string $role
  */
 class InRole extends \Nette\Object implements \Arachne\Verifier\IAnnotation
 {
 
 	/** @var string */
-	public $role;
+	protected $role;
+
+	/**
+	 * @param string $role
+	 */
+	public function __construct($role)
+	{
+		$this->role = $role;
+	}
 
 	public function getHandlerClass()
 	{

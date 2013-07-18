@@ -13,15 +13,29 @@ namespace Arachne\SecurityAnnotations;
 /**
  * @Annotation
  * @Target({"ANNOTATION"})
+ * @method string|bool|null getResource()
+ * @method string|bool|null getPrivilege()
+ * @property-read string|bool|null $resource
+ * @property-read string|bool|null $privilege
  */
 class Allowed extends \Nette\Object implements \Arachne\Verifier\IAnnotation
 {
 
-	/** @var string */
-	public $resource = \Nette\Security\IAuthorizator::ALL;
+	/** @var string|bool|null */
+	protected $resource;
 
-	/** @var string */
-	public $privilege = \Nette\Security\IAuthorizator::ALL;
+	/** @var string|bool|null */
+	protected $privilege;
+
+	/**
+	 * @param string|bool|null $resource
+	 * @param string|bool|null $privilege
+	 */
+	public function __construct($resource = \Nette\Security\IAuthorizator::ALL, $privilege = \Nette\Security\IAuthorizator::ALL)
+	{
+		$this->resource = $resource;
+		$this->privilege = $privilege;
+	}
 
 	public function getHandlerClass()
 	{
