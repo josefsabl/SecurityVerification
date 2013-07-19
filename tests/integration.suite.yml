@@ -5,10 +5,10 @@
 
 class_name: TestGuy
 modules:
-    enabled: [Nette]
+    enabled: [ Nette ]
     config:
         Nette:
             tempDir: tests/_temp
-            configFiles: []
+            configFiles: tests/integration/config.neon
 
 error_level: "E_ALL"

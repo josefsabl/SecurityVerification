@@ -1,0 +1,16 @@
+nette:
+	application:
+		mapping:
+			*: Tests\Integration\*Presenter
+	session:
+		autoStart: true
+
+services:
+	authenticator: Tests\Integration\Authenticator
+	authorizatorFactory: Tests\Integration\PermissionFactory
+	authorizator: @authorizatorFactory::create()
+
+extensions:
+	kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
+	arachne.verifier: Arachne\Verifier\DI\VerifierExtension
+	arachne.securityAnnotations: Arachne\SecurityAnnotations\DI\SecurityAnnotationsExtension

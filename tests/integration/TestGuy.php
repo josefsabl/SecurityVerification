@@ -23,7 +23,8 @@ class TestGuy extends \Codeception\AbstractGuy
 {
     
     /**
-     *
+     * @param string $service
+	 * @return object
      * @see Nette::grabService()
      * @return \Codeception\Maybe
      * ! This method is generated. DO NOT EDIT. !
