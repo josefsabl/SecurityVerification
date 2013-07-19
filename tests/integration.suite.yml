@@ -9,6 +9,7 @@ modules:
     config:
         Nette:
             tempDir: tests/_temp
-            configFiles: tests/integration/config.neon
+            configFiles:
+                - tests/integration/config.neon
 
 error_level: "E_ALL"
