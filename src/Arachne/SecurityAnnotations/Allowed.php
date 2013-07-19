@@ -17,10 +17,10 @@ namespace Arachne\SecurityAnnotations;
 class Allowed extends \Nette\Object implements \Arachne\Verifier\IAnnotation
 {
 
-	/** @var string|bool|null */
+	/** @var string */
 	public $resource;
 
-	/** @var string|bool|null */
+	/** @var string */
 	public $privilege;
 
 	public function getHandlerClass()
