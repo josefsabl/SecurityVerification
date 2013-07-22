@@ -61,8 +61,8 @@ class ArticlePresenter extends BasePresenter
 
 	/**
 	 * @Requirements({
-	 *   @InRole("redactor")
-	 *   @InRole("admin")
+	 *   @InRole("redactor"),
+	 *   @InRole("admin"),
 	 * })
 	 */
 	public function actionDelete($id)
