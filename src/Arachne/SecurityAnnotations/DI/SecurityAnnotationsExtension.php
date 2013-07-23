@@ -20,7 +20,7 @@ class SecurityAnnotationsExtension extends \Nette\DI\CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
-		$builder->addDefinition($this->prefix('securityAnnotationHandler'))
+		$builder->addDefinition($this->prefix('handler'))
 			->setClass('Arachne\SecurityAnnotations\SecurityAnnotationHandler');
 	}
 
