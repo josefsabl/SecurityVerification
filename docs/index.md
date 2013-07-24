@@ -40,19 +40,18 @@ There are three annotations provided by this extension. It internally uses the N
 - `@Allowed(resource = "article", privilege = "edit")` - Only users with the "edit" privilege on the "article" resource.
 
 ```php
-use Arachne\Verifier\Requirements;
 use Arachne\SecurityAnnotations\LoggedIn;
 use Arachne\SecurityAnnotations\Allowed;
 use Arachne\SecurityAnnotations\InRole;
 
 /**
- * @Requirements(@LoggedIn)
+ * @LoggedIn
  */
 class ArticlePresenter extends BasePresenter
 {
 
 	/**
-	 * @Requirements(@Allowed(resource = "article", privilege = "edit"))
+	 * @Allowed(resource = "article", privilege = "edit"))
 	 */
 	public function actionEdit($id)
 	{
@@ -60,10 +59,8 @@ class ArticlePresenter extends BasePresenter
 	}
 
 	/**
-	 * @Requirements({
-	 *   @InRole("redactor"),
-	 *   @InRole("admin"),
-	 * })
+	 * @InRole("redactor")
+	 * @InRole("admin")
 	 */
 	public function actionDelete($id)
 	{

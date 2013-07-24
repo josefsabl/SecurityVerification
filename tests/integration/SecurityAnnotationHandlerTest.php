@@ -29,6 +29,21 @@ final class SecurityAnnotationHandlerTest extends BaseTest
 		$this->assertTrue($this->verifier->isLinkAvailable($request));
 	}
 
+	public function testActionHide()
+	{
+		$this->user->login('admin', 'password');
+
+		$request = new \Nette\Application\Request('Article', 'GET', [
+			\Nette\Application\UI\Presenter::ACTION_KEY => 'hide',
+		]);
+
+		$this->assertFalse($this->verifier->isLinkAvailable($request));
+	}
+	
+	/**
+	 * This test requires all annotations of the same type to be checked, not just the last one.
+	 * It will fail if Doctrine\Common\Annotations\IndexedReader is used.
+	 */	 	
 	public function testActionDelete()
 	{
 		$this->user->login('admin', 'password');

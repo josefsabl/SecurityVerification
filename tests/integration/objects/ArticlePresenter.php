@@ -2,16 +2,13 @@
 
 namespace Tests\Integration;
 
-use Arachne\Verifier\Requirements;
 use Arachne\SecurityAnnotations\LoggedIn;
 use Arachne\SecurityAnnotations\InRole;
 use Arachne\SecurityAnnotations\Allowed;
 
 /**
- * @Requirements({
- *   @LoggedIn,
- *   @InRole("redactor"),
- * })
+ * @LoggedIn
+ * @InRole("redactor")
  */
 class ArticlePresenter extends \Nette\Application\UI\Presenter
 {
@@ -22,18 +19,22 @@ class ArticlePresenter extends \Nette\Application\UI\Presenter
 	}
 
 	/**
-	 * @Requirements({
-	 *   @Allowed(resource = "Article", privilege = "edit"),
-	 * })
+	 * @Allowed(resource = "Article", privilege = "edit")
 	 */
 	public function actionEdit($id)
 	{
 	}
 
 	/**
-	 * @Requirements({
-	 *   @Allowed(resource = "Article", privilege = "delete"),
-	 * })
+	 * @Allowed(resource = "Article", privilege = "hide")
+	 */
+	public function actionHide($id)
+	{
+	}
+	
+	/**
+	 * @Allowed(resource = "Article", privilege = "hide")
+	 * @Allowed(resource = "Article", privilege = "edit")	 	 
 	 */
 	public function actionDelete($id)
 	{

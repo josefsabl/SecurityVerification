@@ -12,7 +12,7 @@ namespace Arachne\SecurityAnnotations;
 
 /**
  * @Annotation
- * @Target({"ANNOTATION"})
+ * @Target({"CLASS", "METHOD"})
  */
 class LoggedIn extends \Nette\Object implements \Arachne\Verifier\IAnnotation
 {
