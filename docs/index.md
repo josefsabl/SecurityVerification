@@ -75,8 +75,13 @@ class ArticlePresenter extends BasePresenter
 }
 ```
 
-**Note**: If you put some requirement in the presenter class doc-block, it applies globally for all actions, views and signals of this presenter. There is no way to later disable it for one particular action.
+If you put some requirement in the presenter class doc-block, it applies globally for all actions, views and signals of this presenter. There is no way to later disable it for one particular action.
 
-**Note**: It's recommended to only use the @Allowed annotation if you use resources-based authorizator like Nette\Security\Permission.
+### Notes
 
-**Note**: There is no way to check for example the ownership of an article. You will have to define your own annotation(s) for that.
+It's recommended to only use the @Allowed annotation if you use resources-based authorizator like Nette\Security\Permission.
+
+There is no way to check for example the ownership of an article. You will have to define your own annotation(s) for that.
+
+Multiple annotations of the same type won't work correctly if Doctrine\Common\Annotations\IndexedReader is used. Be sure your version of Kdyby/Annotations does not use it!
+
