@@ -33,16 +33,8 @@
 	},
 	"repositories": [
 		{
-            "type": "composer",
-            "url": "http://packages.m33.cz"
-        },
-		{
-			"type": "vcs",
-			"url": "https://github.com/Kdyby/Annotations.git"
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/Kdyby/DoctrineCache.git"
+			"type": "composer",
+			"url": "http://packages.m33.cz"
 		}
 	]
 }
