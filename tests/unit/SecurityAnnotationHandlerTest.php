@@ -4,7 +4,7 @@ namespace Tests\Unit\Arachne\Verifier;
 
 use Mockery;
 
-final class SecurityAnnotationHandlerTest extends BaseTest
+class SecurityAnnotationHandlerTest extends BaseTest
 {
 
 	/** @var \Arachne\SecurityAnnotations\SecurityAnnotationHandler */

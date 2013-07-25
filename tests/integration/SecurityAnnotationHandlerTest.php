@@ -2,7 +2,7 @@
 
 namespace Tests\Integration\Arachne\Verifier;
 
-final class SecurityAnnotationHandlerTest extends BaseTest
+class SecurityAnnotationHandlerTest extends BaseTest
 {
 
 	/** @var \Nette\Security\User */
