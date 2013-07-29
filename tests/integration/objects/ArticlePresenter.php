@@ -31,7 +31,7 @@ class ArticlePresenter extends \Nette\Application\UI\Presenter
 	public function actionHide($id)
 	{
 	}
-	
+
 	/**
 	 * @Allowed(resource = "Article", privilege = "hide")
 	 * @Allowed(resource = "Article", privilege = "edit")	 	 

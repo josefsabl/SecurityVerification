@@ -39,7 +39,7 @@ class SecurityAnnotationHandlerTest extends BaseTest
 
 		$this->assertFalse($this->verifier->isLinkAvailable($request));
 	}
-	
+
 	/**
 	 * This test requires all annotations of the same type to be checked, not just the last one.
 	 * It will fail if Doctrine\Common\Annotations\IndexedReader is used.
