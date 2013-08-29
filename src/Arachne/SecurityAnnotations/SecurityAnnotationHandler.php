@@ -42,7 +42,11 @@ class SecurityAnnotationHandler extends \Nette\Object implements \Arachne\Verifi
 			}
 		} elseif ($annotation instanceof LoggedIn) {
 			if ($this->user->isLoggedIn() !== $annotation->flag) {
-				throw new FailedAuthenticationException('User must ' . ($annotation->flag ? '' : 'not ') . 'be logged in for this request.');
+				if ($annotation->flag) {
+					throw new FailedAuthenticationException('User must be logged in for this request.');
+				} else {
+					throw new FailedNoAuthenticationException('User must not be logged in for this request.');
+				}
 			}
 		} else {
 			throw new InvalidArgumentException('Unknown condition \'' . get_class($annotation) . '\' given.');
