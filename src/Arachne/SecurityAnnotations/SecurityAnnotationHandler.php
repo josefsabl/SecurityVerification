@@ -20,9 +20,7 @@ use Arachne\Verifier\IAnnotation;
 use Arachne\Verifier\IAnnotationHandler;
 use Nette\Application\Request;
 use Nette\Object;
-use Nette\Security\IResource;
 use Nette\Security\User;
-use Nette\Utils\Strings;
 
 class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 {
