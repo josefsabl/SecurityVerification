@@ -10,11 +10,14 @@
 
 namespace Arachne\SecurityAnnotations;
 
+use Arachne\Verifier\IAnnotation;
+use Nette\Object;
+
 /**
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-class LoggedIn extends \Nette\Object implements \Arachne\Verifier\IAnnotation
+class LoggedIn extends Object implements IAnnotation
 {
 
 	/** @var bool */

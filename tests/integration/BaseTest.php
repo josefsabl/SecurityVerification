@@ -2,7 +2,9 @@
 
 namespace Tests\Integration\Arachne\Verifier;
 
-abstract class BaseTest extends \Codeception\TestCase\Test
+use Codeception\TestCase\Test;
+
+abstract class BaseTest extends Test
 {
 
 	/** @var \TestGuy */

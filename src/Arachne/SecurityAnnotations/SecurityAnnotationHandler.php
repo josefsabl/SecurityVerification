@@ -10,27 +10,40 @@
 
 namespace Arachne\SecurityAnnotations;
 
-class SecurityAnnotationHandler extends \Nette\Object implements \Arachne\Verifier\IAnnotationHandler
+use Arachne\SecurityAnnotations\Allowed;
+use Arachne\SecurityAnnotations\FailedAuthenticationException;
+use Arachne\SecurityAnnotations\FailedAuthorizationException;
+use Arachne\SecurityAnnotations\FailedNoAuthenticationException;
+use Arachne\SecurityAnnotations\InRole;
+use Arachne\SecurityAnnotations\LoggedIn;
+use Arachne\Verifier\IAnnotation;
+use Arachne\Verifier\IAnnotationHandler;
+use Nette\Application\Request;
+use Nette\Object;
+use Nette\Security\IResource;
+use Nette\Security\User;
+use Nette\Utils\Strings;
+
+class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 {
 
-	/** @var \Nette\Security\User */
+	/** @var User */
 	protected $user;
 
 	/**
-	 * @param \Nette\Security\User $user
+	 * @param User $user
 	 */
-	public function __construct(\Nette\Security\User $user)
+	public function __construct(User $user)
 	{
 		$this->user = $user;
 	}
 
 	/**
-	 * @param \Arachne\Verifier\IAnnotation $annotation
-	 * @param \Nette\Application\Request $request
-	 * @throws \Arachne\SecurityAnnotations\FailedAuthorizationException
-	 * @throws \Arachne\SecurityAnnotations\FailedAuthenticationException
+	 * @param IAnnotation $annotation
+	 * @param Request $request
+	 * @throws FailedAuthorizationExceptiontionException
 	 */
-	public function checkAnnotation(\Arachne\Verifier\IAnnotation $annotation, \Nette\Application\Request $request)
+	public function checkAnnotation(IAnnotation $annotation, Request $request)
 	{
 		if ($annotation instanceof Allowed) {
 			if (!$this->user->isAllowed($annotation->resource, $annotation->privilege)) {

@@ -10,10 +10,12 @@
 
 namespace Arachne\SecurityAnnotations\DI;
 
+use Nette\DI\CompilerExtension;
+
 /**
  * @author Jáchym Toušek
  */
-class SecurityAnnotationsExtension extends \Nette\DI\CompilerExtension
+class SecurityAnnotationsExtension extends CompilerExtension
 {
 
 	public function loadConfiguration()

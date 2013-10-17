@@ -10,11 +10,14 @@
 
 namespace Arachne\SecurityAnnotations;
 
+use Arachne\Verifier\IAnnotation;
+use Nette\Object;
+
 /**
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-class Allowed extends \Nette\Object implements \Arachne\Verifier\IAnnotation
+class Allowed extends Object implements IAnnotation
 {
 
 	/** @var string */

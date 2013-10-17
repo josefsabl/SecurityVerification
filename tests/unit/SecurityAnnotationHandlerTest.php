@@ -2,33 +2,39 @@
 
 namespace Tests\Unit\Arachne\Verifier;
 
+use Arachne\SecurityAnnotations\Allowed;
+use Arachne\SecurityAnnotations\InRole;
+use Arachne\SecurityAnnotations\LoggedIn;
+use Arachne\SecurityAnnotations\SecurityAnnotationHandler;
 use Mockery;
+use Mockery\MockInterface;
+use Nette\Application\Request;
 
 class SecurityAnnotationHandlerTest extends BaseTest
 {
 
-	/** @var \Arachne\SecurityAnnotations\SecurityAnnotationHandler */
+	/** @var SecurityAnnotationHandler */
 	private $handler;
 
-	/** @var \Mockery\MockInterface */
+	/** @var MockInterface */
 	private $user;
 
-	/** @var \Mockery\MockInterface */
+	/** @var MockInterface */
 	private $storage;
 
 	protected function _before()
 	{
 		$this->storage = Mockery::mock('Nette\Security\IUserStorage');
 		$this->user = Mockery::mock('Nette\Security\User', [ $this->storage ]);
-		$this->handler = new \Arachne\SecurityAnnotations\SecurityAnnotationHandler($this->user);
+		$this->handler = new SecurityAnnotationHandler($this->user);
 	}
 
 	public function testAllowedTrue()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\Allowed();
+		$annotation = new Allowed();
 		$annotation->resource = 'resource';
 		$annotation->privilege = 'privilege';
-		$request = new \Nette\Application\Request('Test', 'GET', []);
+		$request = new Request('Test', 'GET', []);
 
 		$this->user
 				->shouldReceive('isAllowed')
@@ -40,15 +46,15 @@ class SecurityAnnotationHandlerTest extends BaseTest
 	}
 
 	/**
-	 * @expectedException \Arachne\SecurityAnnotations\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityAnnotations\FailedAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'resource / privilege' is not granted.
 	 */
 	public function testAllowedFalse()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\Allowed();
+		$annotation = new Allowed();
 		$annotation->resource = 'resource';
 		$annotation->privilege = 'privilege';
-		$request = new \Nette\Application\Request('Test', 'GET', []);
+		$request = new Request('Test', 'GET', []);
 
 		$this->user
 				->shouldReceive('isAllowed')
@@ -61,9 +67,9 @@ class SecurityAnnotationHandlerTest extends BaseTest
 
 	public function testInRoleTrue()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\InRole();
+		$annotation = new InRole();
 		$annotation->role = 'role';
-		$request = new \Nette\Application\Request('Test', 'GET', []);
+		$request = new Request('Test', 'GET', []);
 
 		// can't redefine User::isInRole directly because it's final
 		$this->user
@@ -76,14 +82,14 @@ class SecurityAnnotationHandlerTest extends BaseTest
 	}
 
 	/**
-	 * @expectedException \Arachne\SecurityAnnotations\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityAnnotations\FailedAuthorizationException
 	 * @expectedExceptionMessage Role 'role' is required for this request.
 	 */
 	public function testInRoleFalse()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\InRole();
+		$annotation = new InRole();
 		$annotation->role = 'role';
-		$request = new \Nette\Application\Request('Test', 'GET', []);
+		$request = new Request('Test', 'GET', []);
 
 		// can't redefine User::isInRole directly because it's final
 		$this->user
@@ -97,8 +103,8 @@ class SecurityAnnotationHandlerTest extends BaseTest
 
 	public function testLoggedInTrue()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\LoggedIn();
-		$request = new \Nette\Application\Request('Test', 'GET', []);
+		$annotation = new LoggedIn();
+		$request = new Request('Test', 'GET', []);
 
 		// can't redefine User::isLoggedIn directly because it's final
 		$this->storage
@@ -112,9 +118,9 @@ class SecurityAnnotationHandlerTest extends BaseTest
 
 	public function testNotLoggedInTrue()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\LoggedIn();
+		$annotation = new LoggedIn();
 		$annotation->flag = FALSE;
-		$request = new \Nette\Application\Request('Test', 'GET', []);
+		$request = new Request('Test', 'GET', []);
 
 		// can't redefine User::isLoggedIn directly because it's final
 		$this->storage
@@ -127,13 +133,13 @@ class SecurityAnnotationHandlerTest extends BaseTest
 	}
 
 	/**
-	 * @expectedException \Arachne\SecurityAnnotations\FailedAuthenticationException
+	 * @expectedException Arachne\SecurityAnnotations\FailedAuthenticationException
 	 * @expectedExceptionMessage User must be logged in for this request.
 	 */
 	public function testLoggedInFalse()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\LoggedIn();
-		$request = new \Nette\Application\Request('Test', 'GET', []);
+		$annotation = new LoggedIn();
+		$request = new Request('Test', 'GET', []);
 
 		// can't redefine User::isLoggedIn directly because it's final
 		$this->storage
@@ -146,14 +152,14 @@ class SecurityAnnotationHandlerTest extends BaseTest
 	}
 
 	/**
-	 * @expectedException \Arachne\SecurityAnnotations\FailedNoAuthenticationException
+	 * @expectedException Arachne\SecurityAnnotations\FailedNoAuthenticationException
 	 * @expectedExceptionMessage User must not be logged in for this request.
 	 */
 	public function testNotLoggedInFalse()
 	{
-		$annotation = new \Arachne\SecurityAnnotations\LoggedIn();
+		$annotation = new LoggedIn();
 		$annotation->flag = FALSE;
-		$request = new \Nette\Application\Request('Test', 'GET', []);
+		$request = new Request('Test', 'GET', []);
 
 		// can't redefine User::isLoggedIn directly because it's final
 		$this->storage
@@ -166,12 +172,12 @@ class SecurityAnnotationHandlerTest extends BaseTest
 	}
 
 	/**
-	 * @expectedException \Arachne\SecurityAnnotations\InvalidArgumentException
+	 * @expectedException Arachne\SecurityAnnotations\InvalidArgumentException
 	 */
 	public function testUnknown()
 	{
 		$annotation = Mockery::mock('Arachne\Verifier\IAnnotation');
-		$request = new \Nette\Application\Request('Test', 'GET', []);
+		$request = new Request('Test', 'GET', []);
 
 		$this->handler->checkAnnotation($annotation, $request);
 	}

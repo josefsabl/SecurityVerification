@@ -10,6 +10,8 @@
 
 namespace Arachne\SecurityAnnotations;
 
-class FailedNoAuthenticationException extends \Arachne\Verifier\ForbiddenRequestException
+use Arachne\Verifier\ForbiddenRequestException;
+
+class FailedNoAuthenticationException extends ForbiddenRequestException
 {
 }

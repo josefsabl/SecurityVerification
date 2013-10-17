@@ -2,13 +2,18 @@
 
 namespace Tests\Integration\Arachne\Verifier;
 
+use Arachne\Verifier\Verifier;
+use Nette\Application\Request;
+use Nette\Application\UI\Presenter;
+use Nette\Security\User;
+
 class SecurityAnnotationHandlerTest extends BaseTest
 {
 
-	/** @var \Nette\Security\User */
+	/** @var User */
 	private $user;
 
-	/** @var \Arachne\Verifier\Verifier */
+	/** @var Verifier */
 	private $verifier;
 
 	public function _before()
@@ -22,8 +27,8 @@ class SecurityAnnotationHandlerTest extends BaseTest
 	{
 		$this->user->login('admin', 'password');
 
-		$request = new \Nette\Application\Request('Article', 'GET', [
-			\Nette\Application\UI\Presenter::ACTION_KEY => 'edit',
+		$request = new Request('Article', 'GET', [
+			Presenter::ACTION_KEY => 'edit',
 		]);
 
 		$this->assertTrue($this->verifier->isLinkAvailable($request));
@@ -33,8 +38,8 @@ class SecurityAnnotationHandlerTest extends BaseTest
 	{
 		$this->user->login('admin', 'password');
 
-		$request = new \Nette\Application\Request('Article', 'GET', [
-			\Nette\Application\UI\Presenter::ACTION_KEY => 'hide',
+		$request = new Request('Article', 'GET', [
+			Presenter::ACTION_KEY => 'hide',
 		]);
 
 		$this->assertFalse($this->verifier->isLinkAvailable($request));
@@ -48,8 +53,8 @@ class SecurityAnnotationHandlerTest extends BaseTest
 	{
 		$this->user->login('admin', 'password');
 
-		$request = new \Nette\Application\Request('Article', 'GET', [
-			\Nette\Application\UI\Presenter::ACTION_KEY => 'delete',
+		$request = new Request('Article', 'GET', [
+			Presenter::ACTION_KEY => 'delete',
 		]);
 
 		$this->assertFalse($this->verifier->isLinkAvailable($request));

@@ -2,7 +2,10 @@
 
 namespace Tests\Integration;
 
-class PermissionFactory extends \Nette\Object
+use Nette\Object;
+use Nette\Security\Permission;
+
+class PermissionFactory extends Object
 {
 
 	/**
@@ -10,7 +13,7 @@ class PermissionFactory extends \Nette\Object
 	 */
 	public function create()
 	{
-		$permission = new \Nette\Security\Permission();
+		$permission = new Permission();
 		$permission->addRole('redactor');
 		$permission->addResource('Article');
 		$permission->allow('redactor', 'Article', 'edit');

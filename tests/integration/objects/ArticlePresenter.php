@@ -2,20 +2,22 @@
 
 namespace Tests\Integration;
 
-use Arachne\SecurityAnnotations\LoggedIn;
-use Arachne\SecurityAnnotations\InRole;
 use Arachne\SecurityAnnotations\Allowed;
+use Arachne\SecurityAnnotations\InRole;
+use Arachne\SecurityAnnotations\LoggedIn;
+use Exception;
+use Nette\Application\UI\Presenter;
 
 /**
  * @LoggedIn
  * @InRole("redactor")
  */
-class ArticlePresenter extends \Nette\Application\UI\Presenter
+class ArticlePresenter extends Presenter
 {
 
 	final public function __construct()
 	{
-		throw new \Exception('This class is there for annotations only.');
+		throw new Exception('This class is there for annotations only.');
 	}
 
 	/**
@@ -34,7 +36,7 @@ class ArticlePresenter extends \Nette\Application\UI\Presenter
 
 	/**
 	 * @Allowed(resource = "Article", privilege = "hide")
-	 * @Allowed(resource = "Article", privilege = "edit")	 	 
+	 * @Allowed(resource = "Article", privilege = "edit")
 	 */
 	public function actionDelete($id)
 	{
