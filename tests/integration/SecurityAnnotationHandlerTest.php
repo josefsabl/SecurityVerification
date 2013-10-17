@@ -19,8 +19,8 @@ class SecurityAnnotationHandlerTest extends BaseTest
 	public function _before()
 	{
 		parent::_before();
-		$this->user = $this->guy->grabService('Nette\Security\User');
-		$this->verifier = $this->guy->grabService('Arachne\Verifier\Verifier');
+		$this->user = $this->codeGuy->grabService('Nette\Security\User');
+		$this->verifier = $this->codeGuy->grabService('Arachne\Verifier\Verifier');
 	}
 
 	public function testActionEdit()
