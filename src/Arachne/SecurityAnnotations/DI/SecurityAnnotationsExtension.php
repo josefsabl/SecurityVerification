@@ -10,6 +10,7 @@
 
 namespace Arachne\SecurityAnnotations\DI;
 
+use Arachne\Verifier\DI\VerifierExtension;
 use Nette\DI\CompilerExtension;
 
 /**
@@ -23,7 +24,12 @@ class SecurityAnnotationsExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('handler'))
-			->setClass('Arachne\SecurityAnnotations\SecurityAnnotationHandler');
+			->setClass('Arachne\SecurityAnnotations\SecurityAnnotationHandler')
+			->addTag(VerifierExtension::TAG_HANDLER, array(
+				'Arachne\SecurityAnnotations\LoggedIn',
+				'Arachne\SecurityAnnotations\InRole',
+				'Arachne\SecurityAnnotations\Allowed',
+			));
 	}
 
 }

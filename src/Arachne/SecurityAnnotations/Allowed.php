@@ -26,9 +26,4 @@ class Allowed extends Object implements IAnnotation
 	/** @var string */
 	public $privilege;
 
-	public function getHandlerClass()
-	{
-		return 'Arachne\SecurityAnnotations\SecurityAnnotationHandler';
-	}
-
 }

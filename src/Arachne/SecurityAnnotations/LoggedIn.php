@@ -23,9 +23,4 @@ class LoggedIn extends Object implements IAnnotation
 	/** @var bool */
 	public $flag = TRUE;
 
-	public function getHandlerClass()
-	{
-		return 'Arachne\SecurityAnnotations\SecurityAnnotationHandler';
-	}
-
 }

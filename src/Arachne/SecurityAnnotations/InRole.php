@@ -23,9 +23,4 @@ class InRole extends Object implements IAnnotation
 	/** @var string */
 	public $role;
 
-	public function getHandlerClass()
-	{
-		return 'Arachne\SecurityAnnotations\SecurityAnnotationHandler';
-	}
-
 }
