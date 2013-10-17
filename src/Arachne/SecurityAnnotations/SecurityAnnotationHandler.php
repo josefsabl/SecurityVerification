@@ -48,23 +48,51 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 	public function checkAnnotation(IAnnotation $annotation, Request $request)
 	{
 		if ($annotation instanceof Allowed) {
-			if (!$this->user->isAllowed($annotation->resource, $annotation->privilege)) {
-				throw new FailedAuthorizationException('Required privilege \'' . $annotation->resource . ' / ' . $annotation->privilege . '\' is not granted.');
-			}
+			$this->checkAnnotationAllowed($annotation);
 		} elseif ($annotation instanceof InRole) {
-			if (!$this->user->isInRole($annotation->role)) {
-				throw new FailedAuthorizationException('Role \'' . $annotation->role . '\' is required for this request.');
-			}
+			$this->checkAnnotationInRole($annotation);
 		} elseif ($annotation instanceof LoggedIn) {
-			if ($this->user->isLoggedIn() !== $annotation->flag) {
-				if ($annotation->flag) {
-					throw new FailedAuthenticationException('User must be logged in for this request.');
-				} else {
-					throw new FailedNoAuthenticationException('User must not be logged in for this request.');
-				}
-			}
+			$this->checkAnnotationLoggedIn($annotation);
 		} else {
 			throw new InvalidArgumentException('Unknown condition \'' . get_class($annotation) . '\' given.');
+		}
+	}
+
+	/**
+	 * @param Allowed $annotation
+	 * @throws FailedAuthorizationException
+	 */
+	protected function checkAnnotationAllowed(Allowed $annotation)
+	{
+		if (!$this->user->isAllowed($annotation->resource, $annotation->privilege)) {
+			throw new FailedAuthorizationException("Required privilege '$annotation->resource / $annotation->privilege' is not granted.");
+		}
+	}
+
+	/**
+	 * @param InRole $annotation
+	 * @throws FailedAuthorizationException
+	 */
+	protected function checkAnnotationInRole(InRole $annotation)
+	{
+		if (!$this->user->isInRole($annotation->role)) {
+			throw new FailedAuthorizationException("Role '$annotation->role' is required for this request.");
+		}
+	}
+
+	/**
+	 * @param LoggedIn $annotation
+	 * @throws FailedAuthenticationException
+	 * @throws FailedNoAuthenticationException
+	 */
+	protected function checkAnnotationLoggedIn(LoggedIn $annotation)
+	{
+		if ($this->user->isLoggedIn() !== $annotation->flag) {
+			if ($annotation->flag) {
+				throw new FailedAuthenticationException('User must be logged in for this request.');
+			} else {
+				throw new FailedNoAuthenticationException('User must not be logged in for this request.');
+			}
 		}
 	}
 
