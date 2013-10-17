@@ -41,7 +41,9 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 	/**
 	 * @param IAnnotation $annotation
 	 * @param Request $request
-	 * @throws FailedAuthorizationExceptiontionException
+	 * @throws FailedAuthenticationException
+	 * @throws FailedAuthorizationException
+	 * @throws FailedNoAuthenticationException
 	 */
 	public function checkAnnotation(IAnnotation $annotation, Request $request)
 	{
