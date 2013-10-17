@@ -146,7 +146,7 @@ class SecurityAnnotationHandlerTest extends BaseTest
 	}
 
 	/**
-	 * @expectedException \Arachne\SecurityAnnotations\FailedAuthenticationException
+	 * @expectedException \Arachne\SecurityAnnotations\FailedNoAuthenticationException
 	 * @expectedExceptionMessage User must not be logged in for this request.
 	 */
 	public function testNotLoggedInFalse()
