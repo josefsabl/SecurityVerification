@@ -37,10 +37,10 @@ class SecurityAnnotationHandlerTest extends BaseTest
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
-				->shouldReceive('isAllowed')
-				->with('resource', 'privilege')
-				->once()
-				->andReturn(TRUE);
+			->shouldReceive('isAllowed')
+			->with('resource', 'privilege')
+			->once()
+			->andReturn(TRUE);
 
 		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
 	}
@@ -57,10 +57,10 @@ class SecurityAnnotationHandlerTest extends BaseTest
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
-				->shouldReceive('isAllowed')
-				->with('resource', 'privilege')
-				->once()
-				->andReturn(FALSE);
+			->shouldReceive('isAllowed')
+			->with('resource', 'privilege')
+			->once()
+			->andReturn(FALSE);
 
 		$this->handler->checkAnnotation($annotation, $request);
 	}
@@ -73,10 +73,10 @@ class SecurityAnnotationHandlerTest extends BaseTest
 
 		// can't redefine User::isInRole directly because it's final
 		$this->user
-				->shouldReceive('getRoles')
-				->withAnyArgs()
-				->once()
-				->andReturn([ 'role' ]);
+			->shouldReceive('getRoles')
+			->withAnyArgs()
+			->once()
+			->andReturn([ 'role' ]);
 
 		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
 	}
@@ -93,10 +93,10 @@ class SecurityAnnotationHandlerTest extends BaseTest
 
 		// can't redefine User::isInRole directly because it's final
 		$this->user
-				->shouldReceive('getRoles')
-				->withAnyArgs()
-				->once()
-				->andReturn([]);
+			->shouldReceive('getRoles')
+			->withAnyArgs()
+			->once()
+			->andReturn([]);
 
 		$this->handler->checkAnnotation($annotation, $request);
 	}
@@ -108,10 +108,10 @@ class SecurityAnnotationHandlerTest extends BaseTest
 
 		// can't redefine User::isLoggedIn directly because it's final
 		$this->storage
-				->shouldReceive('isAuthenticated')
-				->withAnyArgs()
-				->once()
-				->andReturn(TRUE);
+			->shouldReceive('isAuthenticated')
+			->withAnyArgs()
+			->once()
+			->andReturn(TRUE);
 
 		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
 	}
@@ -124,10 +124,10 @@ class SecurityAnnotationHandlerTest extends BaseTest
 
 		// can't redefine User::isLoggedIn directly because it's final
 		$this->storage
-				->shouldReceive('isAuthenticated')
-				->withAnyArgs()
-				->once()
-				->andReturn(FALSE);
+			->shouldReceive('isAuthenticated')
+			->withAnyArgs()
+			->once()
+			->andReturn(FALSE);
 
 		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
 	}
@@ -143,10 +143,10 @@ class SecurityAnnotationHandlerTest extends BaseTest
 
 		// can't redefine User::isLoggedIn directly because it's final
 		$this->storage
-				->shouldReceive('isAuthenticated')
-				->withAnyArgs()
-				->once()
-				->andReturn(FALSE);
+			->shouldReceive('isAuthenticated')
+			->withAnyArgs()
+			->once()
+			->andReturn(FALSE);
 
 		$this->handler->checkAnnotation($annotation, $request);
 	}
@@ -163,10 +163,10 @@ class SecurityAnnotationHandlerTest extends BaseTest
 
 		// can't redefine User::isLoggedIn directly because it's final
 		$this->storage
-				->shouldReceive('isAuthenticated')
-				->withAnyArgs()
-				->once()
-				->andReturn(TRUE);
+			->shouldReceive('isAuthenticated')
+			->withAnyArgs()
+			->once()
+			->andReturn(TRUE);
 
 		$this->handler->checkAnnotation($annotation, $request);
 	}
