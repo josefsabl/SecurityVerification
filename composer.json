@@ -16,7 +16,8 @@
 		"nette/nette": "@dev",
 		"arachne/verifier": "@dev",
 		"doctrine/annotations": "~1.1",
-		"kdyby/annotations": "@dev"
+		"kdyby/annotations": "@dev",
+		"kdyby/doctrine-cache": "@dev"
 	},
 	"require-dev": {
 		"squizlabs/php_codesniffer": "~1.4",
@@ -25,7 +26,6 @@
 		"arachne/codeception": "@dev",
 		"mockery/mockery": "~0.8"
 	},
-	"minimum-stability": "dev",
 	"autoload": {
 		"psr-0": {
 			"Arachne\\SecurityAnnotations": "src/"
