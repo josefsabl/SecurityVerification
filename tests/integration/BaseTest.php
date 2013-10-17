@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Integration\Arachne\Verifier;
+namespace Tests\Integration;
 
 use Codeception\TestCase\Test;
 

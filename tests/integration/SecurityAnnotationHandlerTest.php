@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Integration\Arachne\Verifier;
+namespace Tests\Integration;
 
 use Arachne\Verifier\Verifier;
 use Nette\Application\Request;
