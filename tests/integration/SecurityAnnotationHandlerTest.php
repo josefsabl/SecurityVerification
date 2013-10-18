@@ -3,11 +3,12 @@
 namespace Tests\Integration;
 
 use Arachne\Verifier\Verifier;
+use Codeception\TestCase\Test;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
 use Nette\Security\User;
 
-class SecurityAnnotationHandlerTest extends BaseTest
+class SecurityAnnotationHandlerTest extends Test
 {
 
 	/** @var User */

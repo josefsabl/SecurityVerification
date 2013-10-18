@@ -6,11 +6,12 @@ use Arachne\SecurityAnnotations\Allowed;
 use Arachne\SecurityAnnotations\InRole;
 use Arachne\SecurityAnnotations\LoggedIn;
 use Arachne\SecurityAnnotations\SecurityAnnotationHandler;
+use Codeception\TestCase\Test;
 use Mockery;
 use Mockery\MockInterface;
 use Nette\Application\Request;
 
-class SecurityAnnotationHandlerTest extends BaseTest
+class SecurityAnnotationHandlerTest extends Test
 {
 
 	/** @var SecurityAnnotationHandler */
