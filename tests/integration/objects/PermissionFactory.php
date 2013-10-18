@@ -2,16 +2,17 @@
 
 namespace Tests\Integration;
 
+use Nette\DI\Container;
 use Nette\Object;
 use Nette\Security\Permission;
 
 class PermissionFactory extends Object
 {
 
-	/** @var \Nette\DI\Container */
+	/** @var Container */
 	private $container;
 
-	public function injectUser(\Nette\DI\Container $container)
+	public function injectUser(Container $container)
 	{
 		$this->container = $container;
 	}
