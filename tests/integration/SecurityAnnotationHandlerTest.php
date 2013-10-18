@@ -60,4 +60,28 @@ class SecurityAnnotationHandlerTest extends BaseTest
 		$this->assertFalse($this->verifier->isLinkAvailable($request));
 	}
 
+	public function testActionPublishAllowed()
+	{
+		$this->user->login('admin', 'password');
+
+		$request = new Request('Article', 'GET', [
+			Presenter::ACTION_KEY => 'publish',
+			'article' => new ArticleEntity(1),
+		]);
+
+		$this->assertTrue($this->verifier->isLinkAvailable($request));
+	}
+
+	public function testActionPublishDisallowed()
+	{
+		$this->user->login('admin', 'password');
+
+		$request = new Request('Article', 'GET', [
+			Presenter::ACTION_KEY => 'publish',
+			'article' => new ArticleEntity(2),
+		]);
+
+		$this->assertFalse($this->verifier->isLinkAvailable($request));
+	}
+
 }

@@ -65,6 +65,117 @@ class SecurityAnnotationHandlerTest extends BaseTest
 		$this->handler->checkAnnotation($annotation, $request);
 	}
 
+	public function testAllowedThis()
+	{
+		$annotation = new Allowed();
+		$annotation->resource = '$this';
+		$annotation->privilege = 'privilege';
+		$request = new Request('Test', 'GET', []);
+		$this->user
+			->shouldReceive('isAllowed')
+			->with('Test', 'privilege')
+			->once()
+			->andReturn(TRUE);
+
+		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
+	}
+
+	/**
+	 * @expectedException Arachne\SecurityAnnotations\FailedAuthorizationException
+	 * @expectedExceptionMessage Required privilege 'Test / privilege' is not granted.
+	 */
+	public function testAllowedThisFalse()
+	{
+		$annotation = new Allowed();
+		$annotation->resource = '$this';
+		$annotation->privilege = 'privilege';
+		$request = new Request('Test', 'GET', []);
+		$this->user
+			->shouldReceive('isAllowed')
+			->with('Test', 'privilege')
+			->once()
+			->andReturn(FALSE);
+
+		$this->handler->checkAnnotation($annotation, $request);
+	}
+
+	public function testAllowedResource()
+	{
+		$annotation = new Allowed();
+		$annotation->resource = '$entity';
+		$annotation->privilege = 'privilege';
+		$entity = Mockery::mock('Nette\Security\IResource');
+		$request = new Request('Test', 'GET', [
+			'entity' => $entity,
+		]);
+
+		$this->user
+			->shouldReceive('isAllowed')
+			->with($entity, 'privilege')
+			->once()
+			->andReturn(TRUE);
+
+		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
+	}
+
+	/**
+	 * @expectedException Arachne\SecurityAnnotations\FailedAuthorizationException
+	 * @expectedExceptionMessage Required privilege 'entity / privilege' is not granted.
+	 */
+	public function testAllowedResourceFalse()
+	{
+		$annotation = new Allowed();
+		$annotation->resource = '$entity';
+		$annotation->privilege = 'privilege';
+		$entity = Mockery::mock('Nette\Security\IResource');
+		$entity
+			->shouldReceive('getResourceId')
+			->once()
+			->andReturn('entity');
+		$request = new Request('Test', 'GET', [
+			'entity' => $entity,
+		]);
+
+		$this->user
+			->shouldReceive('isAllowed')
+			->with($entity, 'privilege')
+			->once()
+			->andReturn(FALSE);
+
+		$this->handler->checkAnnotation($annotation, $request);
+	}
+
+	/**
+	 * @expectedException Arachne\SecurityAnnotations\InvalidArgumentException
+	 * @expectedExceptionMessage Missing parameter '$entity'.
+	 */
+	public function testAllowedWrongParameter()
+	{
+		$annotation = new Allowed();
+		$annotation->resource = '$entity';
+		$annotation->privilege = 'privilege';
+		$request = new Request('Test', 'GET', []);
+
+		$this->handler->checkAnnotation($annotation, $request);
+	}
+
+	/**
+	 * @expectedException Arachne\SecurityAnnotations\InvalidArgumentException
+	 * @expectedExceptionMessage Parameter '$entity' is not instance of \Nette\Security\IResource.
+	 */
+	public function testAllowedMissingParameter()
+	{
+		$annotation = new Allowed();
+		$annotation->resource = '$entity';
+		$annotation->privilege = 'privilege';
+		$entity = Mockery::mock();
+		$request = new Request('Test', 'GET', [
+			'entity' => $entity,
+		]);
+
+		$this->handler->checkAnnotation($annotation, $request);
+	}
+
 	public function testInRoleTrue()
 	{
 		$annotation = new InRole();

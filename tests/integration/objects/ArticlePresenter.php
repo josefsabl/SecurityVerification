@@ -42,4 +42,11 @@ class ArticlePresenter extends Presenter
 	{
 	}
 
+	/**
+	 * @Allowed(resource = "$article", privilege = "publish")
+	 */
+	public function actionPublish(Article $article)
+	{
+	}
+
 }
