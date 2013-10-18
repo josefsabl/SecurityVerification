@@ -74,9 +74,9 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 			$presenter = $request->getPresenterName();
 			return substr($presenter, strrpos(':' . $presenter, ':'));
 		} elseif (!isset($parameters[$parameter])) {
-			throw new InvalidStateException("Missing parameter '$resource'.");
+			throw new InvalidArgumentException("Missing parameter '$resource'.");
 		} elseif (!$parameters[$parameter] instanceof IResource) {
-			throw new InvalidStateException("Parameter '$resource' is not instance of \Nette\Security\IResource.");
+			throw new InvalidArgumentException("Parameter '$resource' is not instance of \Nette\Security\IResource.");
 		} else {
 			return $parameters[$parameter];
 		}
