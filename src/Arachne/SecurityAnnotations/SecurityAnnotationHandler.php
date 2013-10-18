@@ -24,6 +24,9 @@ use Nette\Security\IResource;
 use Nette\Security\User;
 use Nette\Utils\Strings;
 
+/**
+ * @author Jáchym Toušek
+ */
 class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 {
 

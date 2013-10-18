@@ -9,6 +9,8 @@ use Exception;
 use Nette\Application\UI\Presenter;
 
 /**
+ * @author Jáchym Toušek
+ *
  * @LoggedIn
  * @InRole("redactor")
  */

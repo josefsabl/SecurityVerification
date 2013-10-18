@@ -8,6 +8,9 @@ use Nette\Security\IAuthenticator;
 use Nette\Security\Identity;
 use Nette\Security\IIdentity;
 
+/**
+ * @author Jáchym Toušek
+ */
 class Authenticator extends Object implements IAuthenticator
 {
 

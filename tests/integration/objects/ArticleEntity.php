@@ -5,6 +5,9 @@ namespace Tests\Integration;
 use Nette\Object;
 use Nette\Security\IResource;
 
+/**
+ * @author Jáchym Toušek
+ */
 class ArticleEntity extends Object implements IResource
 {
 

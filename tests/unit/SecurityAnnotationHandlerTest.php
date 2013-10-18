@@ -11,6 +11,9 @@ use Mockery;
 use Mockery\MockInterface;
 use Nette\Application\Request;
 
+/**
+ * @author Jáchym Toušek
+ */
 class SecurityAnnotationHandlerTest extends Test
 {
 

@@ -6,6 +6,9 @@ use Nette\DI\Container;
 use Nette\Object;
 use Nette\Security\Permission;
 
+/**
+ * @author Jáchym Toušek
+ */
 class PermissionFactory extends Object
 {
 

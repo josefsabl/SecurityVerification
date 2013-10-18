@@ -8,6 +8,9 @@ use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
 use Nette\Security\User;
 
+/**
+ * @author Jáchym Toušek
+ */
 class SecurityAnnotationHandlerTest extends Test
 {
 
