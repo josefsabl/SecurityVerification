@@ -50,7 +50,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'resource / privilege' is not granted.
 	 */
 	public function testAllowedFalse()
@@ -85,7 +85,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'Test / privilege' is not granted.
 	 */
 	public function testAllowedThisFalse()
@@ -123,7 +123,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'entity / privilege' is not granted.
 	 */
 	public function testAllowedResourceFalse()
@@ -150,8 +150,8 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\InvalidArgumentException
-	 * @expectedExceptionMessage Missing parameter '$entity'.
+	 * @expectedException Arachne\SecurityAnnotations\Exception\InvalidArgumentException
+	 * @expectedExceptionMessage Missing parameter '$entity' in given request.
 	 */
 	public function testAllowedWrongParameter()
 	{
@@ -164,8 +164,8 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\InvalidArgumentException
-	 * @expectedExceptionMessage Parameter '$entity' is not instance of \Nette\Security\IResource.
+	 * @expectedException Arachne\SecurityAnnotations\Exception\InvalidArgumentException
+	 * @expectedExceptionMessage Parameter '$entity' is not an instance of \Nette\Security\IResource.
 	 */
 	public function testAllowedMissingParameter()
 	{
@@ -197,7 +197,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedAuthorizationException
 	 * @expectedExceptionMessage Role 'role' is required for this request.
 	 */
 	public function testInRoleFalse()
@@ -248,7 +248,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\FailedAuthenticationException
+	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedAuthenticationException
 	 * @expectedExceptionMessage User must be logged in for this request.
 	 */
 	public function testLoggedInFalse()
@@ -267,7 +267,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\FailedNoAuthenticationException
+	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedNoAuthenticationException
 	 * @expectedExceptionMessage User must not be logged in for this request.
 	 */
 	public function testNotLoggedInFalse()
@@ -287,7 +287,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\InvalidArgumentException
+	 * @expectedException Arachne\SecurityAnnotations\Exception\InvalidArgumentException
 	 */
 	public function testUnknown()
 	{

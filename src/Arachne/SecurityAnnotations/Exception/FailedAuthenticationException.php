@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the file license.md that was distributed with this source code.
  */
 
-namespace Arachne\SecurityAnnotations;
+namespace Arachne\SecurityAnnotations\Exception;
 
-use Arachne\Verifier\ForbiddenRequestException;
+use Arachne\Verifier\Exception\ForbiddenRequestException;
 
 /**
  * @author Jáchym Toušek
  */
-class FailedAuthorizationException extends ForbiddenRequestException
+class FailedAuthenticationException extends ForbiddenRequestException
 {
 }

@@ -10,12 +10,10 @@
 
 namespace Arachne\SecurityAnnotations;
 
-use Arachne\SecurityAnnotations\Allowed;
-use Arachne\SecurityAnnotations\FailedAuthenticationException;
-use Arachne\SecurityAnnotations\FailedAuthorizationException;
-use Arachne\SecurityAnnotations\FailedNoAuthenticationException;
-use Arachne\SecurityAnnotations\InRole;
-use Arachne\SecurityAnnotations\LoggedIn;
+use Arachne\SecurityAnnotations\Exception\FailedAuthenticationException;
+use Arachne\SecurityAnnotations\Exception\FailedAuthorizationException;
+use Arachne\SecurityAnnotations\Exception\FailedNoAuthenticationException;
+use Arachne\SecurityAnnotations\Exception\InvalidArgumentException;
 use Arachne\Verifier\IAnnotation;
 use Arachne\Verifier\IAnnotationHandler;
 use Nette\Application\Request;
@@ -57,7 +55,7 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 		} elseif ($annotation instanceof LoggedIn) {
 			$this->checkAnnotationLoggedIn($annotation);
 		} else {
-			throw new InvalidArgumentException('Unknown condition \'' . get_class($annotation) . '\' given.');
+			throw new InvalidArgumentException('Unknown annotation \'' . get_class($annotation) . '\' given.');
 		}
 	}
 
@@ -77,9 +75,9 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 			$presenter = $request->getPresenterName();
 			return substr($presenter, strrpos(':' . $presenter, ':'));
 		} elseif (!isset($parameters[$parameter])) {
-			throw new InvalidArgumentException("Missing parameter '$resource'.");
+			throw new InvalidArgumentException("Missing parameter '$resource' in given request.");
 		} elseif (!$parameters[$parameter] instanceof IResource) {
-			throw new InvalidArgumentException("Parameter '$resource' is not instance of \Nette\Security\IResource.");
+			throw new InvalidArgumentException("Parameter '$resource' is not an instance of \Nette\Security\IResource.");
 		} else {
 			return $parameters[$parameter];
 		}
