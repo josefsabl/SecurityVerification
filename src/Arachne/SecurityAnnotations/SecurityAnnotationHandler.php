@@ -64,7 +64,7 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 	 * @param Request $request
 	 * @return string|IResource
 	 */
-	protected function findResource($resource, Request $request)
+	protected function resolveResource($resource, Request $request)
 	{
 		if (!Strings::startsWith($resource, '$')) {
 			return $resource;
@@ -90,7 +90,7 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 	 */
 	protected function checkAnnotationAllowed(Allowed $annotation, Request $request)
 	{
-		$resource = $this->findResource($annotation->resource, $request);
+		$resource = $this->resolveResource($annotation->resource, $request);
 		if (!$this->user->isAllowed($resource, $annotation->privilege)) {
 			if ($resource instanceof IResource) {
 				$resource = $resource->getResourceId();
