@@ -10,7 +10,7 @@
 
 namespace Arachne\SecurityAnnotations\Exception;
 
-use Arachne\Verifier\Exception\ForbiddenRequestException;
+use Nette\Application\ForbiddenRequestException;
 
 /**
  * @author Jáchym Toušek
