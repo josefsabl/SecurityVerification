@@ -289,7 +289,7 @@ class SecurityAnnotationHandlerTest extends Test
 	/**
 	 * @expectedException Arachne\SecurityAnnotations\Exception\InvalidArgumentException
 	 */
-	public function testUnknown()
+	public function testUnknownAnnotation()
 	{
 		$annotation = Mockery::mock('Arachne\Verifier\IAnnotation');
 		$request = new Request('Test', 'GET', []);
