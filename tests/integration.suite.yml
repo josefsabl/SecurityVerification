@@ -7,7 +7,6 @@ modules:
         - Nette
     config:
         Nette:
-            tempDir: tests/_temp
             configFiles:
                 - tests/integration/config.neon
             robotLoader:
