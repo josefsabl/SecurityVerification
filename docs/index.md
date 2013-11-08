@@ -1,11 +1,9 @@
-Documentation
-=============
+# Documentation
 
 This extension is here to provide easy annotation-based authorization of presenter actions and signals.
 
 
-Instalation
------------
+## Installation
 
 The best way to install Arachne/SecurityAnnotations is using [Composer](http://getcomposer.org/):
 
@@ -27,8 +25,7 @@ See also the documentation of [Kdyby/Annotations](https://github.com/Kdyby/Annot
 **Important**: It's very important to read and follow the instalation section of Arachne/Verifier documentation. These annotations won't work at all if you skip it.
 
 
-Usage
------
+## Usage
 
 ### Presenter
 
