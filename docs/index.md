@@ -8,7 +8,7 @@ This extension is here to provide easy annotation-based authorization of present
 The best way to install Arachne/SecurityAnnotations is using [Composer](http://getcomposer.org/):
 
 ```sh
-$ composer require arachne/security-annotations:@dev
+$ composer require arachne/security-annotations
 ```
 
 Now you need to register Arachne/SecurityAnnotations, Arachne/Verifier and Kdyby/Annotations extensions using your [neon](http://ne-on.org/) config file.

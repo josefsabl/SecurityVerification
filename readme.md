@@ -18,5 +18,5 @@ Installation
 The best way to install Arachne/SecurityAnnotations is using [Composer](http://getcomposer.org/):
 
 ```sh
-$ composer require arachne/security-annotations:@dev
+$ composer require arachne/security-annotations
 ```
