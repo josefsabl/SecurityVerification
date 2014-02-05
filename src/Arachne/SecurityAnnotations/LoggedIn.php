@@ -10,7 +10,7 @@
 
 namespace Arachne\SecurityAnnotations;
 
-use Arachne\Verifier\IAnnotation;
+use Arachne\Verifier\IRule;
 use Nette\Object;
 
 /**
@@ -19,7 +19,7 @@ use Nette\Object;
  * @Annotation
  * @Target({"CLASS", "METHOD"})
  */
-class LoggedIn extends Object implements IAnnotation
+class LoggedIn extends Object implements IRule
 {
 
 	/** @var bool */

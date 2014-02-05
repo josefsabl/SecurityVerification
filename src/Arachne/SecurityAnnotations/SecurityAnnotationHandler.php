@@ -14,8 +14,8 @@ use Arachne\SecurityAnnotations\Exception\FailedAuthenticationException;
 use Arachne\SecurityAnnotations\Exception\FailedAuthorizationException;
 use Arachne\SecurityAnnotations\Exception\FailedNoAuthenticationException;
 use Arachne\SecurityAnnotations\Exception\InvalidArgumentException;
-use Arachne\Verifier\IAnnotation;
-use Arachne\Verifier\IAnnotationHandler;
+use Arachne\Verifier\IRule;
+use Arachne\Verifier\IRuleHandler;
 use Nette\Application\Request;
 use Nette\Object;
 use Nette\Security\IResource;
@@ -25,7 +25,7 @@ use Nette\Utils\Strings;
 /**
  * @author Jáchym Toušek
  */
-class SecurityAnnotationHandler extends Object implements IAnnotationHandler
+class SecurityAnnotationHandler extends Object implements IRuleHandler
 {
 
 	/** @var User */
@@ -40,16 +40,16 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 	}
 
 	/**
-	 * @param IAnnotation $annotation
+	 * @param IRule $annotation
 	 * @param Request $request
 	 * @throws FailedAuthenticationException
 	 * @throws FailedAuthorizationException
 	 * @throws FailedNoAuthenticationException
 	 */
-	public function checkAnnotation(IAnnotation $annotation, Request $request)
+	public function checkRule(IRule $annotation, Request $request, $component = NULL)
 	{
 		if ($annotation instanceof Allowed) {
-			$this->checkAnnotationAllowed($annotation, $request);
+			$this->checkAnnotationAllowed($annotation, $request, $component);
 		} elseif ($annotation instanceof InRole) {
 			$this->checkAnnotationInRole($annotation);
 		} elseif ($annotation instanceof LoggedIn) {
@@ -62,15 +62,19 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 	/**
 	 * @param string $resource
 	 * @param Request $request
+	 * @param string $component
 	 * @return string|IResource
 	 */
-	protected function resolveResource($resource, Request $request)
+	protected function resolveResource($resource, Request $request, $component)
 	{
 		if (!Strings::startsWith($resource, '$')) {
 			return $resource;
 		}
 		$parameters = $request->getParameters();
 		$parameter = substr($resource, 1);
+		if ($component !== NULL) {
+			$parameter = $component . '-' . $parameter;
+		}
 		if ($parameter === 'this') {
 			$presenter = $request->getPresenterName();
 			return substr($presenter, strrpos(':' . $presenter, ':'));
@@ -88,9 +92,9 @@ class SecurityAnnotationHandler extends Object implements IAnnotationHandler
 	 * @param Request $request
 	 * @throws FailedAuthorizationException
 	 */
-	protected function checkAnnotationAllowed(Allowed $annotation, Request $request)
+	protected function checkAnnotationAllowed(Allowed $annotation, Request $request, $component)
 	{
-		$resource = $this->resolveResource($annotation->resource, $request);
+		$resource = $this->resolveResource($annotation->resource, $request, $component);
 		if (!$this->user->isAllowed($resource, $annotation->privilege)) {
 			if ($resource instanceof IResource) {
 				$resource = $resource->getResourceId();

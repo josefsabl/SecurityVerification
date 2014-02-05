@@ -2,7 +2,6 @@
 	"name": "arachne/security-annotations",
 	"type": "library",
 	"keywords": [ "nette", "arachne", "security" ],
-	"homepage": "http://enumag.cz",
 	"license": [ "BSD-3-Clause", "GPL-2.0", "GPL-3.0" ],
 	"authors": [
 		{
@@ -12,20 +11,20 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3.2",
-		"nette/nette": "@dev",
-		"arachne/verifier": "@dev",
-		"doctrine/annotations": "~1.1",
-		"kdyby/annotations": "@dev",
-		"kdyby/doctrine-cache": "@dev"
+		"php": ">=5.3.0",
+		"nette/nette": "~2.1.0",
+		"doctrine/annotations": "~1.1.0",
+		"kdyby/annotations": "~2.0.0",
+		"arachne/verifier": "@dev"
 	},
 	"require-dev": {
 		"php": ">=5.4.0",
 		"squizlabs/php_codesniffer": "~1.4",
 		"arachne/coding-style": "@dev",
-		"codeception/codeception": "~1.6",
+		"codeception/codeception": "~1.8",
 		"arachne/codeception": "@dev",
-		"mockery/mockery": "~0.8"
+		"mockery/mockery": "@dev",
+		"codeception/mockery-module": "~0.1"
 	},
 	"autoload": {
 		"psr-0": {

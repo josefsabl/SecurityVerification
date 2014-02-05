@@ -15,7 +15,7 @@ class PermissionFactory extends Object
 	/** @var Container */
 	private $container;
 
-	public function injectUser(Container $container)
+	public function __construct(Container $container)
 	{
 		$this->container = $container;
 	}

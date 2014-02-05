@@ -23,13 +23,9 @@ class SecurityAnnotationHandlerTest extends Test
 	/** @var MockInterface */
 	private $user;
 
-	/** @var MockInterface */
-	private $storage;
-
 	protected function _before()
 	{
-		$this->storage = Mockery::mock('Nette\Security\IUserStorage');
-		$this->user = Mockery::mock('Nette\Security\User', [ $this->storage ]);
+		$this->user = Mockery::mock('Nette\Security\User');
 		$this->handler = new SecurityAnnotationHandler($this->user);
 	}
 
@@ -38,6 +34,7 @@ class SecurityAnnotationHandlerTest extends Test
 		$annotation = new Allowed();
 		$annotation->resource = 'resource';
 		$annotation->privilege = 'privilege';
+		// TODO: mock this
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
@@ -46,7 +43,7 @@ class SecurityAnnotationHandlerTest extends Test
 			->once()
 			->andReturn(TRUE);
 
-		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
+		$this->assertNull($this->handler->checkRule($annotation, $request));
 	}
 
 	/**
@@ -66,7 +63,7 @@ class SecurityAnnotationHandlerTest extends Test
 			->once()
 			->andReturn(FALSE);
 
-		$this->handler->checkAnnotation($annotation, $request);
+		$this->handler->checkRule($annotation, $request);
 	}
 
 	public function testAllowedThis()
@@ -75,13 +72,14 @@ class SecurityAnnotationHandlerTest extends Test
 		$annotation->resource = '$this';
 		$annotation->privilege = 'privilege';
 		$request = new Request('Test', 'GET', []);
+
 		$this->user
 			->shouldReceive('isAllowed')
 			->with('Test', 'privilege')
 			->once()
 			->andReturn(TRUE);
 
-		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
+		$this->assertNull($this->handler->checkRule($annotation, $request));
 	}
 
 	/**
@@ -100,7 +98,7 @@ class SecurityAnnotationHandlerTest extends Test
 			->once()
 			->andReturn(FALSE);
 
-		$this->handler->checkAnnotation($annotation, $request);
+		$this->handler->checkRule($annotation, $request);
 	}
 
 	public function testAllowedResource()
@@ -119,7 +117,7 @@ class SecurityAnnotationHandlerTest extends Test
 			->once()
 			->andReturn(TRUE);
 
-		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
+		$this->assertNull($this->handler->checkRule($annotation, $request));
 	}
 
 	/**
@@ -146,7 +144,7 @@ class SecurityAnnotationHandlerTest extends Test
 			->once()
 			->andReturn(FALSE);
 
-		$this->handler->checkAnnotation($annotation, $request);
+		$this->handler->checkRule($annotation, $request);
 	}
 
 	/**
@@ -160,7 +158,7 @@ class SecurityAnnotationHandlerTest extends Test
 		$annotation->privilege = 'privilege';
 		$request = new Request('Test', 'GET', []);
 
-		$this->handler->checkAnnotation($annotation, $request);
+		$this->handler->checkRule($annotation, $request);
 	}
 
 	/**
@@ -177,7 +175,7 @@ class SecurityAnnotationHandlerTest extends Test
 			'entity' => $entity,
 		]);
 
-		$this->handler->checkAnnotation($annotation, $request);
+		$this->handler->checkRule($annotation, $request);
 	}
 
 	public function testInRoleTrue()
@@ -186,14 +184,13 @@ class SecurityAnnotationHandlerTest extends Test
 		$annotation->role = 'role';
 		$request = new Request('Test', 'GET', []);
 
-		// can't redefine User::isInRole directly because it's final
 		$this->user
-			->shouldReceive('getRoles')
-			->withAnyArgs()
+			->shouldReceive('isInRole')
+			->with('role')
 			->once()
-			->andReturn([ 'role' ]);
+			->andReturn(TRUE);
 
-		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
+		$this->assertNull($this->handler->checkRule($annotation, $request));
 	}
 
 	/**
@@ -206,14 +203,13 @@ class SecurityAnnotationHandlerTest extends Test
 		$annotation->role = 'role';
 		$request = new Request('Test', 'GET', []);
 
-		// can't redefine User::isInRole directly because it's final
 		$this->user
-			->shouldReceive('getRoles')
-			->withAnyArgs()
+			->shouldReceive('isInRole')
+			->with('role')
 			->once()
-			->andReturn([]);
+			->andReturn(FALSE);
 
-		$this->handler->checkAnnotation($annotation, $request);
+		$this->handler->checkRule($annotation, $request);
 	}
 
 	public function testLoggedInTrue()
@@ -221,14 +217,12 @@ class SecurityAnnotationHandlerTest extends Test
 		$annotation = new LoggedIn();
 		$request = new Request('Test', 'GET', []);
 
-		// can't redefine User::isLoggedIn directly because it's final
-		$this->storage
-			->shouldReceive('isAuthenticated')
-			->withAnyArgs()
+		$this->user
+			->shouldReceive('isLoggedIn')
 			->once()
 			->andReturn(TRUE);
 
-		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
+		$this->assertNull($this->handler->checkRule($annotation, $request));
 	}
 
 	public function testNotLoggedInTrue()
@@ -237,14 +231,12 @@ class SecurityAnnotationHandlerTest extends Test
 		$annotation->flag = FALSE;
 		$request = new Request('Test', 'GET', []);
 
-		// can't redefine User::isLoggedIn directly because it's final
-		$this->storage
-			->shouldReceive('isAuthenticated')
-			->withAnyArgs()
+		$this->user
+			->shouldReceive('isLoggedIn')
 			->once()
 			->andReturn(FALSE);
 
-		$this->assertNull($this->handler->checkAnnotation($annotation, $request));
+		$this->assertNull($this->handler->checkRule($annotation, $request));
 	}
 
 	/**
@@ -256,14 +248,12 @@ class SecurityAnnotationHandlerTest extends Test
 		$annotation = new LoggedIn();
 		$request = new Request('Test', 'GET', []);
 
-		// can't redefine User::isLoggedIn directly because it's final
-		$this->storage
-			->shouldReceive('isAuthenticated')
-			->withAnyArgs()
+		$this->user
+			->shouldReceive('isLoggedIn')
 			->once()
 			->andReturn(FALSE);
 
-		$this->handler->checkAnnotation($annotation, $request);
+		$this->handler->checkRule($annotation, $request);
 	}
 
 	/**
@@ -276,14 +266,12 @@ class SecurityAnnotationHandlerTest extends Test
 		$annotation->flag = FALSE;
 		$request = new Request('Test', 'GET', []);
 
-		// can't redefine User::isLoggedIn directly because it's final
-		$this->storage
-			->shouldReceive('isAuthenticated')
-			->withAnyArgs()
+		$this->user
+			->shouldReceive('isLoggedIn')
 			->once()
 			->andReturn(TRUE);
 
-		$this->handler->checkAnnotation($annotation, $request);
+		$this->handler->checkRule($annotation, $request);
 	}
 
 	/**
@@ -291,10 +279,10 @@ class SecurityAnnotationHandlerTest extends Test
 	 */
 	public function testUnknownAnnotation()
 	{
-		$annotation = Mockery::mock('Arachne\Verifier\IAnnotation');
+		$annotation = Mockery::mock('Arachne\Verifier\IRule');
 		$request = new Request('Test', 'GET', []);
 
-		$this->handler->checkAnnotation($annotation, $request);
+		$this->handler->checkRule($annotation, $request);
 	}
 
 }

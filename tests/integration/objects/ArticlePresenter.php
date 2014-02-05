@@ -17,11 +17,6 @@ use Nette\Application\UI\Presenter;
 class ArticlePresenter extends Presenter
 {
 
-	final public function __construct()
-	{
-		throw new Exception('This class is there for annotations only.');
-	}
-
 	/**
 	 * @Allowed(resource = "Article", privilege = "edit")
 	 */

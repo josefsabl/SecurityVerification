@@ -35,7 +35,7 @@ class SecurityAnnotationHandlerTest extends Test
 			Presenter::ACTION_KEY => 'edit',
 		]);
 
-		$this->assertTrue($this->verifier->isLinkVerified($request));
+		$this->assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
 	}
 
 	public function testActionHide()
@@ -46,7 +46,7 @@ class SecurityAnnotationHandlerTest extends Test
 			Presenter::ACTION_KEY => 'hide',
 		]);
 
-		$this->assertFalse($this->verifier->isLinkVerified($request));
+		$this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
 	}
 
 	/**
@@ -61,7 +61,7 @@ class SecurityAnnotationHandlerTest extends Test
 			Presenter::ACTION_KEY => 'delete',
 		]);
 
-		$this->assertFalse($this->verifier->isLinkVerified($request));
+		$this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
 	}
 
 	public function testActionPublishAllowed()
@@ -73,7 +73,7 @@ class SecurityAnnotationHandlerTest extends Test
 			'article' => new ArticleEntity(1),
 		]);
 
-		$this->assertTrue($this->verifier->isLinkVerified($request));
+		$this->assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
 	}
 
 	public function testActionPublishDisallowed()
@@ -85,7 +85,7 @@ class SecurityAnnotationHandlerTest extends Test
 			'article' => new ArticleEntity(2),
 		]);
 
-		$this->assertFalse($this->verifier->isLinkVerified($request));
+		$this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
 	}
 
 }
