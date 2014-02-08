@@ -21,7 +21,7 @@ class PermissionFactory extends Object
 	}
 
 	/**
-	 * @return \Nette\Security\Permission
+	 * @return Permission
 	 */
 	public function create()
 	{
