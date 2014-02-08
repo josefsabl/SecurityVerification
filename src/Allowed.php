@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the file license.md that was distributed with this source code.
  */
 
-namespace Arachne\SecurityAnnotations;
+namespace Arachne\SecurityVerification;
 
 use Arachne\Verifier\IRule;
 use Nette\Object;

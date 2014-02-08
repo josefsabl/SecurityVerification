@@ -1,10 +1,10 @@
-Arachne/SecurityAnnotations
+Arachne/SecurityVerification
 ====
 
 Requirements
 ----
 
-Arachne/SecurityAnnotations requires:
+Arachne/SecurityVerification requires:
 
 - PHP 5.4.0 or higher
 - [Nette Framework](https://github.com/nette/nette) 2.1.0 or higher
@@ -15,8 +15,8 @@ Arachne/SecurityAnnotations requires:
 Installation
 ----
 
-The best way to install Arachne/SecurityAnnotations is using [Composer](http://getcomposer.org/):
+The best way to install Arachne/SecurityVerification is using [Composer](http://getcomposer.org/):
 
 ```sh
-$ composer require arachne/security-annotations
+$ composer require arachne/security-rules
 ```

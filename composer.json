@@ -1,5 +1,5 @@
 {
-	"name": "arachne/security-annotations",
+	"name": "arachne/security-verification",
 	"type": "library",
 	"keywords": [ "nette", "arachne", "security" ],
 	"license": [ "BSD-3-Clause", "GPL-2.0", "GPL-3.0" ],
@@ -28,7 +28,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Arachne\\SecurityAnnotations\\": "src/"
+			"Arachne\\SecurityVerification\\": "src/"
 		}
 	},
 	"repositories": [

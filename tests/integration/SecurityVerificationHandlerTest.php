@@ -11,7 +11,7 @@ use Nette\Security\User;
 /**
  * @author Jáchym Toušek
  */
-class SecurityAnnotationHandlerTest extends Test
+class SecurityVerificationHandlerTest extends Test
 {
 
 	/** @var User */

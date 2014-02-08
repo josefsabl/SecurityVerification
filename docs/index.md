@@ -1,23 +1,23 @@
 # Documentation
 
-This extension is here to provide easy annotation-based authorization of presenter actions and signals.
+This extension is here to provide authorization rules for arachne/verifier.
 
 
 ## Installation
 
-The best way to install Arachne/SecurityAnnotations is using [Composer](http://getcomposer.org/):
+The best way to install Arachne/SecurityVerification is using [Composer](http://getcomposer.org/):
 
 ```sh
-$ composer require arachne/security-annotations
+$ composer require arachne/security-verification
 ```
 
-Now you need to register Arachne/SecurityAnnotations, Arachne/Verifier and Kdyby/Annotations extensions using your [neon](http://ne-on.org/) config file.
+Now you need to register Arachne/SecurityVerification, Arachne/Verifier and Kdyby/Annotations extensions using your [neon](http://ne-on.org/) config file.
 
 ```yml
 extensions:
 	kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
 	arachne.verifier: Arachne\Verifier\DI\VerifierExtension
-	arachne.securityAnnotations: Arachne\SecurityAnnotations\DI\SecurityAnnotationsExtension
+	arachne.securityVerification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
 ```
 
 See also the documentation of [Kdyby/Annotations](https://github.com/Kdyby/Annotations/blob/master/docs/en/index.md) and Arachne/Verifier.
@@ -29,7 +29,7 @@ See also the documentation of [Kdyby/Annotations](https://github.com/Kdyby/Annot
 
 ### Presenter
 
-There are three annotations provided by this extension. It internally uses the Nette\Security\User service.
+There are three types of rules provided by this extension. It internally uses the Nette\Security\User service.
 
 - `@LoggedIn` - Only logged in users.
 - `@LoggedIn(FALSE)` - Only anonymous (not logged in) users.
@@ -37,9 +37,9 @@ There are three annotations provided by this extension. It internally uses the N
 - `@Allowed(resource = "article", privilege = "edit")` - Only users with the "edit" privilege on the "article" resource.
 
 ```php
-use Arachne\SecurityAnnotations\LoggedIn;
-use Arachne\SecurityAnnotations\Allowed;
-use Arachne\SecurityAnnotations\InRole;
+use Arachne\SecurityVerification\LoggedIn;
+use Arachne\SecurityVerification\Allowed;
+use Arachne\SecurityVerification\InRole;
 
 /**
  * @LoggedIn

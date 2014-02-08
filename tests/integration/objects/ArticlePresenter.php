@@ -2,9 +2,9 @@
 
 namespace Tests\Integration;
 
-use Arachne\SecurityAnnotations\Allowed;
-use Arachne\SecurityAnnotations\InRole;
-use Arachne\SecurityAnnotations\LoggedIn;
+use Arachne\SecurityVerification\Allowed;
+use Arachne\SecurityVerification\InRole;
+use Arachne\SecurityVerification\LoggedIn;
 use Exception;
 use Nette\Application\UI\Presenter;
 

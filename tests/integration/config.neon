@@ -13,4 +13,4 @@ services:
 extensions:
 	kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
 	arachne.verifier: Arachne\Verifier\DI\VerifierExtension
-	arachne.securityAnnotations: Arachne\SecurityAnnotations\DI\SecurityAnnotationsExtension
+	arachne.securityVerification: Arachne\SecurityVerification\DI\SecurityVerificationExtension

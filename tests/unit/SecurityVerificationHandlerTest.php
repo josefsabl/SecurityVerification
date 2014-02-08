@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
-use Arachne\SecurityAnnotations\Allowed;
-use Arachne\SecurityAnnotations\InRole;
-use Arachne\SecurityAnnotations\LoggedIn;
-use Arachne\SecurityAnnotations\SecurityAnnotationHandler;
+use Arachne\SecurityVerification\Allowed;
+use Arachne\SecurityVerification\InRole;
+use Arachne\SecurityVerification\LoggedIn;
+use Arachne\SecurityVerification\SecurityVerificationHandler;
 use Codeception\TestCase\Test;
 use Mockery;
 use Mockery\MockInterface;
@@ -14,10 +14,10 @@ use Nette\Application\Request;
 /**
  * @author Jáchym Toušek
  */
-class SecurityAnnotationHandlerTest extends Test
+class SecurityVerificationHandlerTest extends Test
 {
 
-	/** @var SecurityAnnotationHandler */
+	/** @var SecurityVerificationHandler */
 	private $handler;
 
 	/** @var MockInterface */
@@ -26,7 +26,7 @@ class SecurityAnnotationHandlerTest extends Test
 	protected function _before()
 	{
 		$this->user = Mockery::mock('Nette\Security\User');
-		$this->handler = new SecurityAnnotationHandler($this->user);
+		$this->handler = new SecurityVerificationHandler($this->user);
 	}
 
 	public function testAllowedTrue()
@@ -47,7 +47,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityVerification\Exception\FailedAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'resource / privilege' is not granted.
 	 */
 	public function testAllowedFalse()
@@ -83,7 +83,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityVerification\Exception\FailedAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'Test / privilege' is not granted.
 	 */
 	public function testAllowedThisFalse()
@@ -121,7 +121,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityVerification\Exception\FailedAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'entity / privilege' is not granted.
 	 */
 	public function testAllowedResourceFalse()
@@ -148,7 +148,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\Exception\InvalidArgumentException
+	 * @expectedException Arachne\SecurityVerification\Exception\InvalidArgumentException
 	 * @expectedExceptionMessage Missing parameter '$entity' in given request.
 	 */
 	public function testAllowedWrongParameter()
@@ -162,7 +162,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\Exception\InvalidArgumentException
+	 * @expectedException Arachne\SecurityVerification\Exception\InvalidArgumentException
 	 * @expectedExceptionMessage Parameter '$entity' is not an instance of \Nette\Security\IResource.
 	 */
 	public function testAllowedMissingParameter()
@@ -194,7 +194,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityVerification\Exception\FailedAuthorizationException
 	 * @expectedExceptionMessage Role 'role' is required for this request.
 	 */
 	public function testInRoleFalse()
@@ -240,7 +240,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedAuthenticationException
+	 * @expectedException Arachne\SecurityVerification\Exception\FailedAuthenticationException
 	 * @expectedExceptionMessage User must be logged in for this request.
 	 */
 	public function testLoggedInFalse()
@@ -257,7 +257,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\Exception\FailedNoAuthenticationException
+	 * @expectedException Arachne\SecurityVerification\Exception\FailedNoAuthenticationException
 	 * @expectedExceptionMessage User must not be logged in for this request.
 	 */
 	public function testNotLoggedInFalse()
@@ -275,7 +275,7 @@ class SecurityAnnotationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityAnnotations\Exception\InvalidArgumentException
+	 * @expectedException Arachne\SecurityVerification\Exception\InvalidArgumentException
 	 */
 	public function testUnknownAnnotation()
 	{

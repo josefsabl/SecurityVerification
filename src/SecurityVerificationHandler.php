@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the file license.md that was distributed with this source code.
  */
 
-namespace Arachne\SecurityAnnotations;
+namespace Arachne\SecurityVerification;
 
-use Arachne\SecurityAnnotations\Exception\FailedAuthenticationException;
-use Arachne\SecurityAnnotations\Exception\FailedAuthorizationException;
-use Arachne\SecurityAnnotations\Exception\FailedNoAuthenticationException;
-use Arachne\SecurityAnnotations\Exception\InvalidArgumentException;
+use Arachne\SecurityVerification\Exception\FailedAuthenticationException;
+use Arachne\SecurityVerification\Exception\FailedAuthorizationException;
+use Arachne\SecurityVerification\Exception\FailedNoAuthenticationException;
+use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\Verifier\IRule;
 use Arachne\Verifier\IRuleHandler;
 use Nette\Application\Request;
@@ -25,7 +25,7 @@ use Nette\Utils\Strings;
 /**
  * @author Jáchym Toušek
  */
-class SecurityAnnotationHandler extends Object implements IRuleHandler
+class SecurityVerificationHandler extends Object implements IRuleHandler
 {
 
 	/** @var User */
