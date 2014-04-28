@@ -3,6 +3,8 @@
 namespace Tests\Unit;
 
 use Arachne\SecurityVerification\Allowed;
+use Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException;
+use Arachne\SecurityVerification\Exception\FailedRoleAuthorizationException;
 use Arachne\SecurityVerification\InRole;
 use Arachne\SecurityVerification\LoggedIn;
 use Arachne\SecurityVerification\SecurityVerificationHandler;
@@ -63,7 +65,13 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(FALSE);
 
-		$this->handler->checkRule($annotation, $request);
+		try {
+			$this->handler->checkRule($annotation, $request);
+		} catch (FailedPrivilegeAuthorizationException $e) {
+			$this->assertSame('resource', $e->getResource());
+			$this->assertSame('privilege', $e->getPrivilege());
+			throw  $e;
+		}
 	}
 
 	public function testAllowedThis()
@@ -98,7 +106,13 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(FALSE);
 
-		$this->handler->checkRule($annotation, $request);
+		try {
+			$this->handler->checkRule($annotation, $request);
+		} catch (FailedPrivilegeAuthorizationException $e) {
+			$this->assertSame('Test', $e->getResource());
+			$this->assertSame('privilege', $e->getPrivilege());
+			throw  $e;
+		}
 	}
 
 	public function testAllowedResource()
@@ -144,7 +158,13 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(FALSE);
 
-		$this->handler->checkRule($annotation, $request);
+		try {
+			$this->handler->checkRule($annotation, $request);
+		} catch (FailedPrivilegeAuthorizationException $e) {
+			$this->assertSame($entity, $e->getResource());
+			$this->assertSame('privilege', $e->getPrivilege());
+			throw  $e;
+		}
 	}
 
 	/**
@@ -209,7 +229,12 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(FALSE);
 
-		$this->handler->checkRule($annotation, $request);
+		try {
+			$this->handler->checkRule($annotation, $request);
+		} catch (FailedRoleAuthorizationException $e) {
+			$this->assertSame('role', $e->getRole());
+			throw  $e;
+		}
 	}
 
 	public function testLoggedInTrue()
