@@ -5,7 +5,6 @@ namespace Tests\Integration\Classes;
 use Arachne\SecurityVerification\Allowed;
 use Arachne\SecurityVerification\InRole;
 use Arachne\SecurityVerification\LoggedIn;
-use Exception;
 use Nette\Application\UI\Presenter;
 
 /**

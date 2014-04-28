@@ -15,6 +15,26 @@ use Nette\Application\ForbiddenRequestException;
 /**
  * @author Jáchym Toušek
  */
-class FailedAuthorizationException extends ForbiddenRequestException
+class FailedRoleAuthorizationException extends ForbiddenRequestException
 {
+
+	/** @var string */
+	private $role;
+
+	/**
+	 * @return string
+	 */
+	public function getRole()
+	{
+		return $this->role;
+	}
+
+	/**
+	 * @param string $role
+	 */
+	public function setRole($role)
+	{
+		$this->role = $role;
+	}
+
 }

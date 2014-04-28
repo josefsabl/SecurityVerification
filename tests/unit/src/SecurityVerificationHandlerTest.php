@@ -47,7 +47,7 @@ class SecurityVerificationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'resource / privilege' is not granted.
 	 */
 	public function testAllowedFalse()
@@ -83,7 +83,7 @@ class SecurityVerificationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'Test / privilege' is not granted.
 	 */
 	public function testAllowedThisFalse()
@@ -121,7 +121,7 @@ class SecurityVerificationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'entity / privilege' is not granted.
 	 */
 	public function testAllowedResourceFalse()
@@ -194,7 +194,7 @@ class SecurityVerificationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\FailedAuthorizationException
+	 * @expectedException Arachne\SecurityVerification\Exception\FailedRoleAuthorizationException
 	 * @expectedExceptionMessage Role 'role' is required for this request.
 	 */
 	public function testInRoleFalse()

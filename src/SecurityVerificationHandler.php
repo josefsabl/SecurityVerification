@@ -11,8 +11,9 @@
 namespace Arachne\SecurityVerification;
 
 use Arachne\SecurityVerification\Exception\FailedAuthenticationException;
-use Arachne\SecurityVerification\Exception\FailedAuthorizationException;
 use Arachne\SecurityVerification\Exception\FailedNoAuthenticationException;
+use Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException;
+use Arachne\SecurityVerification\Exception\FailedRoleAuthorizationException;
 use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\Verifier\IRule;
 use Arachne\Verifier\IRuleHandler;
@@ -43,8 +44,9 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	 * @param IRule $annotation
 	 * @param Request $request
 	 * @throws FailedAuthenticationException
-	 * @throws FailedAuthorizationException
 	 * @throws FailedNoAuthenticationException
+	 * @throws FailedPrivilegeAuthorizationException
+	 * @throws FailedRoleAuthorizationException
 	 */
 	public function checkRule(IRule $annotation, Request $request, $component = NULL)
 	{
@@ -90,27 +92,30 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	/**
 	 * @param Allowed $annotation
 	 * @param Request $request
-	 * @throws FailedAuthorizationException
+	 * @throws FailedPrivilegeAuthorizationException
 	 */
 	protected function checkAnnotationAllowed(Allowed $annotation, Request $request, $component)
 	{
 		$resource = $this->resolveResource($annotation->resource, $request, $component);
 		if (!$this->user->isAllowed($resource, $annotation->privilege)) {
-			if ($resource instanceof IResource) {
-				$resource = $resource->getResourceId();
-			}
-			throw new FailedAuthorizationException("Required privilege '$resource / $annotation->privilege' is not granted.");
+			$resourceId = $resource instanceof IResource ? $resource->getResourceId() : $resource;
+			$exception = new FailedPrivilegeAuthorizationException("Required privilege '$resourceId / $annotation->privilege' is not granted.");
+			$exception->setResource($resource);
+			$exception->setPrivilege($annotation->privilege);
+			throw $exception;
 		}
 	}
 
 	/**
 	 * @param InRole $annotation
-	 * @throws FailedAuthorizationException
+	 * @throws FailedRoleAuthorizationException
 	 */
 	protected function checkAnnotationInRole(InRole $annotation)
 	{
 		if (!$this->user->isInRole($annotation->role)) {
-			throw new FailedAuthorizationException("Role '$annotation->role' is required for this request.");
+			$exception =  new FailedRoleAuthorizationException("Role '$annotation->role' is required for this request.");
+			$exception->setRole($annotation->role);
+			throw $exception;
 		}
 	}
 
