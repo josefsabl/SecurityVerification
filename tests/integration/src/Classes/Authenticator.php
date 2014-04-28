@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Integration;
+namespace Tests\Integration\Classes;
 
 use Nette\Object;
 use Nette\Security\AuthenticationException;

@@ -7,6 +7,8 @@ use Codeception\TestCase\Test;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
 use Nette\Security\User;
+use Tests\Integration\Classes\ArticleEntity;
+use Tests\Integration\Classes\ArticlePresenter;
 
 /**
  * @author Jáchym Toušek

@@ -8,6 +8,4 @@ modules:
     config:
         Nette:
             configFiles:
-                - tests/integration/config.neon
-            robotLoader:
-                - tests/integration
+                - tests/integration/config/config.neon

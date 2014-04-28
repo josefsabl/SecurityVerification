@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Integration;
+namespace Tests\Integration\Classes;
 
 use Arachne\SecurityVerification\Allowed;
 use Arachne\SecurityVerification\InRole;

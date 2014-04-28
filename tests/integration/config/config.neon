@@ -1,13 +1,13 @@
 nette:
 	application:
 		mapping:
-			*: Tests\Integration\*Presenter
+			*: Tests\Integration\Classes\*Presenter
 	session:
 		autoStart: true
 
 services:
-	authenticator: Tests\Integration\Authenticator
-	authorizatorFactory: Tests\Integration\PermissionFactory
+	authenticator: Tests\Integration\Classes\Authenticator
+	authorizatorFactory: Tests\Integration\Classes\PermissionFactory
 	authorizator: @authorizatorFactory::create()
 
 extensions:
