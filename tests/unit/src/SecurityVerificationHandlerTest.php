@@ -36,7 +36,6 @@ class SecurityVerificationHandlerTest extends Test
 		$annotation = new Allowed();
 		$annotation->resource = 'resource';
 		$annotation->privilege = 'privilege';
-		// TODO: mock this
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
