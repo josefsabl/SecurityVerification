@@ -1,3 +1,8 @@
+extensions:
+	kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
+	arachne.verifier: Arachne\Verifier\DI\VerifierExtension
+	arachne.securityVerification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
+
 nette:
 	application:
 		mapping:
@@ -9,8 +14,3 @@ services:
 	authenticator: Tests\Integration\Classes\Authenticator
 	authorizatorFactory: Tests\Integration\Classes\PermissionFactory
 	authorizator: @authorizatorFactory::create()
-
-extensions:
-	kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
-	arachne.verifier: Arachne\Verifier\DI\VerifierExtension
-	arachne.securityVerification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
