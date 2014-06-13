@@ -21,7 +21,6 @@ use Nette\Application\Request;
 use Nette\Object;
 use Nette\Security\IResource;
 use Nette\Security\User;
-use Nette\Utils\Strings;
 
 /**
  * @author Jáchym Toušek
@@ -69,7 +68,7 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	 */
 	protected function resolveResource($resource, Request $request, $component)
 	{
-		if (!Strings::startsWith($resource, '$')) {
+		if (strncmp($resource, '$', 1) !== 0) {
 			return $resource;
 		}
 		$parameters = $request->getParameters();
