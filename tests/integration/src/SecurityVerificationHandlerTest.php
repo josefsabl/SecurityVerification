@@ -25,8 +25,8 @@ class SecurityVerificationHandlerTest extends Test
 	public function _before()
 	{
 		parent::_before();
-		$this->user = $this->codeGuy->grabService(User::class);
-		$this->verifier = $this->codeGuy->grabService(Verifier::class);
+		$this->user = $this->guy->grabService(User::class);
+		$this->verifier = $this->guy->grabService(Verifier::class);
 	}
 
 	public function testActionEdit()
