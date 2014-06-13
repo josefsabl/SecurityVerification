@@ -25,8 +25,8 @@ class SecurityVerificationHandlerTest extends Test
 	public function _before()
 	{
 		parent::_before();
-		$this->user = $this->codeGuy->grabService('Nette\Security\User');
-		$this->verifier = $this->codeGuy->grabService('Arachne\Verifier\Verifier');
+		$this->user = $this->codeGuy->grabService(User::class);
+		$this->verifier = $this->codeGuy->grabService(Verifier::class);
 	}
 
 	public function testActionEdit()

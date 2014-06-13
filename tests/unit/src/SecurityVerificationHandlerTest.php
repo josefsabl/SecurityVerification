@@ -8,10 +8,13 @@ use Arachne\SecurityVerification\Exception\FailedRoleAuthorizationException;
 use Arachne\SecurityVerification\InRole;
 use Arachne\SecurityVerification\LoggedIn;
 use Arachne\SecurityVerification\SecurityVerificationHandler;
+use Arachne\Verifier\IRule;
 use Codeception\TestCase\Test;
 use Mockery;
 use Mockery\MockInterface;
 use Nette\Application\Request;
+use Nette\Security\IResource;
+use Nette\Security\User;
 
 /**
  * @author Jáchym Toušek
@@ -27,7 +30,7 @@ class SecurityVerificationHandlerTest extends Test
 
 	protected function _before()
 	{
-		$this->user = Mockery::mock('Nette\Security\User');
+		$this->user = Mockery::mock(User::class);
 		$this->handler = new SecurityVerificationHandler($this->user);
 	}
 
@@ -119,7 +122,7 @@ class SecurityVerificationHandlerTest extends Test
 		$annotation = new Allowed();
 		$annotation->resource = '$entity';
 		$annotation->privilege = 'privilege';
-		$entity = Mockery::mock('Nette\Security\IResource');
+		$entity = Mockery::mock(IResource::class);
 		$request = new Request('Test', 'GET', [
 			'entity' => $entity,
 		]);
@@ -142,7 +145,7 @@ class SecurityVerificationHandlerTest extends Test
 		$annotation = new Allowed();
 		$annotation->resource = '$entity';
 		$annotation->privilege = 'privilege';
-		$entity = Mockery::mock('Nette\Security\IResource');
+		$entity = Mockery::mock(IResource::class);
 		$entity
 			->shouldReceive('getResourceId')
 			->once()
@@ -303,7 +306,7 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testUnknownAnnotation()
 	{
-		$annotation = Mockery::mock('Arachne\Verifier\IRule');
+		$annotation = Mockery::mock(IRule::class);
 		$request = new Request('Test', 'GET', []);
 
 		$this->handler->checkRule($annotation, $request);
