@@ -72,7 +72,7 @@ class SecurityVerificationHandlerTest extends Test
 		} catch (FailedPrivilegeAuthorizationException $e) {
 			$this->assertSame('resource', $e->getResource());
 			$this->assertSame('privilege', $e->getPrivilege());
-			throw  $e;
+			throw $e;
 		}
 	}
 
@@ -113,7 +113,7 @@ class SecurityVerificationHandlerTest extends Test
 		} catch (FailedPrivilegeAuthorizationException $e) {
 			$this->assertSame('Test', $e->getResource());
 			$this->assertSame('privilege', $e->getPrivilege());
-			throw  $e;
+			throw $e;
 		}
 	}
 
@@ -165,7 +165,7 @@ class SecurityVerificationHandlerTest extends Test
 		} catch (FailedPrivilegeAuthorizationException $e) {
 			$this->assertSame($entity, $e->getResource());
 			$this->assertSame('privilege', $e->getPrivilege());
-			throw  $e;
+			throw $e;
 		}
 	}
 
@@ -235,7 +235,7 @@ class SecurityVerificationHandlerTest extends Test
 			$this->handler->checkRule($annotation, $request);
 		} catch (FailedRoleAuthorizationException $e) {
 			$this->assertSame('role', $e->getRole());
-			throw  $e;
+			throw $e;
 		}
 	}
 
