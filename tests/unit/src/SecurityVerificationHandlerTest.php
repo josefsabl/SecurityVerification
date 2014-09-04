@@ -185,7 +185,7 @@ class SecurityVerificationHandlerTest extends Test
 
 	/**
 	 * @expectedException Arachne\SecurityVerification\Exception\InvalidArgumentException
-	 * @expectedExceptionMessage Parameter '$entity' is not an instance of \Nette\Security\IResource.
+	 * @expectedExceptionMessage Parameter '$entity' is not an instance of Nette\Security\IResource.
 	 */
 	public function testAllowedMissingParameter()
 	{

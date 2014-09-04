@@ -82,7 +82,7 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 		} elseif (!isset($parameters[$parameter])) {
 			throw new InvalidArgumentException("Missing parameter '$resource' in given request.");
 		} elseif (!$parameters[$parameter] instanceof IResource) {
-			throw new InvalidArgumentException("Parameter '$resource' is not an instance of \Nette\Security\IResource.");
+			throw new InvalidArgumentException("Parameter '$resource' is not an instance of Nette\Security\IResource.");
 		} else {
 			return $parameters[$parameter];
 		}
