@@ -36,9 +36,9 @@ class SecurityVerificationHandlerTest extends Test
 
 	public function testAllowedTrue()
 	{
-		$annotation = new Allowed();
-		$annotation->resource = 'resource';
-		$annotation->privilege = 'privilege';
+		$rule = new Allowed();
+		$rule->resource = 'resource';
+		$rule->privilege = 'privilege';
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
@@ -47,7 +47,7 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(TRUE);
 
-		$this->assertNull($this->handler->checkRule($annotation, $request));
+		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
 
 	/**
@@ -56,9 +56,9 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testAllowedFalse()
 	{
-		$annotation = new Allowed();
-		$annotation->resource = 'resource';
-		$annotation->privilege = 'privilege';
+		$rule = new Allowed();
+		$rule->resource = 'resource';
+		$rule->privilege = 'privilege';
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
@@ -68,7 +68,7 @@ class SecurityVerificationHandlerTest extends Test
 			->andReturn(FALSE);
 
 		try {
-			$this->handler->checkRule($annotation, $request);
+			$this->handler->checkRule($rule, $request);
 		} catch (FailedPrivilegeAuthorizationException $e) {
 			$this->assertSame('resource', $e->getResource());
 			$this->assertSame('privilege', $e->getPrivilege());
@@ -78,9 +78,9 @@ class SecurityVerificationHandlerTest extends Test
 
 	public function testAllowedThis()
 	{
-		$annotation = new Allowed();
-		$annotation->resource = '$this';
-		$annotation->privilege = 'privilege';
+		$rule = new Allowed();
+		$rule->resource = '$this';
+		$rule->privilege = 'privilege';
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
@@ -89,7 +89,7 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(TRUE);
 
-		$this->assertNull($this->handler->checkRule($annotation, $request));
+		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
 
 	/**
@@ -98,9 +98,9 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testAllowedThisFalse()
 	{
-		$annotation = new Allowed();
-		$annotation->resource = '$this';
-		$annotation->privilege = 'privilege';
+		$rule = new Allowed();
+		$rule->resource = '$this';
+		$rule->privilege = 'privilege';
 		$request = new Request('Test', 'GET', []);
 		$this->user
 			->shouldReceive('isAllowed')
@@ -109,7 +109,7 @@ class SecurityVerificationHandlerTest extends Test
 			->andReturn(FALSE);
 
 		try {
-			$this->handler->checkRule($annotation, $request);
+			$this->handler->checkRule($rule, $request);
 		} catch (FailedPrivilegeAuthorizationException $e) {
 			$this->assertSame('Test', $e->getResource());
 			$this->assertSame('privilege', $e->getPrivilege());
@@ -119,9 +119,9 @@ class SecurityVerificationHandlerTest extends Test
 
 	public function testAllowedResource()
 	{
-		$annotation = new Allowed();
-		$annotation->resource = '$entity';
-		$annotation->privilege = 'privilege';
+		$rule = new Allowed();
+		$rule->resource = '$entity';
+		$rule->privilege = 'privilege';
 		$entity = Mockery::mock(IResource::class);
 		$request = new Request('Test', 'GET', [
 			'entity' => $entity,
@@ -133,7 +133,7 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(TRUE);
 
-		$this->assertNull($this->handler->checkRule($annotation, $request));
+		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
 
 	/**
@@ -142,9 +142,9 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testAllowedResourceFalse()
 	{
-		$annotation = new Allowed();
-		$annotation->resource = '$entity';
-		$annotation->privilege = 'privilege';
+		$rule = new Allowed();
+		$rule->resource = '$entity';
+		$rule->privilege = 'privilege';
 		$entity = Mockery::mock(IResource::class);
 		$entity
 			->shouldReceive('getResourceId')
@@ -161,7 +161,7 @@ class SecurityVerificationHandlerTest extends Test
 			->andReturn(FALSE);
 
 		try {
-			$this->handler->checkRule($annotation, $request);
+			$this->handler->checkRule($rule, $request);
 		} catch (FailedPrivilegeAuthorizationException $e) {
 			$this->assertSame($entity, $e->getResource());
 			$this->assertSame('privilege', $e->getPrivilege());
@@ -175,12 +175,12 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testAllowedWrongParameter()
 	{
-		$annotation = new Allowed();
-		$annotation->resource = '$entity';
-		$annotation->privilege = 'privilege';
+		$rule = new Allowed();
+		$rule->resource = '$entity';
+		$rule->privilege = 'privilege';
 		$request = new Request('Test', 'GET', []);
 
-		$this->handler->checkRule($annotation, $request);
+		$this->handler->checkRule($rule, $request);
 	}
 
 	/**
@@ -189,21 +189,21 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testAllowedMissingParameter()
 	{
-		$annotation = new Allowed();
-		$annotation->resource = '$entity';
-		$annotation->privilege = 'privilege';
+		$rule = new Allowed();
+		$rule->resource = '$entity';
+		$rule->privilege = 'privilege';
 		$entity = Mockery::mock();
 		$request = new Request('Test', 'GET', [
 			'entity' => $entity,
 		]);
 
-		$this->handler->checkRule($annotation, $request);
+		$this->handler->checkRule($rule, $request);
 	}
 
 	public function testInRoleTrue()
 	{
-		$annotation = new InRole();
-		$annotation->role = 'role';
+		$rule = new InRole();
+		$rule->role = 'role';
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
@@ -212,7 +212,7 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(TRUE);
 
-		$this->assertNull($this->handler->checkRule($annotation, $request));
+		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
 
 	/**
@@ -221,8 +221,8 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testInRoleFalse()
 	{
-		$annotation = new InRole();
-		$annotation->role = 'role';
+		$rule = new InRole();
+		$rule->role = 'role';
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
@@ -232,7 +232,7 @@ class SecurityVerificationHandlerTest extends Test
 			->andReturn(FALSE);
 
 		try {
-			$this->handler->checkRule($annotation, $request);
+			$this->handler->checkRule($rule, $request);
 		} catch (FailedRoleAuthorizationException $e) {
 			$this->assertSame('role', $e->getRole());
 			throw $e;
@@ -241,7 +241,7 @@ class SecurityVerificationHandlerTest extends Test
 
 	public function testLoggedInTrue()
 	{
-		$annotation = new LoggedIn();
+		$rule = new LoggedIn();
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
@@ -249,13 +249,13 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(TRUE);
 
-		$this->assertNull($this->handler->checkRule($annotation, $request));
+		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
 
 	public function testNotLoggedInTrue()
 	{
-		$annotation = new LoggedIn();
-		$annotation->flag = FALSE;
+		$rule = new LoggedIn();
+		$rule->flag = FALSE;
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
@@ -263,7 +263,7 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(FALSE);
 
-		$this->assertNull($this->handler->checkRule($annotation, $request));
+		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
 
 	/**
@@ -272,7 +272,7 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testLoggedInFalse()
 	{
-		$annotation = new LoggedIn();
+		$rule = new LoggedIn();
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
@@ -280,7 +280,7 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(FALSE);
 
-		$this->handler->checkRule($annotation, $request);
+		$this->handler->checkRule($rule, $request);
 	}
 
 	/**
@@ -289,8 +289,8 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testNotLoggedInFalse()
 	{
-		$annotation = new LoggedIn();
-		$annotation->flag = FALSE;
+		$rule = new LoggedIn();
+		$rule->flag = FALSE;
 		$request = new Request('Test', 'GET', []);
 
 		$this->user
@@ -298,7 +298,7 @@ class SecurityVerificationHandlerTest extends Test
 			->once()
 			->andReturn(TRUE);
 
-		$this->handler->checkRule($annotation, $request);
+		$this->handler->checkRule($rule, $request);
 	}
 
 	/**
@@ -306,10 +306,10 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testUnknownAnnotation()
 	{
-		$annotation = Mockery::mock(IRule::class);
+		$rule = Mockery::mock(IRule::class);
 		$request = new Request('Test', 'GET', []);
 
-		$this->handler->checkRule($annotation, $request);
+		$this->handler->checkRule($rule, $request);
 	}
 
 }
