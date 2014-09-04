@@ -91,6 +91,7 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	/**
 	 * @param Allowed $rule
 	 * @param Request $request
+	 * @param string $component	 
 	 * @throws FailedPrivilegeAuthorizationException
 	 */
 	protected function checkRuleAllowed(Allowed $rule, Request $request, $component)
