@@ -40,23 +40,23 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	}
 
 	/**
-	 * @param IRule $annotation
+	 * @param IRule $rule
 	 * @param Request $request
 	 * @throws FailedAuthenticationException
 	 * @throws FailedNoAuthenticationException
 	 * @throws FailedPrivilegeAuthorizationException
 	 * @throws FailedRoleAuthorizationException
 	 */
-	public function checkRule(IRule $annotation, Request $request, $component = NULL)
+	public function checkRule(IRule $rule, Request $request, $component = NULL)
 	{
-		if ($annotation instanceof Allowed) {
-			$this->checkAnnotationAllowed($annotation, $request, $component);
-		} elseif ($annotation instanceof InRole) {
-			$this->checkAnnotationInRole($annotation);
-		} elseif ($annotation instanceof LoggedIn) {
-			$this->checkAnnotationLoggedIn($annotation);
+		if ($rule instanceof Allowed) {
+			$this->checkRuleAllowed($rule, $request, $component);
+		} elseif ($rule instanceof InRole) {
+			$this->checkRuleInRole($rule);
+		} elseif ($rule instanceof LoggedIn) {
+			$this->checkRuleLoggedIn($rule);
 		} else {
-			throw new InvalidArgumentException('Unknown annotation \'' . get_class($annotation) . '\' given.');
+			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
 		}
 	}
 
@@ -89,44 +89,44 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	}
 
 	/**
-	 * @param Allowed $annotation
+	 * @param Allowed $rule
 	 * @param Request $request
 	 * @throws FailedPrivilegeAuthorizationException
 	 */
-	protected function checkAnnotationAllowed(Allowed $annotation, Request $request, $component)
+	protected function checkRuleAllowed(Allowed $rule, Request $request, $component)
 	{
-		$resource = $this->resolveResource($annotation->resource, $request, $component);
-		if (!$this->user->isAllowed($resource, $annotation->privilege)) {
+		$resource = $this->resolveResource($rule->resource, $request, $component);
+		if (!$this->user->isAllowed($resource, $rule->privilege)) {
 			$resourceId = $resource instanceof IResource ? $resource->getResourceId() : $resource;
-			$exception = new FailedPrivilegeAuthorizationException("Required privilege '$resourceId / $annotation->privilege' is not granted.");
+			$exception = new FailedPrivilegeAuthorizationException("Required privilege '$resourceId / $rule->privilege' is not granted.");
 			$exception->setResource($resource);
-			$exception->setPrivilege($annotation->privilege);
+			$exception->setPrivilege($rule->privilege);
 			throw $exception;
 		}
 	}
 
 	/**
-	 * @param InRole $annotation
+	 * @param InRole $rule
 	 * @throws FailedRoleAuthorizationException
 	 */
-	protected function checkAnnotationInRole(InRole $annotation)
+	protected function checkRuleInRole(InRole $rule)
 	{
-		if (!$this->user->isInRole($annotation->role)) {
-			$exception =  new FailedRoleAuthorizationException("Role '$annotation->role' is required for this request.");
-			$exception->setRole($annotation->role);
+		if (!$this->user->isInRole($rule->role)) {
+			$exception =  new FailedRoleAuthorizationException("Role '$rule->role' is required for this request.");
+			$exception->setRole($rule->role);
 			throw $exception;
 		}
 	}
 
 	/**
-	 * @param LoggedIn $annotation
+	 * @param LoggedIn $rule
 	 * @throws FailedAuthenticationException
 	 * @throws FailedNoAuthenticationException
 	 */
-	protected function checkAnnotationLoggedIn(LoggedIn $annotation)
+	protected function checkRuleLoggedIn(LoggedIn $rule)
 	{
-		if ($this->user->isLoggedIn() !== $annotation->flag) {
-			if ($annotation->flag) {
+		if ($this->user->isLoggedIn() !== $rule->flag) {
+			if ($rule->flag) {
 				throw new FailedAuthenticationException('User must be logged in for this request.');
 			} else {
 				throw new FailedNoAuthenticationException('User must not be logged in for this request.');
