@@ -12,5 +12,5 @@ nette:
 
 services:
 	authenticator: Tests\Integration\Classes\Authenticator
-	authorizatorFactory: Tests\Integration\Classes\PermissionFactory
+	authorizatorFactory: Tests\Integration\Classes\AuthorizatorFactory
 	authorizator: @authorizatorFactory::create()

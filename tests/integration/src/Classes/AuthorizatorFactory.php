@@ -9,7 +9,7 @@ use Nette\Security\Permission;
 /**
  * @author Jáchym Toušek
  */
-class PermissionFactory extends Object
+class AuthorizatorFactory extends Object
 {
 
 	/** @var Container */
