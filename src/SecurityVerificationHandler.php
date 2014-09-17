@@ -42,6 +42,7 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	/**
 	 * @param IRule $rule
 	 * @param Request $request
+	 * @param string $component	 
 	 * @throws FailedAuthenticationException
 	 * @throws FailedNoAuthenticationException
 	 * @throws FailedPrivilegeAuthorizationException
