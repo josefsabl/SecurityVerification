@@ -90,4 +90,28 @@ class SecurityVerificationHandlerTest extends Test
 		$this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
 	}
 
+	public function testActionPublishParentAllowed()
+	{
+		$this->user->login('admin', 'password');
+
+		$request = new Request('Article', 'GET', [
+			Presenter::ACTION_KEY => 'publishparent',
+			'article' => new ArticleEntity(2, new ArticleEntity(1)),
+		]);
+
+		$this->assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
+	}
+
+	public function testActionPublishParentDisallowed()
+	{
+		$this->user->login('admin', 'password');
+
+		$request = new Request('Article', 'GET', [
+			Presenter::ACTION_KEY => 'publishparent',
+			'article' => new ArticleEntity(1, new ArticleEntity(2)),
+		]);
+
+		$this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
+	}
+
 }

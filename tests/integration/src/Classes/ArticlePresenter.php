@@ -45,4 +45,11 @@ class ArticlePresenter extends Presenter
 	{
 	}
 
+	/**
+	 * @Allowed(resource = "$article.parent", privilege = "publish")
+	 */
+	public function actionPublishParent(ArticleEntity $article)
+	{
+	}
+
 }

@@ -21,6 +21,8 @@ use Nette\Application\Request;
 use Nette\Object;
 use Nette\Security\IResource;
 use Nette\Security\User;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * @author Jáchym Toušek
@@ -31,18 +33,22 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	/** @var User */
 	protected $user;
 
+	/** @var PropertyAccessorInterface */
+	protected $propertyAccessor;
+
 	/**
 	 * @param User $user
 	 */
-	public function __construct(User $user)
+	public function __construct(User $user, PropertyAccessorInterface $propertyAccessor = NULL)
 	{
 		$this->user = $user;
+		$this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
 	}
 
 	/**
 	 * @param IRule $rule
 	 * @param Request $request
-	 * @param string $component	 
+	 * @param string $component
 	 * @throws FailedAuthenticationException
 	 * @throws FailedNoAuthenticationException
 	 * @throws FailedPrivilegeAuthorizationException
@@ -72,7 +78,6 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 		if (strncmp($resource, '$', 1) !== 0) {
 			return $resource;
 		}
-		$parameters = $request->getParameters();
 		$parameter = substr($resource, 1);
 		if ($component !== NULL) {
 			$parameter = $component . '-' . $parameter;
@@ -80,19 +85,18 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 		if ($parameter === 'this') {
 			$presenter = $request->getPresenterName();
 			return substr($presenter, strrpos(':' . $presenter, ':'));
-		} elseif (!isset($parameters[$parameter])) {
-			throw new InvalidArgumentException("Missing parameter '$resource' in given request.");
-		} elseif (!$parameters[$parameter] instanceof IResource) {
-			throw new InvalidArgumentException("Parameter '$resource' is not an instance of Nette\Security\IResource.");
-		} else {
-			return $parameters[$parameter];
 		}
+		$object = $this->propertyAccessor->getValue((object) $request->getParameters(), $parameter);
+		if (!$object instanceof IResource) {
+			throw new InvalidArgumentException("Resource '$resource' is not an instance of Nette\Security\IResource.");
+		}
+		return $object;
 	}
 
 	/**
 	 * @param Allowed $rule
 	 * @param Request $request
-	 * @param string $component	 
+	 * @param string $component
 	 * @throws FailedPrivilegeAuthorizationException
 	 */
 	protected function checkRuleAllowed(Allowed $rule, Request $request, $component)

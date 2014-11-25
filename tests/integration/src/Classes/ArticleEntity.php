@@ -13,14 +13,22 @@ class ArticleEntity extends Object implements IResource
 
 	private $ownerId;
 
-	public function __construct($ownerId)
+	private $parent;
+
+	public function __construct($ownerId, ArticleEntity $parent = NULL)
 	{
 		$this->ownerId = $ownerId;
+		$this->parent = $parent;
 	}
 
 	public function getOwnerId()
 	{
 		return $this->ownerId;
+	}
+
+	public function getParent()
+	{
+		return $this->parent;
 	}
 
 	public function getResourceId()

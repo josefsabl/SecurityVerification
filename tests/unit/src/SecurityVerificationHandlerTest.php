@@ -170,8 +170,7 @@ class SecurityVerificationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\InvalidArgumentException
-	 * @expectedExceptionMessage Missing parameter '$entity' in given request.
+	 * @expectedException Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
 	 */
 	public function testAllowedWrongParameter()
 	{
@@ -185,7 +184,7 @@ class SecurityVerificationHandlerTest extends Test
 
 	/**
 	 * @expectedException Arachne\SecurityVerification\Exception\InvalidArgumentException
-	 * @expectedExceptionMessage Parameter '$entity' is not an instance of Nette\Security\IResource.
+	 * @expectedExceptionMessage Resource '$entity' is not an instance of Nette\Security\IResource.
 	 */
 	public function testAllowedMissingParameter()
 	{
