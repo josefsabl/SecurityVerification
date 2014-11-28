@@ -31,10 +31,10 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 {
 
 	/** @var User */
-	protected $user;
+	private $user;
 
 	/** @var PropertyAccessorInterface */
-	protected $propertyAccessor;
+	private $propertyAccessor;
 
 	/**
 	 * @param User $user
@@ -73,7 +73,7 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	 * @param string $component
 	 * @return string|IResource
 	 */
-	protected function resolveResource($resource, Request $request, $component)
+	private function resolveResource($resource, Request $request, $component)
 	{
 		if (strncmp($resource, '$', 1) !== 0) {
 			return $resource;
@@ -99,7 +99,7 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	 * @param string $component
 	 * @throws FailedPrivilegeAuthorizationException
 	 */
-	protected function checkRuleAllowed(Allowed $rule, Request $request, $component)
+	private function checkRuleAllowed(Allowed $rule, Request $request, $component)
 	{
 		$resource = $this->resolveResource($rule->resource, $request, $component);
 		if (!$this->user->isAllowed($resource, $rule->privilege)) {
@@ -115,7 +115,7 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	 * @param InRole $rule
 	 * @throws FailedRoleAuthorizationException
 	 */
-	protected function checkRuleInRole(InRole $rule)
+	private function checkRuleInRole(InRole $rule)
 	{
 		if (!$this->user->isInRole($rule->role)) {
 			$exception =  new FailedRoleAuthorizationException("Role '$rule->role' is required for this request.");
@@ -129,7 +129,7 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 	 * @throws FailedAuthenticationException
 	 * @throws FailedNoAuthenticationException
 	 */
-	protected function checkRuleLoggedIn(LoggedIn $rule)
+	private function checkRuleLoggedIn(LoggedIn $rule)
 	{
 		if ($this->user->isLoggedIn() !== $rule->flag) {
 			if ($rule->flag) {
