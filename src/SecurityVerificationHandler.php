@@ -38,6 +38,7 @@ class SecurityVerificationHandler extends Object implements IRuleHandler
 
 	/**
 	 * @param User $user
+	 * @param PropertyAccessorInterface $propertyAccessor	 
 	 */
 	public function __construct(User $user, PropertyAccessorInterface $propertyAccessor = NULL)
 	{
