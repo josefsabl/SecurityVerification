@@ -303,7 +303,7 @@ class SecurityVerificationHandlerTest extends Test
 	/**
 	 * @expectedException Arachne\SecurityVerification\Exception\InvalidArgumentException
 	 */
-	public function testUnknownAnnotation()
+	public function testUnknownRule()
 	{
 		$rule = Mockery::mock(IRule::class);
 		$request = new Request('Test', 'GET', []);
