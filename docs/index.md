@@ -37,9 +37,9 @@ There are three types of rules provided by this extension. It internally uses th
 - `@Allowed(resource = "article", privilege = "edit")` - Only users with the "edit" privilege on the "article" resource.
 
 ```php
-use Arachne\SecurityVerification\LoggedIn;
-use Arachne\SecurityVerification\Allowed;
-use Arachne\SecurityVerification\InRole;
+use Arachne\SecurityVerification\Rules\LoggedIn;
+use Arachne\SecurityVerification\Rules\Allowed;
+use Arachne\SecurityVerification\Rules\InRole;
 
 /**
  * @LoggedIn
