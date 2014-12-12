@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the file license.md that was distributed with this source code.
  */
 
-namespace Arachne\SecurityVerification;
+namespace Arachne\SecurityVerification\Rules;
 
-use Arachne\Verifier\IRule;
+use Arachne\Verifier\RuleInterface;
 use Nette\Object;
 
 /**
  * @author Jáchym Toušek
  *
  * @Annotation
- * @Target({"CLASS", "METHOD"})
+ * @Target({"CLASS", "METHOD", "ANNOTATION"})
  */
-class Allowed extends Object implements IRule
+class Allowed extends Object implements RuleInterface
 {
 
 	/** @var string */

@@ -2,13 +2,13 @@
 
 namespace Tests\Unit;
 
-use Arachne\SecurityVerification\Allowed;
 use Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException;
 use Arachne\SecurityVerification\Exception\FailedRoleAuthorizationException;
-use Arachne\SecurityVerification\InRole;
-use Arachne\SecurityVerification\LoggedIn;
-use Arachne\SecurityVerification\SecurityVerificationHandler;
-use Arachne\Verifier\IRule;
+use Arachne\SecurityVerification\Rules\Allowed;
+use Arachne\SecurityVerification\Rules\InRole;
+use Arachne\SecurityVerification\Rules\LoggedIn;
+use Arachne\SecurityVerification\Rules\SecurityVerificationHandler;
+use Arachne\Verifier\RuleInterface;
 use Codeception\TestCase\Test;
 use Mockery;
 use Mockery\MockInterface;
@@ -305,7 +305,7 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testUnknownRule()
 	{
-		$rule = Mockery::mock(IRule::class);
+		$rule = Mockery::mock(RuleInterface::class);
 		$request = new Request('Test', 'GET', []);
 
 		$this->handler->checkRule($rule, $request);

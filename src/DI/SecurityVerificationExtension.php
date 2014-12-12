@@ -24,11 +24,11 @@ class SecurityVerificationExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('handler'))
-			->setClass('Arachne\SecurityVerification\SecurityVerificationHandler')
+			->setClass('Arachne\SecurityVerification\Rules\SecurityVerificationHandler')
 			->addTag(VerifierExtension::TAG_HANDLER, array(
-				'Arachne\SecurityVerification\LoggedIn',
-				'Arachne\SecurityVerification\InRole',
-				'Arachne\SecurityVerification\Allowed',
+				'Arachne\SecurityVerification\Rules\LoggedIn',
+				'Arachne\SecurityVerification\Rules\InRole',
+				'Arachne\SecurityVerification\Rules\Allowed',
 			));
 	}
 

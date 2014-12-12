@@ -114,4 +114,15 @@ class SecurityVerificationHandlerTest extends Test
 		$this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
 	}
 
+	public function testInnerRules()
+	{
+		$this->user->login('admin', 'password');
+
+		$request = new Request('Article', 'GET', [
+			Presenter::ACTION_KEY => 'innerrules',
+		]);
+
+		$this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
+	}
+
 }

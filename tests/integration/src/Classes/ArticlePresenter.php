@@ -2,9 +2,10 @@
 
 namespace Tests\Integration\Classes;
 
-use Arachne\SecurityVerification\Allowed;
-use Arachne\SecurityVerification\InRole;
-use Arachne\SecurityVerification\LoggedIn;
+use Arachne\SecurityVerification\Rules\Allowed;
+use Arachne\SecurityVerification\Rules\InRole;
+use Arachne\SecurityVerification\Rules\LoggedIn;
+use Arachne\Verifier\Rules\All;
 use Nette\Application\UI\Presenter;
 
 /**
@@ -49,6 +50,17 @@ class ArticlePresenter extends Presenter
 	 * @Allowed(resource = "$article.parent", privilege = "publish")
 	 */
 	public function actionPublishParent(ArticleEntity $article)
+	{
+	}
+
+	/**
+	 * @All({
+	 *   @LoggedIn,
+	 *   @InRole("redactor"),
+	 *   @Allowed(resource = "Article", privilege = "hide"),
+	 * })
+	 */
+	public function actionInnerRules()
 	{
 	}
 
