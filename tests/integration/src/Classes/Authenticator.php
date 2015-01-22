@@ -9,7 +9,7 @@ use Nette\Security\Identity;
 use Nette\Security\IIdentity;
 
 /**
- * @author Jáchym Toušek
+ * @author Jáchym Toušek <enumag@gmail.com>
  */
 class Authenticator extends Object implements IAuthenticator
 {

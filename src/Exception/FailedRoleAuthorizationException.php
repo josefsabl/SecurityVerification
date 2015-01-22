@@ -13,7 +13,7 @@ namespace Arachne\SecurityVerification\Exception;
 use Nette\Application\ForbiddenRequestException;
 
 /**
- * @author Jáchym Toušek
+ * @author Jáchym Toušek <enumag@gmail.com>
  */
 class FailedRoleAuthorizationException extends ForbiddenRequestException
 {

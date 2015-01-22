@@ -25,7 +25,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @author Jáchym Toušek
+ * @author Jáchym Toušek <enumag@gmail.com>
  */
 class SecurityVerificationHandler extends Object implements RuleHandlerInterface
 {
@@ -38,7 +38,7 @@ class SecurityVerificationHandler extends Object implements RuleHandlerInterface
 
 	/**
 	 * @param User $user
-	 * @param PropertyAccessorInterface $propertyAccessor	 
+	 * @param PropertyAccessorInterface $propertyAccessor
 	 */
 	public function __construct(User $user, PropertyAccessorInterface $propertyAccessor = NULL)
 	{

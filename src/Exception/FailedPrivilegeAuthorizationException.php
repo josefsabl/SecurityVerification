@@ -14,7 +14,7 @@ use Nette\Application\ForbiddenRequestException;
 use Nette\Security\IResource;
 
 /**
- * @author Jáchym Toušek
+ * @author Jáchym Toušek <enumag@gmail.com>
  */
 class FailedPrivilegeAuthorizationException extends ForbiddenRequestException
 {

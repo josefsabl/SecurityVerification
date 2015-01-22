@@ -17,7 +17,7 @@ use Nette\Security\IResource;
 use Nette\Security\User;
 
 /**
- * @author Jáchym Toušek
+ * @author Jáchym Toušek <enumag@gmail.com>
  */
 class SecurityVerificationHandlerTest extends Test
 {

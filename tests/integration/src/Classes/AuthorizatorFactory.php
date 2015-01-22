@@ -7,7 +7,7 @@ use Nette\Object;
 use Nette\Security\Permission;
 
 /**
- * @author Jáchym Toušek
+ * @author Jáchym Toušek <enumag@gmail.com>
  */
 class AuthorizatorFactory extends Object
 {
