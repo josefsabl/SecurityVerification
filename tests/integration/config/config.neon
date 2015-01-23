@@ -1,16 +1,26 @@
 extensions:
+	nette: Nette\Bridges\Framework\NetteExtension
 	kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
+	arachne.dihelpers: Arachne\DIHelpers\DI\DIHelpersExtension
 	arachne.verifier: Arachne\Verifier\DI\VerifierExtension
-	arachne.securityVerification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
+	arachne.security: Arachne\Security\DI\SecurityExtension
+	arachne.securityverification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
 
 nette:
 	application:
 		mapping:
-			*: Tests\Integration\Classes\*Presenter
+			Admin: Tests\Integration\Classes\*Presenter
 	session:
 		autoStart: true
+
+arachne.security:
+	firewalls:
+		- Admin
 
 services:
 	authenticator: Tests\Integration\Classes\Authenticator
 	authorizatorFactory: Tests\Integration\Classes\AuthorizatorFactory
-	authorizator: @authorizatorFactory::create()
+	authorizator:
+		factory: @authorizatorFactory::create( @arachne.security.firewall.Admin )
+		tags:
+			arachne.security.authorizator: Admin

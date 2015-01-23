@@ -2,9 +2,13 @@
 
 namespace Tests\Integration\Classes;
 
-use Nette\DI\Container;
+use Arachne\Security\AuthorizatorInterface;
+use Arachne\Security\FirewallInterface;
+use Arachne\Security\Permission;
+use Arachne\Security\PermissionAuthorizator;
 use Nette\Object;
-use Nette\Security\Permission;
+use Nette\Security\IIdentity;
+use Nette\Security\IResource;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
@@ -12,27 +16,20 @@ use Nette\Security\Permission;
 class AuthorizatorFactory extends Object
 {
 
-	/** @var Container */
-	private $container;
-
-	public function __construct(Container $container)
-	{
-		$this->container = $container;
-	}
-
 	/**
-	 * @return Permission
+	 * @return AuthorizatorInterface
 	 */
-	public function create()
+	public function create(FirewallInterface $firewall)
 	{
 		$permission = new Permission();
 		$permission->addRole('redactor');
 		$permission->addResource('Article');
 		$permission->allow('redactor', 'Article', 'edit');
-		$permission->allow(NULL, 'Article', 'publish', function (Permission $permission) {
-			return $this->container->getByType('Nette\Security\User')->getId() === $permission->getQueriedResource()->getOwnerId();
+		$permission->allow(NULL, 'Article', 'publish', function (IIdentity $identity, IResource $resource) {
+			return $identity->getId() === $resource->getOwnerId();
 		});
-		return $permission;
+
+		return new PermissionAuthorizator($firewall, $permission);
 	}
 
 }

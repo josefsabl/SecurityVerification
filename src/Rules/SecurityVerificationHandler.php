@@ -10,6 +10,7 @@
 
 namespace Arachne\SecurityVerification\Rules;
 
+use Arachne\DIHelpers\ResolverInterface;
 use Arachne\SecurityVerification\Exception\FailedAuthenticationException;
 use Arachne\SecurityVerification\Exception\FailedNoAuthenticationException;
 use Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException;
@@ -20,7 +21,6 @@ use Arachne\Verifier\RuleInterface;
 use Nette\Application\Request;
 use Nette\Object;
 use Nette\Security\IResource;
-use Nette\Security\User;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -30,19 +30,24 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 class SecurityVerificationHandler extends Object implements RuleHandlerInterface
 {
 
-	/** @var User */
-	private $user;
+	/** @var ResolverInterface */
+	private $firewallResolver;
+
+	/** @var ResolverInterface */
+	private $authorizatorResolver;
 
 	/** @var PropertyAccessorInterface */
 	private $propertyAccessor;
 
 	/**
-	 * @param User $user
+	 * @param ResolverInterface $firewallResolver
+	 * @param ResolverInterface $authorizatorResolver
 	 * @param PropertyAccessorInterface $propertyAccessor
 	 */
-	public function __construct(User $user, PropertyAccessorInterface $propertyAccessor = NULL)
+	public function __construct(ResolverInterface $firewallResolver, ResolverInterface $authorizatorResolver, PropertyAccessorInterface $propertyAccessor = NULL)
 	{
-		$this->user = $user;
+		$this->firewallResolver = $firewallResolver;
+		$this->authorizatorResolver = $authorizatorResolver;
 		$this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
 	}
 
@@ -60,9 +65,9 @@ class SecurityVerificationHandler extends Object implements RuleHandlerInterface
 		if ($rule instanceof Allowed) {
 			$this->checkRuleAllowed($rule, $request, $component);
 		} elseif ($rule instanceof InRole) {
-			$this->checkRuleInRole($rule);
+			$this->checkRuleInRole($rule, $request);
 		} elseif ($rule instanceof LoggedIn) {
-			$this->checkRuleLoggedIn($rule);
+			$this->checkRuleLoggedIn($rule, $request);
 		} else {
 			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
 		}
@@ -94,6 +99,20 @@ class SecurityVerificationHandler extends Object implements RuleHandlerInterface
 		return $object;
 	}
 
+	private function resolveName($name, Request $request)
+	{
+		if ($name) {
+			return $name;
+		}
+		// if name is not specified, return the top-level module name instead
+		$presenter = $request->getPresenterName();
+		$position = strpos($presenter, ':');
+		if ($position === FALSE) {
+			throw new \Exception();
+		}
+		return substr($presenter, 0, $position);
+	}
+
 	/**
 	 * @param Allowed $rule
 	 * @param Request $request
@@ -103,7 +122,10 @@ class SecurityVerificationHandler extends Object implements RuleHandlerInterface
 	private function checkRuleAllowed(Allowed $rule, Request $request, $component)
 	{
 		$resource = $this->resolveResource($rule->resource, $request, $component);
-		if (!$this->user->isAllowed($resource, $rule->privilege)) {
+		$authorizator = $this->resolveName($rule->authorizator, $request);
+		$allowed = $this->authorizatorResolver->resolve($authorizator)->isAllowed($resource, $rule->privilege);
+
+		if (!$allowed) {
 			$resourceId = $resource instanceof IResource ? $resource->getResourceId() : $resource;
 			$exception = new FailedPrivilegeAuthorizationException("Required privilege '$resourceId / $rule->privilege' is not granted.");
 			$exception->setResource($resource);
@@ -116,9 +138,12 @@ class SecurityVerificationHandler extends Object implements RuleHandlerInterface
 	 * @param InRole $rule
 	 * @throws FailedRoleAuthorizationException
 	 */
-	private function checkRuleInRole(InRole $rule)
+	private function checkRuleInRole(InRole $rule, Request $request)
 	{
-		if (!$this->user->isInRole($rule->role)) {
+		$firewall = $this->resolveName($rule->firewall, $request);
+		$inRole = $this->firewallResolver->resolve($firewall)->isInRole($rule->role);
+
+		if (!$inRole) {
 			$exception =  new FailedRoleAuthorizationException("Role '$rule->role' is required for this request.");
 			$exception->setRole($rule->role);
 			throw $exception;
@@ -130,9 +155,12 @@ class SecurityVerificationHandler extends Object implements RuleHandlerInterface
 	 * @throws FailedAuthenticationException
 	 * @throws FailedNoAuthenticationException
 	 */
-	private function checkRuleLoggedIn(LoggedIn $rule)
+	private function checkRuleLoggedIn(LoggedIn $rule, Request $request)
 	{
-		if ($this->user->isLoggedIn() !== $rule->flag) {
+		$firewall = $this->resolveName($rule->firewall, $request);
+		$loggedIn = $this->firewallResolver->resolve($firewall)->isLoggedIn();
+
+		if ($loggedIn !== $rule->flag) {
 			if ($rule->flag) {
 				throw new FailedAuthenticationException('User must be logged in for this request.');
 			} else {

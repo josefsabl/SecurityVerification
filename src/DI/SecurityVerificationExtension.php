@@ -23,8 +23,18 @@ class SecurityVerificationExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
+		$extensions = $this->compiler->getExtensions('Arachne\Security\DI\SecurityExtension');
+		if (count($extensions) !== 1) {
+			throw new \Exception();
+		}
+		$extension = reset($extensions);
+
 		$builder->addDefinition($this->prefix('handler'))
 			->setClass('Arachne\SecurityVerification\Rules\SecurityVerificationHandler')
+			->setArguments(array(
+				'firewallResolver' => $extension->prefix('@firewallResolver'),
+				'authorizatorResolver' => $extension->prefix('@authorizatorResolver'),
+			))
 			->addTag(VerifierExtension::TAG_HANDLER, array(
 				'Arachne\SecurityVerification\Rules\LoggedIn',
 				'Arachne\SecurityVerification\Rules\InRole',

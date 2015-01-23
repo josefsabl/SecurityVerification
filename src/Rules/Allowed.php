@@ -28,4 +28,7 @@ class Allowed extends Object implements RuleInterface
 	/** @var string */
 	public $privilege;
 
+	/** @var string */
+	public $authorizator;
+
 }

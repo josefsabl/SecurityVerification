@@ -2,36 +2,44 @@
 
 namespace Tests\Unit;
 
+use Arachne\DIHelpers\ResolverInterface;
+use Arachne\Security\AuthorizatorInterface;
+use Arachne\Security\FirewallInterface;
 use Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException;
-use Arachne\SecurityVerification\Exception\FailedRoleAuthorizationException;
 use Arachne\SecurityVerification\Rules\Allowed;
-use Arachne\SecurityVerification\Rules\InRole;
-use Arachne\SecurityVerification\Rules\LoggedIn;
 use Arachne\SecurityVerification\Rules\SecurityVerificationHandler;
-use Arachne\Verifier\RuleInterface;
 use Codeception\TestCase\Test;
 use Mockery;
 use Mockery\MockInterface;
 use Nette\Application\Request;
+use Nette\Security\IIdentity;
 use Nette\Security\IResource;
-use Nette\Security\User;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class SecurityVerificationHandlerTest extends Test
+class AllowedRuleTest extends Test
 {
 
 	/** @var SecurityVerificationHandler */
 	private $handler;
 
 	/** @var MockInterface */
-	private $user;
+	private $authorizator;
 
 	protected function _before()
 	{
-		$this->user = Mockery::mock(User::class);
-		$this->handler = new SecurityVerificationHandler($this->user);
+		$firewallResolver = Mockery::mock(ResolverInterface::class);
+
+		$this->authorizator = Mockery::mock(AuthorizatorInterface::class);
+
+		$authorizatorResolver = Mockery::mock(ResolverInterface::class);
+		$authorizatorResolver
+			->shouldReceive('resolve')
+			->with('Admin')
+			->andReturn($this->authorizator);
+
+		$this->handler = new SecurityVerificationHandler($firewallResolver, $authorizatorResolver);
 	}
 
 	public function testAllowedTrue()
@@ -39,9 +47,9 @@ class SecurityVerificationHandlerTest extends Test
 		$rule = new Allowed();
 		$rule->resource = 'resource';
 		$rule->privilege = 'privilege';
-		$request = new Request('Test', 'GET', []);
+		$request = new Request('Admin:Test', 'GET', []);
 
-		$this->user
+		$this->authorizator
 			->shouldReceive('isAllowed')
 			->with('resource', 'privilege')
 			->once()
@@ -51,7 +59,7 @@ class SecurityVerificationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
+	 * @expectedException \Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'resource / privilege' is not granted.
 	 */
 	public function testAllowedFalse()
@@ -59,9 +67,9 @@ class SecurityVerificationHandlerTest extends Test
 		$rule = new Allowed();
 		$rule->resource = 'resource';
 		$rule->privilege = 'privilege';
-		$request = new Request('Test', 'GET', []);
+		$request = new Request('Admin:Test', 'GET', []);
 
-		$this->user
+		$this->authorizator
 			->shouldReceive('isAllowed')
 			->with('resource', 'privilege')
 			->once()
@@ -81,9 +89,9 @@ class SecurityVerificationHandlerTest extends Test
 		$rule = new Allowed();
 		$rule->resource = '$this';
 		$rule->privilege = 'privilege';
-		$request = new Request('Test', 'GET', []);
+		$request = new Request('Admin:Test', 'GET', []);
 
-		$this->user
+		$this->authorizator
 			->shouldReceive('isAllowed')
 			->with('Test', 'privilege')
 			->once()
@@ -93,7 +101,7 @@ class SecurityVerificationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
+	 * @expectedException \Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'Test / privilege' is not granted.
 	 */
 	public function testAllowedThisFalse()
@@ -101,8 +109,9 @@ class SecurityVerificationHandlerTest extends Test
 		$rule = new Allowed();
 		$rule->resource = '$this';
 		$rule->privilege = 'privilege';
-		$request = new Request('Test', 'GET', []);
-		$this->user
+		$request = new Request('Admin:Test', 'GET', []);
+
+		$this->authorizator
 			->shouldReceive('isAllowed')
 			->with('Test', 'privilege')
 			->once()
@@ -123,11 +132,11 @@ class SecurityVerificationHandlerTest extends Test
 		$rule->resource = '$entity';
 		$rule->privilege = 'privilege';
 		$entity = Mockery::mock(IResource::class);
-		$request = new Request('Test', 'GET', [
+		$request = new Request('Admin:Test', 'GET', [
 			'entity' => $entity,
 		]);
 
-		$this->user
+		$this->authorizator
 			->shouldReceive('isAllowed')
 			->with($entity, 'privilege')
 			->once()
@@ -137,7 +146,7 @@ class SecurityVerificationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
+	 * @expectedException \Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'entity / privilege' is not granted.
 	 */
 	public function testAllowedResourceFalse()
@@ -145,16 +154,18 @@ class SecurityVerificationHandlerTest extends Test
 		$rule = new Allowed();
 		$rule->resource = '$entity';
 		$rule->privilege = 'privilege';
+
 		$entity = Mockery::mock(IResource::class);
 		$entity
 			->shouldReceive('getResourceId')
 			->once()
 			->andReturn('entity');
-		$request = new Request('Test', 'GET', [
+
+		$request = new Request('Admin:Test', 'GET', [
 			'entity' => $entity,
 		]);
 
-		$this->user
+		$this->authorizator
 			->shouldReceive('isAllowed')
 			->with($entity, 'privilege')
 			->once()
@@ -170,20 +181,20 @@ class SecurityVerificationHandlerTest extends Test
 	}
 
 	/**
-	 * @expectedException Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
+	 * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
 	 */
 	public function testAllowedWrongParameter()
 	{
 		$rule = new Allowed();
 		$rule->resource = '$entity';
 		$rule->privilege = 'privilege';
-		$request = new Request('Test', 'GET', []);
+		$request = new Request('Admin:Test', 'GET', []);
 
 		$this->handler->checkRule($rule, $request);
 	}
 
 	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\InvalidArgumentException
+	 * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
 	 * @expectedExceptionMessage Resource '$entity' is not an instance of Nette\Security\IResource.
 	 */
 	public function testAllowedMissingParameter()
@@ -192,121 +203,9 @@ class SecurityVerificationHandlerTest extends Test
 		$rule->resource = '$entity';
 		$rule->privilege = 'privilege';
 		$entity = Mockery::mock();
-		$request = new Request('Test', 'GET', [
+		$request = new Request('Admin:Test', 'GET', [
 			'entity' => $entity,
 		]);
-
-		$this->handler->checkRule($rule, $request);
-	}
-
-	public function testInRoleTrue()
-	{
-		$rule = new InRole();
-		$rule->role = 'role';
-		$request = new Request('Test', 'GET', []);
-
-		$this->user
-			->shouldReceive('isInRole')
-			->with('role')
-			->once()
-			->andReturn(TRUE);
-
-		$this->assertNull($this->handler->checkRule($rule, $request));
-	}
-
-	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\FailedRoleAuthorizationException
-	 * @expectedExceptionMessage Role 'role' is required for this request.
-	 */
-	public function testInRoleFalse()
-	{
-		$rule = new InRole();
-		$rule->role = 'role';
-		$request = new Request('Test', 'GET', []);
-
-		$this->user
-			->shouldReceive('isInRole')
-			->with('role')
-			->once()
-			->andReturn(FALSE);
-
-		try {
-			$this->handler->checkRule($rule, $request);
-		} catch (FailedRoleAuthorizationException $e) {
-			$this->assertSame('role', $e->getRole());
-			throw $e;
-		}
-	}
-
-	public function testLoggedInTrue()
-	{
-		$rule = new LoggedIn();
-		$request = new Request('Test', 'GET', []);
-
-		$this->user
-			->shouldReceive('isLoggedIn')
-			->once()
-			->andReturn(TRUE);
-
-		$this->assertNull($this->handler->checkRule($rule, $request));
-	}
-
-	public function testNotLoggedInTrue()
-	{
-		$rule = new LoggedIn();
-		$rule->flag = FALSE;
-		$request = new Request('Test', 'GET', []);
-
-		$this->user
-			->shouldReceive('isLoggedIn')
-			->once()
-			->andReturn(FALSE);
-
-		$this->assertNull($this->handler->checkRule($rule, $request));
-	}
-
-	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\FailedAuthenticationException
-	 * @expectedExceptionMessage User must be logged in for this request.
-	 */
-	public function testLoggedInFalse()
-	{
-		$rule = new LoggedIn();
-		$request = new Request('Test', 'GET', []);
-
-		$this->user
-			->shouldReceive('isLoggedIn')
-			->once()
-			->andReturn(FALSE);
-
-		$this->handler->checkRule($rule, $request);
-	}
-
-	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\FailedNoAuthenticationException
-	 * @expectedExceptionMessage User must not be logged in for this request.
-	 */
-	public function testNotLoggedInFalse()
-	{
-		$rule = new LoggedIn();
-		$rule->flag = FALSE;
-		$request = new Request('Test', 'GET', []);
-
-		$this->user
-			->shouldReceive('isLoggedIn')
-			->once()
-			->andReturn(TRUE);
-
-		$this->handler->checkRule($rule, $request);
-	}
-
-	/**
-	 * @expectedException Arachne\SecurityVerification\Exception\InvalidArgumentException
-	 */
-	public function testUnknownRule()
-	{
-		$rule = Mockery::mock(RuleInterface::class);
-		$request = new Request('Test', 'GET', []);
 
 		$this->handler->checkRule($rule, $request);
 	}

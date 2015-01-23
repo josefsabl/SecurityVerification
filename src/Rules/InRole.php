@@ -25,4 +25,7 @@ class InRole extends Object implements RuleInterface
 	/** @var string */
 	public $role;
 
+	/** @var string */
+	public $firewall;
+
 }

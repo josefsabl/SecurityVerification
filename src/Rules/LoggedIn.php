@@ -25,4 +25,7 @@ class LoggedIn extends Object implements RuleInterface
 	/** @var bool */
 	public $flag = TRUE;
 
+	/** @var string */
+	public $firewall;
+
 }

@@ -2,38 +2,42 @@
 
 namespace Tests\Integration;
 
+use Arachne\Codeception\ConfigFilesInterface;
 use Arachne\Verifier\Verifier;
 use Codeception\TestCase\Test;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
-use Nette\Security\User;
+use Nette\DI\Container;
+use Nette\Security\Identity;
 use Tests\Integration\Classes\ArticleEntity;
 use Tests\Integration\Classes\ArticlePresenter;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class SecurityVerificationHandlerTest extends Test
+class SecurityVerificationHandlerTest extends Test implements ConfigFilesInterface
 {
-
-	/** @var User */
-	private $user;
 
 	/** @var Verifier */
 	private $verifier;
 
+	public function getConfigFiles()
+	{
+		return [
+			'/config/config.neon',
+		];
+	}
+
 	public function _before()
 	{
-		parent::_before();
-		$this->user = $this->guy->grabService(User::class);
+		$this->guy->grabService(Container::class)->getService('arachne.security.firewallResolver')->resolve('Admin')->login(new Identity(1, [ 'redactor' ]));
+
 		$this->verifier = $this->guy->grabService(Verifier::class);
 	}
 
 	public function testActionEdit()
 	{
-		$this->user->login('admin', 'password');
-
-		$request = new Request('Article', 'GET', [
+		$request = new Request('Admin:Article', 'GET', [
 			Presenter::ACTION_KEY => 'edit',
 		]);
 
@@ -42,9 +46,7 @@ class SecurityVerificationHandlerTest extends Test
 
 	public function testActionHide()
 	{
-		$this->user->login('admin', 'password');
-
-		$request = new Request('Article', 'GET', [
+		$request = new Request('Admin:Article', 'GET', [
 			Presenter::ACTION_KEY => 'hide',
 		]);
 
@@ -57,9 +59,7 @@ class SecurityVerificationHandlerTest extends Test
 	 */
 	public function testActionDelete()
 	{
-		$this->user->login('admin', 'password');
-
-		$request = new Request('Article', 'GET', [
+		$request = new Request('Admin:Article', 'GET', [
 			Presenter::ACTION_KEY => 'delete',
 		]);
 
@@ -68,9 +68,7 @@ class SecurityVerificationHandlerTest extends Test
 
 	public function testActionPublishAllowed()
 	{
-		$this->user->login('admin', 'password');
-
-		$request = new Request('Article', 'GET', [
+		$request = new Request('Admin:Article', 'GET', [
 			Presenter::ACTION_KEY => 'publish',
 			'article' => new ArticleEntity(1),
 		]);
@@ -80,9 +78,7 @@ class SecurityVerificationHandlerTest extends Test
 
 	public function testActionPublishDisallowed()
 	{
-		$this->user->login('admin', 'password');
-
-		$request = new Request('Article', 'GET', [
+		$request = new Request('Admin:Article', 'GET', [
 			Presenter::ACTION_KEY => 'publish',
 			'article' => new ArticleEntity(2),
 		]);
@@ -92,9 +88,7 @@ class SecurityVerificationHandlerTest extends Test
 
 	public function testActionPublishParentAllowed()
 	{
-		$this->user->login('admin', 'password');
-
-		$request = new Request('Article', 'GET', [
+		$request = new Request('Admin:Article', 'GET', [
 			Presenter::ACTION_KEY => 'publishparent',
 			'article' => new ArticleEntity(2, new ArticleEntity(1)),
 		]);
@@ -104,9 +98,7 @@ class SecurityVerificationHandlerTest extends Test
 
 	public function testActionPublishParentDisallowed()
 	{
-		$this->user->login('admin', 'password');
-
-		$request = new Request('Article', 'GET', [
+		$request = new Request('Admin:Article', 'GET', [
 			Presenter::ACTION_KEY => 'publishparent',
 			'article' => new ArticleEntity(1, new ArticleEntity(2)),
 		]);
@@ -116,9 +108,7 @@ class SecurityVerificationHandlerTest extends Test
 
 	public function testInnerRules()
 	{
-		$this->user->login('admin', 'password');
-
-		$request = new Request('Article', 'GET', [
+		$request = new Request('Admin:Article', 'GET', [
 			Presenter::ACTION_KEY => 'innerrules',
 		]);
 
