@@ -41,24 +41,15 @@ class LoggedInRuleHandler extends Object implements RuleHandlerInterface
 	 * @param RuleInterface $rule
 	 * @param Request $request
 	 * @param string $component
-	 * @throws FailedRoleAuthorizationException
-	 */
-	public function checkRule(RuleInterface $rule, Request $request, $component = NULL)
-	{
-		if ($rule instanceof LoggedIn) {
-			$this->checkRuleLoggedIn($rule, $request);
-		} else {
-			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
-		}
-	}
-
-	/**
-	 * @param LoggedIn $rule
 	 * @throws FailedAuthenticationException
 	 * @throws FailedNoAuthenticationException
 	 */
-	private function checkRuleLoggedIn(LoggedIn $rule, Request $request)
+	public function checkRule(RuleInterface $rule, Request $request, $component = NULL)
 	{
+		if (!$rule instanceof LoggedIn) {
+			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
+		}
+
 		$firewall = $rule->firewall ?: Helpers::getTopModuleName($request->getPresenterName());
 
 		if ($this->firewallResolver->resolve($firewall)->isLoggedIn() !== $rule->flag) {

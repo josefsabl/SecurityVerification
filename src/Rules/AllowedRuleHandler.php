@@ -52,10 +52,19 @@ class AllowedRuleHandler extends Object implements RuleHandlerInterface
 	 */
 	public function checkRule(RuleInterface $rule, Request $request, $component = NULL)
 	{
-		if ($rule instanceof Allowed) {
-			$this->checkRuleAllowed($rule, $request, $component);
-		} else {
+		if (!$rule instanceof Allowed) {
 			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
+		}
+
+		$resource = $this->resolveResource($rule->resource, $request, $component);
+		$authorizator = $rule->authorizator ?: Helpers::getTopModuleName($request->getPresenterName());
+
+		if (!$this->authorizatorResolver->resolve($authorizator)->isAllowed($resource, $rule->privilege)) {
+			$resourceId = $resource instanceof IResource ? $resource->getResourceId() : $resource;
+			$exception = new FailedPrivilegeAuthorizationException("Required privilege '$resourceId / $rule->privilege' is not granted.");
+			$exception->setResource($resource);
+			$exception->setPrivilege($rule->privilege);
+			throw $exception;
 		}
 	}
 
@@ -82,26 +91,6 @@ class AllowedRuleHandler extends Object implements RuleHandlerInterface
 			throw new InvalidArgumentException("Resource '$resource' is not an instance of Nette\Security\IResource.");
 		}
 		return $object;
-	}
-
-	/**
-	 * @param Allowed $rule
-	 * @param Request $request
-	 * @param string $component
-	 * @throws FailedPrivilegeAuthorizationException
-	 */
-	private function checkRuleAllowed(Allowed $rule, Request $request, $component)
-	{
-		$resource = $this->resolveResource($rule->resource, $request, $component);
-		$authorizator = $rule->authorizator ?: Helpers::getTopModuleName($request->getPresenterName());
-
-		if (!$this->authorizatorResolver->resolve($authorizator)->isAllowed($resource, $rule->privilege)) {
-			$resourceId = $resource instanceof IResource ? $resource->getResourceId() : $resource;
-			$exception = new FailedPrivilegeAuthorizationException("Required privilege '$resourceId / $rule->privilege' is not granted.");
-			$exception->setResource($resource);
-			$exception->setPrivilege($rule->privilege);
-			throw $exception;
-		}
 	}
 
 }

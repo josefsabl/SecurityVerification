@@ -44,19 +44,10 @@ class InRoleRuleHandler extends Object implements RuleHandlerInterface
 	 */
 	public function checkRule(RuleInterface $rule, Request $request, $component = NULL)
 	{
-		if ($rule instanceof InRole) {
-			$this->checkRuleInRole($rule, $request);
-		} else {
+		if (!$rule instanceof InRole) {
 			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
 		}
-	}
 
-	/**
-	 * @param InRole $rule
-	 * @throws FailedRoleAuthorizationException
-	 */
-	private function checkRuleInRole(InRole $rule, Request $request)
-	{
 		$firewall = $rule->firewall ?: Helpers::getTopModuleName($request->getPresenterName());
 
 		if (!$this->firewallResolver->resolve($firewall)->isInRole($rule->role)) {
