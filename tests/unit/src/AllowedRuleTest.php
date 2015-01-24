@@ -4,10 +4,10 @@ namespace Tests\Unit;
 
 use Arachne\DIHelpers\ResolverInterface;
 use Arachne\Security\AuthorizatorInterface;
-use Arachne\Security\FirewallInterface;
 use Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException;
 use Arachne\SecurityVerification\Rules\Allowed;
-use Arachne\SecurityVerification\Rules\SecurityVerificationHandler;
+use Arachne\SecurityVerification\Rules\AllowedRuleHandler;
+use Arachne\Verifier\RuleInterface;
 use Codeception\TestCase\Test;
 use Mockery;
 use Mockery\MockInterface;
@@ -29,8 +29,6 @@ class AllowedRuleTest extends Test
 
 	protected function _before()
 	{
-		$firewallResolver = Mockery::mock(ResolverInterface::class);
-
 		$this->authorizator = Mockery::mock(AuthorizatorInterface::class);
 
 		$authorizatorResolver = Mockery::mock(ResolverInterface::class);
@@ -39,7 +37,7 @@ class AllowedRuleTest extends Test
 			->with('Admin')
 			->andReturn($this->authorizator);
 
-		$this->handler = new SecurityVerificationHandler($firewallResolver, $authorizatorResolver);
+		$this->handler = new AllowedRuleHandler($authorizatorResolver);
 	}
 
 	public function testAllowedTrue()
@@ -206,6 +204,17 @@ class AllowedRuleTest extends Test
 		$request = new Request('Admin:Test', 'GET', [
 			'entity' => $entity,
 		]);
+
+		$this->handler->checkRule($rule, $request);
+	}
+
+	/**
+	 * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
+	 */
+	public function testUnknownRule()
+	{
+		$rule = Mockery::mock(RuleInterface::class);
+		$request = new Request('Test', 'GET', []);
 
 		$this->handler->checkRule($rule, $request);
 	}

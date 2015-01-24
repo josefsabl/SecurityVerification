@@ -6,7 +6,8 @@ use Arachne\DIHelpers\ResolverInterface;
 use Arachne\Security\FirewallInterface;
 use Arachne\SecurityVerification\Exception\FailedRoleAuthorizationException;
 use Arachne\SecurityVerification\Rules\InRole;
-use Arachne\SecurityVerification\Rules\SecurityVerificationHandler;
+use Arachne\SecurityVerification\Rules\InRoleRuleHandler;
+use Arachne\Verifier\RuleInterface;
 use Codeception\TestCase\Test;
 use Mockery;
 use Mockery\MockInterface;
@@ -32,12 +33,9 @@ class InRoleRuleTest extends Test
 		$firewallResolver
 			->shouldReceive('resolve')
 			->with('Admin')
-			->once()
 			->andReturn($this->firewall);
 
-		$authorizatorResolver = Mockery::mock(ResolverInterface::class);
-
-		$this->handler = new SecurityVerificationHandler($firewallResolver, $authorizatorResolver);
+		$this->handler = new InRoleRuleHandler($firewallResolver);
 	}
 
 	public function testInRoleTrue()
@@ -77,6 +75,17 @@ class InRoleRuleTest extends Test
 			$this->assertSame('role', $e->getRole());
 			throw $e;
 		}
+	}
+
+	/**
+	 * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
+	 */
+	public function testUnknownRule()
+	{
+		$rule = Mockery::mock(RuleInterface::class);
+		$request = new Request('Test', 'GET', []);
+
+		$this->handler->checkRule($rule, $request);
 	}
 
 }

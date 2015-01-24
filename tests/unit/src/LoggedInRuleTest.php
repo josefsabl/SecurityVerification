@@ -5,7 +5,8 @@ namespace Tests\Unit;
 use Arachne\DIHelpers\ResolverInterface;
 use Arachne\Security\FirewallInterface;
 use Arachne\SecurityVerification\Rules\LoggedIn;
-use Arachne\SecurityVerification\Rules\SecurityVerificationHandler;
+use Arachne\SecurityVerification\Rules\LoggedInRuleHandler;
+use Arachne\Verifier\RuleInterface;
 use Codeception\TestCase\Test;
 use Mockery;
 use Mockery\MockInterface;
@@ -31,12 +32,9 @@ class LoggedInRuleTest extends Test
 		$firewallResolver
 			->shouldReceive('resolve')
 			->with('Admin')
-			->once()
 			->andReturn($this->firewall);
 
-		$authorizatorResolver = Mockery::mock(ResolverInterface::class);
-
-		$this->handler = new SecurityVerificationHandler($firewallResolver, $authorizatorResolver);
+		$this->handler = new LoggedInRuleHandler($firewallResolver);
 	}
 
 	public function testLoggedInTrue()
@@ -97,6 +95,17 @@ class LoggedInRuleTest extends Test
 			->shouldReceive('isLoggedIn')
 			->once()
 			->andReturn(TRUE);
+
+		$this->handler->checkRule($rule, $request);
+	}
+
+	/**
+	 * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
+	 */
+	public function testUnknownRule()
+	{
+		$rule = Mockery::mock(RuleInterface::class);
+		$request = new Request('Test', 'GET', []);
 
 		$this->handler->checkRule($rule, $request);
 	}

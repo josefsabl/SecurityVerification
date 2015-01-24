@@ -15,7 +15,7 @@ use Tests\Integration\Classes\ArticlePresenter;
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class SecurityVerificationHandlerTest extends Test implements ConfigFilesInterface
+class SecurityVerificationTest extends Test implements ConfigFilesInterface
 {
 
 	/** @var Verifier */
