@@ -30,7 +30,11 @@ class SecurityVerificationTest extends Test implements ConfigFilesInterface
 
 	public function _before()
 	{
-		$this->guy->grabService(Container::class)->getService('arachne.security.firewallResolver')->resolve('Admin')->login(new Identity(1, [ 'redactor' ]));
+		$this->guy
+			->grabService(Container::class)
+			->getService('arachne.dihelpers.resolver.arachne.security.firewall')
+			->resolve('Admin')
+			->login(new Identity(1, [ 'redactor' ]));
 
 		$this->verifier = $this->guy->grabService(Verifier::class);
 	}

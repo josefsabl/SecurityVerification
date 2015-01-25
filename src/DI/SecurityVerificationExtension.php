@@ -10,9 +10,9 @@
 
 namespace Arachne\SecurityVerification\DI;
 
-use Arachne\SecurityVerification\Exception\LogicException;
+use Arachne\DIHelpers\CompilerExtension;
+use Arachne\Security\DI\SecurityExtension;
 use Arachne\Verifier\DI\VerifierExtension;
-use Nette\DI\CompilerExtension;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
@@ -22,18 +22,15 @@ class SecurityVerificationExtension extends CompilerExtension
 
 	public function loadConfiguration()
 	{
-		$builder = $this->getContainerBuilder();
+		$this->getExtension('Arachne\Security\DI\SecurityExtension');
+		$extension = $this->getExtension('Arachne\DIHelpers\DI\DIHelpersExtension');
 
-		$extensions = $this->compiler->getExtensions('Arachne\Security\DI\SecurityExtension');
-		if (count($extensions) !== 1) {
-			throw new LogicException('Extension Arachne\Security\DI\SecurityExtension is not installed.');
-		}
-		$extension = reset($extensions);
+		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('handler.allowed'))
 			->setClass('Arachne\SecurityVerification\Rules\AllowedRuleHandler')
 			->setArguments(array(
-				'authorizatorResolver' => $extension->prefix('@authorizatorResolver'),
+				'authorizatorResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_AUTHORIZATOR),
 			))
 			->addTag(VerifierExtension::TAG_HANDLER, array(
 				'Arachne\SecurityVerification\Rules\Allowed',
@@ -42,7 +39,7 @@ class SecurityVerificationExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('handler.inRole'))
 			->setClass('Arachne\SecurityVerification\Rules\InRoleRuleHandler')
 			->setArguments(array(
-				'firewallResolver' => $extension->prefix('@firewallResolver'),
+				'firewallResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_FIREWALL),
 			))
 			->addTag(VerifierExtension::TAG_HANDLER, array(
 				'Arachne\SecurityVerification\Rules\InRole',
@@ -51,7 +48,7 @@ class SecurityVerificationExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('handler.loggedIn'))
 			->setClass('Arachne\SecurityVerification\Rules\LoggedInRuleHandler')
 			->setArguments(array(
-				'firewallResolver' => $extension->prefix('@firewallResolver'),
+				'firewallResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_FIREWALL),
 			))
 			->addTag(VerifierExtension::TAG_HANDLER, array(
 				'Arachne\SecurityVerification\Rules\LoggedIn',

@@ -21,6 +21,8 @@ services:
 	authenticator: Tests\Integration\Classes\Authenticator
 	authorizatorFactory: Tests\Integration\Classes\AuthorizatorFactory
 	authorizator:
+		# TODO: class can be removed with nette/di 2.3
+		class: Arachne\Security\PermissionAuthorizator
 		factory: @authorizatorFactory::create( @arachne.security.firewall.Admin )
 		tags:
 			arachne.security.authorizator: Admin
