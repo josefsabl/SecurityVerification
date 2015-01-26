@@ -14,6 +14,7 @@ use Arachne\DIHelpers\ResolverInterface;
 use Arachne\SecurityVerification\Exception\FailedAuthenticationException;
 use Arachne\SecurityVerification\Exception\FailedNoAuthenticationException;
 use Arachne\SecurityVerification\Exception\InvalidArgumentException;
+use Arachne\SecurityVerification\Exception\UnexpectedValueException;
 use Arachne\SecurityVerification\Helpers;
 use Arachne\Verifier\RuleHandlerInterface;
 use Arachne\Verifier\RuleInterface;
@@ -50,9 +51,13 @@ class LoggedInRuleHandler extends Object implements RuleHandlerInterface
 			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
 		}
 
-		$firewall = $rule->firewall ?: Helpers::getTopModuleName($request->getPresenterName());
+		$name = $rule->firewall ?: Helpers::getTopModuleName($request->getPresenterName());
+		$firewall = $this->firewallResolver->resolve($name);
+		if (!$firewall) {
+			throw new UnexpectedValueException("Could not find firewall named '$name'.");
+		}
 
-		if ($this->firewallResolver->resolve($firewall)->isLoggedIn() !== $rule->flag) {
+		if ($firewall->isLoggedIn() !== $rule->flag) {
 			if ($rule->flag) {
 				throw new FailedAuthenticationException('User must be logged in for this request.');
 			} else {

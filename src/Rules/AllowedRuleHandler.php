@@ -13,6 +13,7 @@ namespace Arachne\SecurityVerification\Rules;
 use Arachne\DIHelpers\ResolverInterface;
 use Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException;
 use Arachne\SecurityVerification\Exception\InvalidArgumentException;
+use Arachne\SecurityVerification\Exception\UnexpectedValueException;
 use Arachne\SecurityVerification\Helpers;
 use Arachne\Verifier\RuleHandlerInterface;
 use Arachne\Verifier\RuleInterface;
@@ -56,10 +57,14 @@ class AllowedRuleHandler extends Object implements RuleHandlerInterface
 			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
 		}
 
-		$resource = $this->resolveResource($rule->resource, $request, $component);
-		$authorizator = $rule->authorizator ?: Helpers::getTopModuleName($request->getPresenterName());
+		$name = $rule->authorizator ?: Helpers::getTopModuleName($request->getPresenterName());
+		$authorizator = $this->authorizatorResolver->resolve($name);
+		if (!$authorizator) {
+			throw new UnexpectedValueException("Could not find authorizator named '$name'.");
+		}
 
-		if (!$this->authorizatorResolver->resolve($authorizator)->isAllowed($resource, $rule->privilege)) {
+		$resource = $this->resolveResource($rule->resource, $request, $component);
+		if (!$authorizator->isAllowed($resource, $rule->privilege)) {
 			$resourceId = $resource instanceof IResource ? $resource->getResourceId() : $resource;
 			$exception = new FailedPrivilegeAuthorizationException("Required privilege '$resourceId / $rule->privilege' is not granted.");
 			$exception->setResource($resource);
