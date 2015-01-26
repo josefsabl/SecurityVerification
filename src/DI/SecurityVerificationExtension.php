@@ -29,30 +29,30 @@ class SecurityVerificationExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('handler.allowed'))
 			->setClass('Arachne\SecurityVerification\Rules\AllowedRuleHandler')
-			->setArguments(array(
+			->setArguments([
 				'authorizatorResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_AUTHORIZATOR),
-			))
-			->addTag(VerifierExtension::TAG_HANDLER, array(
+			])
+			->addTag(VerifierExtension::TAG_HANDLER, [
 				'Arachne\SecurityVerification\Rules\Allowed',
-			));
+			]);
 
 		$builder->addDefinition($this->prefix('handler.inRole'))
 			->setClass('Arachne\SecurityVerification\Rules\InRoleRuleHandler')
-			->setArguments(array(
+			->setArguments([
 				'firewallResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_FIREWALL),
-			))
-			->addTag(VerifierExtension::TAG_HANDLER, array(
+			])
+			->addTag(VerifierExtension::TAG_HANDLER, [
 				'Arachne\SecurityVerification\Rules\InRole',
-			));
+			]);
 
 		$builder->addDefinition($this->prefix('handler.loggedIn'))
 			->setClass('Arachne\SecurityVerification\Rules\LoggedInRuleHandler')
-			->setArguments(array(
+			->setArguments([
 				'firewallResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_FIREWALL),
-			))
-			->addTag(VerifierExtension::TAG_HANDLER, array(
+			])
+			->addTag(VerifierExtension::TAG_HANDLER, [
 				'Arachne\SecurityVerification\Rules\LoggedIn',
-			));
+			]);
 	}
 
 }
