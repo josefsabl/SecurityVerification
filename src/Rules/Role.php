@@ -19,16 +19,13 @@ use Nette\Object;
  * @Annotation
  * @Target({"CLASS", "METHOD", "ANNOTATION"})
  */
-class Allowed extends Object implements RuleInterface
+class Role extends Object implements RuleInterface
 {
 
 	/** @var string */
-	public $resource;
+	public $role;
 
 	/** @var string */
-	public $privilege;
-
-	/** @var string */
-	public $authorizator;
+	public $firewall;
 
 }

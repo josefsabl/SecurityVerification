@@ -39,7 +39,7 @@ class LoggedInRuleHandler extends Object implements RuleHandlerInterface
 	}
 
 	/**
-	 * @param RuleInterface $rule
+	 * @param LoggedIn $rule
 	 * @param Request $request
 	 * @param string $component
 	 * @throws FailedAuthenticationException
@@ -57,7 +57,7 @@ class LoggedInRuleHandler extends Object implements RuleHandlerInterface
 			throw new UnexpectedValueException("Could not find firewall named '$name'.");
 		}
 
-		if ($firewall->isLoggedIn() !== $rule->flag) {
+		if ((bool) $firewall->getIdentity() !== $rule->flag) {
 			if ($rule->flag) {
 				throw new FailedAuthenticationException('User must be logged in for this request.');
 			} else {

@@ -26,7 +26,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class AllowedRuleHandler extends Object implements RuleHandlerInterface
+class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
 {
 
 	/** @var ResolverInterface */
@@ -46,14 +46,14 @@ class AllowedRuleHandler extends Object implements RuleHandlerInterface
 	}
 
 	/**
-	 * @param RuleInterface $rule
+	 * @param Privilege $rule
 	 * @param Request $request
 	 * @param string $component
 	 * @throws FailedPrivilegeAuthorizationException
 	 */
 	public function checkRule(RuleInterface $rule, Request $request, $component = NULL)
 	{
-		if (!$rule instanceof Allowed) {
+		if (!$rule instanceof Privilege) {
 			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
 		}
 

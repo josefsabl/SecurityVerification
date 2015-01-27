@@ -27,24 +27,6 @@ class SecurityVerificationExtension extends CompilerExtension
 
 		$builder = $this->getContainerBuilder();
 
-		$builder->addDefinition($this->prefix('handler.allowed'))
-			->setClass('Arachne\SecurityVerification\Rules\AllowedRuleHandler')
-			->setArguments([
-				'authorizatorResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_AUTHORIZATOR),
-			])
-			->addTag(VerifierExtension::TAG_HANDLER, [
-				'Arachne\SecurityVerification\Rules\Allowed',
-			]);
-
-		$builder->addDefinition($this->prefix('handler.inRole'))
-			->setClass('Arachne\SecurityVerification\Rules\InRoleRuleHandler')
-			->setArguments([
-				'firewallResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_FIREWALL),
-			])
-			->addTag(VerifierExtension::TAG_HANDLER, [
-				'Arachne\SecurityVerification\Rules\InRole',
-			]);
-
 		$builder->addDefinition($this->prefix('handler.loggedIn'))
 			->setClass('Arachne\SecurityVerification\Rules\LoggedInRuleHandler')
 			->setArguments([
@@ -52,6 +34,24 @@ class SecurityVerificationExtension extends CompilerExtension
 			])
 			->addTag(VerifierExtension::TAG_HANDLER, [
 				'Arachne\SecurityVerification\Rules\LoggedIn',
+			]);
+
+		$builder->addDefinition($this->prefix('handler.role'))
+			->setClass('Arachne\SecurityVerification\Rules\RoleRuleHandler')
+			->setArguments([
+				'firewallResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_FIREWALL),
+			])
+			->addTag(VerifierExtension::TAG_HANDLER, [
+				'Arachne\SecurityVerification\Rules\Role',
+			]);
+
+		$builder->addDefinition($this->prefix('handler.privilege'))
+			->setClass('Arachne\SecurityVerification\Rules\PrivilegeRuleHandler')
+			->setArguments([
+				'authorizatorResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_AUTHORIZATOR),
+			])
+			->addTag(VerifierExtension::TAG_HANDLER, [
+				'Arachne\SecurityVerification\Rules\Privilege',
 			]);
 	}
 

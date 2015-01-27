@@ -5,8 +5,8 @@ namespace Tests\Unit;
 use Arachne\DIHelpers\ResolverInterface;
 use Arachne\Security\AuthorizatorInterface;
 use Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException;
-use Arachne\SecurityVerification\Rules\Allowed;
-use Arachne\SecurityVerification\Rules\AllowedRuleHandler;
+use Arachne\SecurityVerification\Rules\Privilege;
+use Arachne\SecurityVerification\Rules\PrivilegeRuleHandler;
 use Arachne\Verifier\RuleInterface;
 use Codeception\TestCase\Test;
 use Mockery;
@@ -18,7 +18,7 @@ use Nette\Security\IResource;
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class AllowedRuleTest extends Test
+class PrivilegeRuleTest extends Test
 {
 
 	/** @var SecurityVerificationHandler */
@@ -37,12 +37,12 @@ class AllowedRuleTest extends Test
 			->with('Admin')
 			->andReturn($this->authorizator);
 
-		$this->handler = new AllowedRuleHandler($authorizatorResolver);
+		$this->handler = new PrivilegeRuleHandler($authorizatorResolver);
 	}
 
-	public function testAllowedTrue()
+	public function testPrivilegeTrue()
 	{
-		$rule = new Allowed();
+		$rule = new Privilege();
 		$rule->resource = 'resource';
 		$rule->privilege = 'privilege';
 		$request = new Request('Admin:Test', 'GET', []);
@@ -60,9 +60,9 @@ class AllowedRuleTest extends Test
 	 * @expectedException \Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'resource / privilege' is not granted.
 	 */
-	public function testAllowedFalse()
+	public function testPrivilegeFalse()
 	{
-		$rule = new Allowed();
+		$rule = new Privilege();
 		$rule->resource = 'resource';
 		$rule->privilege = 'privilege';
 		$request = new Request('Admin:Test', 'GET', []);
@@ -82,9 +82,9 @@ class AllowedRuleTest extends Test
 		}
 	}
 
-	public function testAllowedThis()
+	public function testPrivilegeThis()
 	{
-		$rule = new Allowed();
+		$rule = new Privilege();
 		$rule->resource = '$this';
 		$rule->privilege = 'privilege';
 		$request = new Request('Admin:Test', 'GET', []);
@@ -102,9 +102,9 @@ class AllowedRuleTest extends Test
 	 * @expectedException \Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'Test / privilege' is not granted.
 	 */
-	public function testAllowedThisFalse()
+	public function testPrivilegeThisFalse()
 	{
-		$rule = new Allowed();
+		$rule = new Privilege();
 		$rule->resource = '$this';
 		$rule->privilege = 'privilege';
 		$request = new Request('Admin:Test', 'GET', []);
@@ -124,9 +124,9 @@ class AllowedRuleTest extends Test
 		}
 	}
 
-	public function testAllowedResource()
+	public function testPrivilegeResource()
 	{
-		$rule = new Allowed();
+		$rule = new Privilege();
 		$rule->resource = '$entity';
 		$rule->privilege = 'privilege';
 		$entity = Mockery::mock(IResource::class);
@@ -147,9 +147,9 @@ class AllowedRuleTest extends Test
 	 * @expectedException \Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
 	 * @expectedExceptionMessage Required privilege 'entity / privilege' is not granted.
 	 */
-	public function testAllowedResourceFalse()
+	public function testPrivilegeResourceFalse()
 	{
-		$rule = new Allowed();
+		$rule = new Privilege();
 		$rule->resource = '$entity';
 		$rule->privilege = 'privilege';
 
@@ -181,9 +181,9 @@ class AllowedRuleTest extends Test
 	/**
 	 * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
 	 */
-	public function testAllowedWrongParameter()
+	public function testPrivilegeWrongParameter()
 	{
-		$rule = new Allowed();
+		$rule = new Privilege();
 		$rule->resource = '$entity';
 		$rule->privilege = 'privilege';
 		$request = new Request('Admin:Test', 'GET', []);
@@ -195,9 +195,9 @@ class AllowedRuleTest extends Test
 	 * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
 	 * @expectedExceptionMessage Resource '$entity' is not an instance of Nette\Security\IResource.
 	 */
-	public function testAllowedMissingParameter()
+	public function testPrivilegedMissingParameter()
 	{
-		$rule = new Allowed();
+		$rule = new Privilege();
 		$rule->resource = '$entity';
 		$rule->privilege = 'privilege';
 		$entity = Mockery::mock();

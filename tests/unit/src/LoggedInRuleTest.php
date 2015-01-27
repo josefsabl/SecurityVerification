@@ -11,6 +11,7 @@ use Codeception\TestCase\Test;
 use Mockery;
 use Mockery\MockInterface;
 use Nette\Application\Request;
+use Nette\Security\IIdentity;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
@@ -43,9 +44,9 @@ class LoggedInRuleTest extends Test
 		$request = new Request('Admin:Test', 'GET', []);
 
 		$this->firewall
-			->shouldReceive('isLoggedIn')
+			->shouldReceive('getIdentity')
 			->once()
-			->andReturn(TRUE);
+			->andReturn(Mockery::mock(IIdentity::class));
 
 		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
@@ -57,9 +58,9 @@ class LoggedInRuleTest extends Test
 		$request = new Request('Admin:Test', 'GET', []);
 
 		$this->firewall
-			->shouldReceive('isLoggedIn')
+			->shouldReceive('getIdentity')
 			->once()
-			->andReturn(FALSE);
+			->andReturn();
 
 		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
@@ -74,9 +75,9 @@ class LoggedInRuleTest extends Test
 		$request = new Request('Admin:Test', 'GET', []);
 
 		$this->firewall
-			->shouldReceive('isLoggedIn')
+			->shouldReceive('getIdentity')
 			->once()
-			->andReturn(FALSE);
+			->andReturn();
 
 		$this->handler->checkRule($rule, $request);
 	}
@@ -92,9 +93,9 @@ class LoggedInRuleTest extends Test
 		$request = new Request('Admin:Test', 'GET', []);
 
 		$this->firewall
-			->shouldReceive('isLoggedIn')
+			->shouldReceive('getIdentity')
 			->once()
-			->andReturn(TRUE);
+			->andReturn(Mockery::mock(IIdentity::class));
 
 		$this->handler->checkRule($rule, $request);
 	}

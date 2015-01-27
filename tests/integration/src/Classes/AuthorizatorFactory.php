@@ -2,10 +2,10 @@
 
 namespace Tests\Integration\Classes;
 
-use Arachne\Security\AuthorizatorInterface;
-use Arachne\Security\FirewallInterface;
-use Arachne\Security\Permission;
-use Arachne\Security\PermissionAuthorizator;
+use Arachne\Security\Authentication\FirewallInterface;
+use Arachne\Security\Authorization\AuthorizatorInterface;
+use Arachne\Security\Authorization\Permission;
+use Arachne\Security\Authorization\PermissionAuthorizator;
 use Nette\Object;
 use Nette\Security\IIdentity;
 use Nette\Security\IResource;

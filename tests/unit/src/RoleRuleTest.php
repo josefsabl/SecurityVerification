@@ -5,8 +5,8 @@ namespace Tests\Unit;
 use Arachne\DIHelpers\ResolverInterface;
 use Arachne\Security\FirewallInterface;
 use Arachne\SecurityVerification\Exception\FailedRoleAuthorizationException;
-use Arachne\SecurityVerification\Rules\InRole;
-use Arachne\SecurityVerification\Rules\InRoleRuleHandler;
+use Arachne\SecurityVerification\Rules\Role;
+use Arachne\SecurityVerification\Rules\RoleRuleHandler;
 use Arachne\Verifier\RuleInterface;
 use Codeception\TestCase\Test;
 use Mockery;
@@ -16,7 +16,7 @@ use Nette\Application\Request;
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class InRoleRuleTest extends Test
+class RoleRuleTest extends Test
 {
 
 	/** @var SecurityVerificationHandler */
@@ -35,20 +35,19 @@ class InRoleRuleTest extends Test
 			->with('Admin')
 			->andReturn($this->firewall);
 
-		$this->handler = new InRoleRuleHandler($firewallResolver);
+		$this->handler = new RoleRuleHandler($firewallResolver);
 	}
 
-	public function testInRoleTrue()
+	public function testRoleTrue()
 	{
-		$rule = new InRole();
+		$rule = new Role();
 		$rule->role = 'role';
 		$request = new Request('Admin:Test', 'GET', []);
 
 		$this->firewall
-			->shouldReceive('isInRole')
-			->with('role')
+			->shouldReceive('getIdentity->getRoles')
 			->once()
-			->andReturn(TRUE);
+			->andReturn([ 'role' ]);
 
 		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
@@ -57,17 +56,16 @@ class InRoleRuleTest extends Test
 	 * @expectedException \Arachne\SecurityVerification\Exception\FailedRoleAuthorizationException
 	 * @expectedExceptionMessage Role 'role' is required for this request.
 	 */
-	public function testInRoleFalse()
+	public function testRoleFalse()
 	{
-		$rule = new InRole();
+		$rule = new Role();
 		$rule->role = 'role';
 		$request = new Request('Admin:Test', 'GET', []);
 
 		$this->firewall
-			->shouldReceive('isInRole')
-			->with('role')
+			->shouldReceive('getIdentity->getRoles')
 			->once()
-			->andReturn(FALSE);
+			->andReturn([]);
 
 		try {
 			$this->handler->checkRule($rule, $request);
