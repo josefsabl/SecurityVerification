@@ -19,7 +19,7 @@ use Nette\Application\Request;
 class RoleRuleTest extends Test
 {
 
-	/** @var SecurityVerificationHandler */
+	/** @var RoleRuleHandler */
 	private $handler;
 
 	/** @var MockInterface */

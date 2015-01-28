@@ -21,7 +21,7 @@ use Nette\Security\IResource;
 class PrivilegeRuleTest extends Test
 {
 
-	/** @var SecurityVerificationHandler */
+	/** @var PrivilegeRuleHandler */
 	private $handler;
 
 	/** @var MockInterface */
