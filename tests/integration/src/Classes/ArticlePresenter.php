@@ -2,16 +2,16 @@
 
 namespace Tests\Integration\Classes;
 
+use Arachne\SecurityVerification\Rules\Identity;
 use Arachne\SecurityVerification\Rules\Privilege;
 use Arachne\SecurityVerification\Rules\Role;
-use Arachne\SecurityVerification\Rules\LoggedIn;
 use Arachne\Verifier\Rules\All;
 use Nette\Application\UI\Presenter;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  *
- * @LoggedIn
+ * @Identity
  * @Role("redactor")
  */
 class ArticlePresenter extends Presenter
@@ -55,7 +55,7 @@ class ArticlePresenter extends Presenter
 
 	/**
 	 * @All({
-	 *   @LoggedIn,
+	 *   @Identity,
 	 *   @Role("redactor"),
 	 *   @Privilege(resource = "Article", privilege = "hide"),
 	 * })

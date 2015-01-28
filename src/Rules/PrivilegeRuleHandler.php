@@ -11,10 +11,10 @@
 namespace Arachne\SecurityVerification\Rules;
 
 use Arachne\DIHelpers\ResolverInterface;
-use Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException;
 use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\SecurityVerification\Exception\UnexpectedValueException;
 use Arachne\SecurityVerification\Helpers;
+use Arachne\Verifier\Exception\VerificationException;
 use Arachne\Verifier\RuleHandlerInterface;
 use Arachne\Verifier\RuleInterface;
 use Nette\Application\Request;
@@ -49,7 +49,7 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
 	 * @param Privilege $rule
 	 * @param Request $request
 	 * @param string $component
-	 * @throws FailedPrivilegeAuthorizationException
+	 * @throws VerificationException
 	 */
 	public function checkRule(RuleInterface $rule, Request $request, $component = NULL)
 	{
@@ -66,10 +66,7 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
 		$resource = $this->resolveResource($rule->resource, $request, $component);
 		if (!$authorizator->isAllowed($resource, $rule->privilege)) {
 			$resourceId = $resource instanceof IResource ? $resource->getResourceId() : $resource;
-			$exception = new FailedPrivilegeAuthorizationException("Required privilege '$resourceId / $rule->privilege' is not granted.");
-			$exception->setResource($resource);
-			$exception->setPrivilege($rule->privilege);
-			throw $exception;
+			throw new VerificationException($rule, "Required privilege '$resourceId / $rule->privilege' is not granted.");
 		}
 	}
 

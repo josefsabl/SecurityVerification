@@ -10,8 +10,7 @@
 
 namespace Arachne\SecurityVerification\Rules;
 
-use Arachne\Verifier\RuleInterface;
-use Nette\Object;
+use Arachne\Verifier\Rules\SecurityRule;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
@@ -19,7 +18,7 @@ use Nette\Object;
  * @Annotation
  * @Target({"CLASS", "METHOD", "ANNOTATION"})
  */
-class Privilege extends Object implements RuleInterface
+class Privilege extends SecurityRule
 {
 
 	/** @var string */

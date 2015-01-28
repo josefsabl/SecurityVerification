@@ -11,11 +11,10 @@
 namespace Arachne\SecurityVerification\Rules;
 
 use Arachne\DIHelpers\ResolverInterface;
-use Arachne\SecurityVerification\Exception\FailedAuthenticationException;
-use Arachne\SecurityVerification\Exception\FailedNoAuthenticationException;
 use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\SecurityVerification\Exception\UnexpectedValueException;
 use Arachne\SecurityVerification\Helpers;
+use Arachne\Verifier\Exception\VerificationException;
 use Arachne\Verifier\RuleHandlerInterface;
 use Arachne\Verifier\RuleInterface;
 use Nette\Application\Request;
@@ -24,7 +23,7 @@ use Nette\Object;
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class LoggedInRuleHandler extends Object implements RuleHandlerInterface
+class NoIdentityRuleHandler extends Object implements RuleHandlerInterface
 {
 
 	/** @var ResolverInterface */
@@ -39,15 +38,14 @@ class LoggedInRuleHandler extends Object implements RuleHandlerInterface
 	}
 
 	/**
-	 * @param LoggedIn $rule
+	 * @param NoIdentity $rule
 	 * @param Request $request
 	 * @param string $component
-	 * @throws FailedAuthenticationException
-	 * @throws FailedNoAuthenticationException
+	 * @throws VerificationException
 	 */
 	public function checkRule(RuleInterface $rule, Request $request, $component = NULL)
 	{
-		if (!$rule instanceof LoggedIn) {
+		if (!$rule instanceof NoIdentity) {
 			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
 		}
 
@@ -57,12 +55,8 @@ class LoggedInRuleHandler extends Object implements RuleHandlerInterface
 			throw new UnexpectedValueException("Could not find firewall named '$name'.");
 		}
 
-		if ((bool) $firewall->getIdentity() !== $rule->flag) {
-			if ($rule->flag) {
-				throw new FailedAuthenticationException('User must be logged in for this request.');
-			} else {
-				throw new FailedNoAuthenticationException('User must not be logged in for this request.');
-			}
+		if ($firewall->getIdentity()) {
+			throw new VerificationException($rule, 'User must not be logged in for this request.');
 		}
 	}
 

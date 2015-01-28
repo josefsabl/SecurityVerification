@@ -4,15 +4,14 @@ namespace Tests\Unit;
 
 use Arachne\DIHelpers\ResolverInterface;
 use Arachne\Security\AuthorizatorInterface;
-use Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException;
 use Arachne\SecurityVerification\Rules\Privilege;
 use Arachne\SecurityVerification\Rules\PrivilegeRuleHandler;
+use Arachne\Verifier\Exception\VerificationException;
 use Arachne\Verifier\RuleInterface;
 use Codeception\TestCase\Test;
 use Mockery;
 use Mockery\MockInterface;
 use Nette\Application\Request;
-use Nette\Security\IIdentity;
 use Nette\Security\IResource;
 
 /**
@@ -57,7 +56,7 @@ class PrivilegeRuleTest extends Test
 	}
 
 	/**
-	 * @expectedException \Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
+	 * @expectedException \Arachne\Verifier\Exception\VerificationException
 	 * @expectedExceptionMessage Required privilege 'resource / privilege' is not granted.
 	 */
 	public function testPrivilegeFalse()
@@ -75,9 +74,8 @@ class PrivilegeRuleTest extends Test
 
 		try {
 			$this->handler->checkRule($rule, $request);
-		} catch (FailedPrivilegeAuthorizationException $e) {
-			$this->assertSame('resource', $e->getResource());
-			$this->assertSame('privilege', $e->getPrivilege());
+		} catch (VerificationException $e) {
+			$this->assertSame($rule, $e->getRule());
 			throw $e;
 		}
 	}
@@ -99,7 +97,7 @@ class PrivilegeRuleTest extends Test
 	}
 
 	/**
-	 * @expectedException \Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
+	 * @expectedException \Arachne\Verifier\Exception\VerificationException
 	 * @expectedExceptionMessage Required privilege 'Test / privilege' is not granted.
 	 */
 	public function testPrivilegeThisFalse()
@@ -117,9 +115,8 @@ class PrivilegeRuleTest extends Test
 
 		try {
 			$this->handler->checkRule($rule, $request);
-		} catch (FailedPrivilegeAuthorizationException $e) {
-			$this->assertSame('Test', $e->getResource());
-			$this->assertSame('privilege', $e->getPrivilege());
+		} catch (VerificationException $e) {
+			$this->assertSame($rule, $e->getRule());
 			throw $e;
 		}
 	}
@@ -144,7 +141,7 @@ class PrivilegeRuleTest extends Test
 	}
 
 	/**
-	 * @expectedException \Arachne\SecurityVerification\Exception\FailedPrivilegeAuthorizationException
+	 * @expectedException \Arachne\Verifier\Exception\VerificationException
 	 * @expectedExceptionMessage Required privilege 'entity / privilege' is not granted.
 	 */
 	public function testPrivilegeResourceFalse()
@@ -171,9 +168,8 @@ class PrivilegeRuleTest extends Test
 
 		try {
 			$this->handler->checkRule($rule, $request);
-		} catch (FailedPrivilegeAuthorizationException $e) {
-			$this->assertSame($entity, $e->getResource());
-			$this->assertSame('privilege', $e->getPrivilege());
+		} catch (VerificationException $e) {
+			$this->assertSame($rule, $e->getRule());
 			throw $e;
 		}
 	}

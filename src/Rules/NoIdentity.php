@@ -10,8 +10,7 @@
 
 namespace Arachne\SecurityVerification\Rules;
 
-use Arachne\Verifier\RuleInterface;
-use Nette\Object;
+use Arachne\Verifier\Rules\SecurityRule;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
@@ -19,11 +18,8 @@ use Nette\Object;
  * @Annotation
  * @Target({"CLASS", "METHOD", "ANNOTATION"})
  */
-class LoggedIn extends Object implements RuleInterface
+class NoIdentity extends SecurityRule
 {
-
-	/** @var bool */
-	public $flag = TRUE;
 
 	/** @var string */
 	public $firewall;

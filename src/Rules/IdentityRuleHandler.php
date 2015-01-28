@@ -23,7 +23,7 @@ use Nette\Object;
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class RoleRuleHandler extends Object implements RuleHandlerInterface
+class IdentityRuleHandler extends Object implements RuleHandlerInterface
 {
 
 	/** @var ResolverInterface */
@@ -38,14 +38,14 @@ class RoleRuleHandler extends Object implements RuleHandlerInterface
 	}
 
 	/**
-	 * @param Role $rule
+	 * @param Identity $rule
 	 * @param Request $request
 	 * @param string $component
 	 * @throws VerificationException
 	 */
 	public function checkRule(RuleInterface $rule, Request $request, $component = NULL)
 	{
-		if (!$rule instanceof Role) {
+		if (!$rule instanceof Identity) {
 			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
 		}
 
@@ -55,8 +55,8 @@ class RoleRuleHandler extends Object implements RuleHandlerInterface
 			throw new UnexpectedValueException("Could not find firewall named '$name'.");
 		}
 
-		if (!in_array($rule->role, $firewall->getIdentity()->getRoles(), TRUE)) {
-			throw new VerificationException($rule, "Role '$rule->role' is required for this request.");
+		if (!$firewall->getIdentity()) {
+			throw new VerificationException($rule, 'User must be logged in for this request.');
 		}
 	}
 

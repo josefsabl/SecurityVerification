@@ -8,13 +8,20 @@
  * For the full copyright and license information, please view the file license.md that was distributed with this source code.
  */
 
-namespace Arachne\SecurityVerification\Exception;
+namespace Arachne\SecurityVerification\Rules;
 
-use Nette\Application\ForbiddenRequestException;
+use Arachne\Verifier\Rules\SecurityRule;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
+ *
+ * @Annotation
+ * @Target({"CLASS", "METHOD", "ANNOTATION"})
  */
-class FailedAuthenticationException extends ForbiddenRequestException
+class Identity extends SecurityRule
 {
+
+	/** @var string */
+	public $firewall;
+
 }

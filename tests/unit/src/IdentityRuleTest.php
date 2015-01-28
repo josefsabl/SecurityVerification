@@ -4,8 +4,8 @@ namespace Tests\Unit;
 
 use Arachne\DIHelpers\ResolverInterface;
 use Arachne\Security\FirewallInterface;
-use Arachne\SecurityVerification\Rules\LoggedIn;
-use Arachne\SecurityVerification\Rules\LoggedInRuleHandler;
+use Arachne\SecurityVerification\Rules\Identity;
+use Arachne\SecurityVerification\Rules\IdentityRuleHandler;
 use Arachne\Verifier\RuleInterface;
 use Codeception\TestCase\Test;
 use Mockery;
@@ -16,10 +16,10 @@ use Nette\Security\IIdentity;
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class LoggedInRuleTest extends Test
+class IdentityRuleTest extends Test
 {
 
-	/** @var SecurityVerificationHandler */
+	/** @var IdentityRuleHandler */
 	private $handler;
 
 	/** @var MockInterface */
@@ -35,12 +35,12 @@ class LoggedInRuleTest extends Test
 			->with('Admin')
 			->andReturn($this->firewall);
 
-		$this->handler = new LoggedInRuleHandler($firewallResolver);
+		$this->handler = new IdentityRuleHandler($firewallResolver);
 	}
 
-	public function testLoggedInTrue()
+	public function testIdentityTrue()
 	{
-		$rule = new LoggedIn();
+		$rule = new Identity();
 		$request = new Request('Admin:Test', 'GET', []);
 
 		$this->firewall
@@ -51,51 +51,19 @@ class LoggedInRuleTest extends Test
 		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
 
-	public function testNotLoggedInTrue()
-	{
-		$rule = new LoggedIn();
-		$rule->flag = FALSE;
-		$request = new Request('Admin:Test', 'GET', []);
-
-		$this->firewall
-			->shouldReceive('getIdentity')
-			->once()
-			->andReturn();
-
-		$this->assertNull($this->handler->checkRule($rule, $request));
-	}
-
 	/**
-	 * @expectedException \Arachne\SecurityVerification\Exception\FailedAuthenticationException
+	 * @expectedException \Arachne\Verifier\Exception\VerificationException
 	 * @expectedExceptionMessage User must be logged in for this request.
 	 */
-	public function testLoggedInFalse()
+	public function testIdentityFalse()
 	{
-		$rule = new LoggedIn();
+		$rule = new Identity();
 		$request = new Request('Admin:Test', 'GET', []);
 
 		$this->firewall
 			->shouldReceive('getIdentity')
 			->once()
 			->andReturn();
-
-		$this->handler->checkRule($rule, $request);
-	}
-
-	/**
-	 * @expectedException \Arachne\SecurityVerification\Exception\FailedNoAuthenticationException
-	 * @expectedExceptionMessage User must not be logged in for this request.
-	 */
-	public function testNotLoggedInFalse()
-	{
-		$rule = new LoggedIn();
-		$rule->flag = FALSE;
-		$request = new Request('Admin:Test', 'GET', []);
-
-		$this->firewall
-			->shouldReceive('getIdentity')
-			->once()
-			->andReturn(Mockery::mock(IIdentity::class));
 
 		$this->handler->checkRule($rule, $request);
 	}

@@ -4,22 +4,22 @@ namespace Tests\Unit;
 
 use Arachne\DIHelpers\ResolverInterface;
 use Arachne\Security\FirewallInterface;
-use Arachne\SecurityVerification\Rules\Role;
-use Arachne\SecurityVerification\Rules\RoleRuleHandler;
-use Arachne\Verifier\Exception\VerificationException;
+use Arachne\SecurityVerification\Rules\NoIdentity;
+use Arachne\SecurityVerification\Rules\NoIdentityRuleHandler;
 use Arachne\Verifier\RuleInterface;
 use Codeception\TestCase\Test;
 use Mockery;
 use Mockery\MockInterface;
 use Nette\Application\Request;
+use Nette\Security\IIdentity;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class RoleRuleTest extends Test
+class NoIdentityRuleTest extends Test
 {
 
-	/** @var RoleRuleHandler */
+	/** @var NoIdentityRuleHandler */
 	private $handler;
 
 	/** @var MockInterface */
@@ -35,44 +35,37 @@ class RoleRuleTest extends Test
 			->with('Admin')
 			->andReturn($this->firewall);
 
-		$this->handler = new RoleRuleHandler($firewallResolver);
+		$this->handler = new NoIdentityRuleHandler($firewallResolver);
 	}
 
-	public function testRoleTrue()
+	public function testNoIdentityTrue()
 	{
-		$rule = new Role();
-		$rule->role = 'role';
+		$rule = new NoIdentity();
 		$request = new Request('Admin:Test', 'GET', []);
 
 		$this->firewall
-			->shouldReceive('getIdentity->getRoles')
+			->shouldReceive('getIdentity')
 			->once()
-			->andReturn([ 'role' ]);
+			->andReturn();
 
 		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
 
 	/**
 	 * @expectedException \Arachne\Verifier\Exception\VerificationException
-	 * @expectedExceptionMessage Role 'role' is required for this request.
+	 * @expectedExceptionMessage User must not be logged in for this request.
 	 */
-	public function testRoleFalse()
+	public function testNoIdentityFalse()
 	{
-		$rule = new Role();
-		$rule->role = 'role';
+		$rule = new NoIdentity();
 		$request = new Request('Admin:Test', 'GET', []);
 
 		$this->firewall
-			->shouldReceive('getIdentity->getRoles')
+			->shouldReceive('getIdentity')
 			->once()
-			->andReturn([]);
+			->andReturn(Mockery::mock(IIdentity::class));
 
-		try {
-			$this->handler->checkRule($rule, $request);
-		} catch (VerificationException $e) {
-			$this->assertSame($rule, $e->getRule());
-			throw $e;
-		}
+		$this->handler->checkRule($rule, $request);
 	}
 
 	/**
