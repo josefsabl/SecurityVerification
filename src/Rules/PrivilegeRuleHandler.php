@@ -39,7 +39,7 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
 	 * @param ResolverInterface $authorizatorResolver
 	 * @param PropertyAccessorInterface $propertyAccessor
 	 */
-	public function __construct(ResolverInterface $authorizatorResolver, PropertyAccessorInterface $propertyAccessor = NULL)
+	public function __construct(ResolverInterface $authorizatorResolver, PropertyAccessorInterface $propertyAccessor = null)
 	{
 		$this->authorizatorResolver = $authorizatorResolver;
 		$this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
@@ -51,7 +51,7 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
 	 * @param string $component
 	 * @throws VerificationException
 	 */
-	public function checkRule(RuleInterface $rule, Request $request, $component = NULL)
+	public function checkRule(RuleInterface $rule, Request $request, $component = null)
 	{
 		if (!$rule instanceof Privilege) {
 			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
@@ -82,7 +82,7 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
 			return $resource;
 		}
 		$parameter = substr($resource, 1);
-		if ($component !== NULL) {
+		if ($component !== null) {
 			$parameter = $component . '-' . $parameter;
 		}
 		if ($parameter === 'this') {

@@ -25,7 +25,7 @@ class AuthorizatorFactory extends Object
 		$permission->addRole('redactor');
 		$permission->addResource('Article');
 		$permission->allow('redactor', 'Article', 'edit');
-		$permission->allow(NULL, 'Article', 'publish', function (IIdentity $identity, IResource $resource) {
+		$permission->allow(null, 'Article', 'publish', function (IIdentity $identity, IResource $resource) {
 			return $identity->getId() === $resource->getOwnerId();
 		});
 

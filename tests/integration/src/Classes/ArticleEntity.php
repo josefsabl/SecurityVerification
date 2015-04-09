@@ -15,7 +15,7 @@ class ArticleEntity extends Object implements IResource
 
 	private $parent;
 
-	public function __construct($ownerId, ArticleEntity $parent = NULL)
+	public function __construct($ownerId, ArticleEntity $parent = null)
 	{
 		$this->ownerId = $ownerId;
 		$this->parent = $parent;

@@ -26,7 +26,7 @@ class Helpers
 	public static function getTopModuleName($presenter)
 	{
 		$position = strpos($presenter, ':');
-		if ($position === FALSE) {
+		if ($position === false) {
 			throw new InvalidArgumentException("Module name could not be detected.");
 		}
 		return substr($presenter, 0, $position);

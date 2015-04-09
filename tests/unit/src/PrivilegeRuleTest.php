@@ -50,7 +50,7 @@ class PrivilegeRuleTest extends Test
 			->shouldReceive('isAllowed')
 			->with('resource', 'privilege')
 			->once()
-			->andReturn(TRUE);
+			->andReturn(true);
 
 		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
@@ -70,7 +70,7 @@ class PrivilegeRuleTest extends Test
 			->shouldReceive('isAllowed')
 			->with('resource', 'privilege')
 			->once()
-			->andReturn(FALSE);
+			->andReturn(false);
 
 		try {
 			$this->handler->checkRule($rule, $request);
@@ -91,7 +91,7 @@ class PrivilegeRuleTest extends Test
 			->shouldReceive('isAllowed')
 			->with('Test', 'privilege')
 			->once()
-			->andReturn(TRUE);
+			->andReturn(true);
 
 		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
@@ -111,7 +111,7 @@ class PrivilegeRuleTest extends Test
 			->shouldReceive('isAllowed')
 			->with('Test', 'privilege')
 			->once()
-			->andReturn(FALSE);
+			->andReturn(false);
 
 		try {
 			$this->handler->checkRule($rule, $request);
@@ -135,7 +135,7 @@ class PrivilegeRuleTest extends Test
 			->shouldReceive('isAllowed')
 			->with($entity, 'privilege')
 			->once()
-			->andReturn(TRUE);
+			->andReturn(true);
 
 		$this->assertNull($this->handler->checkRule($rule, $request));
 	}
@@ -164,7 +164,7 @@ class PrivilegeRuleTest extends Test
 			->shouldReceive('isAllowed')
 			->with($entity, 'privilege')
 			->once()
-			->andReturn(FALSE);
+			->andReturn(false);
 
 		try {
 			$this->handler->checkRule($rule, $request);

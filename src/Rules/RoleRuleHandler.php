@@ -43,7 +43,7 @@ class RoleRuleHandler extends Object implements RuleHandlerInterface
 	 * @param string $component
 	 * @throws VerificationException
 	 */
-	public function checkRule(RuleInterface $rule, Request $request, $component = NULL)
+	public function checkRule(RuleInterface $rule, Request $request, $component = null)
 	{
 		if (!$rule instanceof Role) {
 			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
@@ -55,7 +55,7 @@ class RoleRuleHandler extends Object implements RuleHandlerInterface
 			throw new UnexpectedValueException("Could not find firewall named '$name'.");
 		}
 
-		if (!in_array($rule->role, $firewall->getIdentity()->getRoles(), TRUE)) {
+		if (!in_array($rule->role, $firewall->getIdentity()->getRoles(), true)) {
 			throw new VerificationException($rule, "Role '$rule->role' is required for this request.");
 		}
 	}
