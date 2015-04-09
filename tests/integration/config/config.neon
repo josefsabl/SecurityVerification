@@ -1,28 +1,43 @@
-extensions:
-	nette: Nette\Bridges\Framework\NetteExtension
-	kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
-	arachne.dihelpers: Arachne\DIHelpers\DI\DIHelpersExtension
-	arachne.verifier: Arachne\Verifier\DI\VerifierExtension
-	arachne.security: Arachne\Security\DI\SecurityExtension
-	arachne.securityverification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
+common:
+	services:
+		authorizatorFactory: Tests\Integration\Classes\AuthorizatorFactory
+		authorizator:
+			factory: @authorizatorFactory::create( @arachne.security.firewall.Admin )
+			tags:
+				arachne.security.authorizator: Admin
 
-nette:
-	application:
+	extensions:
+		kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
+		arachne.dihelpers: Arachne\DIHelpers\DI\DIHelpersExtension
+		arachne.verifier: Arachne\Verifier\DI\VerifierExtension
+		arachne.security: Arachne\Security\DI\SecurityExtension
+		arachne.securityverification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
+
+	arachne.security:
+		firewalls:
+			- Admin
+
+nette_2.2 < common:
+	extensions:
+		nette: Nette\Bridges\Framework\NetteExtension
+
+	services:
+		authorizator:
+			class: Arachne\Security\Authorization\PermissionAuthorizator
+
+	nette:
+		application:
+			mapping:
+				Admin: Tests\Integration\Classes\*Presenter
+
+nette_2.3 < common:
+	extensions:
+		nette.application: Nette\Bridges\ApplicationDI\ApplicationExtension( %debugMode%, [ %appDir% ] )
+		nette.cache: Nette\Bridges\CacheDI\CacheExtension( %tempDir% )
+		nette.http: Nette\Bridges\HttpDI\HttpExtension
+		nette.routing: Nette\Bridges\ApplicationDI\RoutingExtension( %debugMode% )
+		nette.session: Nette\Bridges\HttpDI\SessionExtension( %debugMode% )
+
+	nette.application:
 		mapping:
 			Admin: Tests\Integration\Classes\*Presenter
-	session:
-		autoStart: true
-
-arachne.security:
-	firewalls:
-		- Admin
-
-services:
-	#authenticator: Tests\Integration\Classes\Authenticator
-	authorizatorFactory: Tests\Integration\Classes\AuthorizatorFactory
-	authorizator:
-		# TODO: class can be removed with nette/di 2.3
-		class: Arachne\Security\Authorization\PermissionAuthorizator
-		factory: @authorizatorFactory::create( @arachne.security.firewall.Admin )
-		tags:
-			arachne.security.authorizator: Admin

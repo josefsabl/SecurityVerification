@@ -4,7 +4,6 @@ namespace Tests\Integration;
 
 use Arachne\Codeception\ConfigFilesInterface;
 use Arachne\Verifier\Verifier;
-use Codeception\TestCase\Test;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Container;
@@ -15,18 +14,11 @@ use Tests\Integration\Classes\ArticlePresenter;
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class SecurityVerificationTest extends Test implements ConfigFilesInterface
+class SecurityVerificationTest extends Test
 {
 
 	/** @var Verifier */
 	private $verifier;
-
-	public function getConfigFiles()
-	{
-		return [
-			'/config/config.neon',
-		];
-	}
 
 	public function _before()
 	{
