@@ -32,11 +32,11 @@ nette_2.2 < common:
 
 nette_2.3 < common:
 	extensions:
-		nette.application: Nette\Bridges\ApplicationDI\ApplicationExtension( %debugMode%, [ %appDir% ] )
+		nette.application: Nette\Bridges\ApplicationDI\ApplicationExtension
 		nette.cache: Nette\Bridges\CacheDI\CacheExtension( %tempDir% )
 		nette.http: Nette\Bridges\HttpDI\HttpExtension
-		nette.routing: Nette\Bridges\ApplicationDI\RoutingExtension( %debugMode% )
-		nette.session: Nette\Bridges\HttpDI\SessionExtension( %debugMode% )
+		nette.routing: Nette\Bridges\ApplicationDI\RoutingExtension
+		nette.session: Nette\Bridges\HttpDI\SessionExtension
 
 	nette.application:
 		mapping:

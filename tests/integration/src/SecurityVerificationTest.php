@@ -4,6 +4,7 @@ namespace Tests\Integration;
 
 use Arachne\Codeception\ConfigFilesInterface;
 use Arachne\Verifier\Verifier;
+use Codeception\TestCase\Test;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Container;
