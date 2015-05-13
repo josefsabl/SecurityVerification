@@ -23,7 +23,7 @@ class SecurityVerificationExtension extends CompilerExtension
 	public function loadConfiguration()
 	{
 		$this->getExtension('Arachne\Security\DI\SecurityExtension');
-		$extension = $this->getExtension('Arachne\DIHelpers\DI\DIHelpersExtension');
+		$this->getExtension('Arachne\DIHelpers\DI\DIHelpersExtension');
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('handler.identity'))
