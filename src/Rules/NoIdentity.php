@@ -16,7 +16,6 @@ use Arachne\Verifier\Rules\SecurityRule;
  * @author Jáchym Toušek <enumag@gmail.com>
  *
  * @Annotation
- * @Target({"CLASS", "METHOD", "ANNOTATION"})
  */
 class NoIdentity extends SecurityRule
 {
