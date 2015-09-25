@@ -13,6 +13,7 @@ namespace Arachne\SecurityVerification\DI;
 use Arachne\DIHelpers\CompilerExtension;
 use Arachne\Security\DI\SecurityExtension;
 use Arachne\Verifier\DI\VerifierExtension;
+use Nette\Utils\AssertionException;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
@@ -23,7 +24,7 @@ class SecurityVerificationExtension extends CompilerExtension
 	public function loadConfiguration()
 	{
 		$this->getExtension('Arachne\Security\DI\SecurityExtension');
-		$this->getExtension('Arachne\DIHelpers\DI\DIHelpersExtension');
+
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('handler.identity'))
@@ -53,27 +54,36 @@ class SecurityVerificationExtension extends CompilerExtension
 
 	public function beforeCompile()
 	{
-		$extension = $this->getExtension('Arachne\DIHelpers\DI\DIHelpersExtension');
 		$builder = $this->getContainerBuilder();
+
+		if ($extension = $this->getExtension('Arachne\DIHelpers\DI\ResolversExtension', false)) {
+			$firewallResolver = $extension->get(SecurityExtension::TAG_FIREWALL);
+			$authorizatorResolver = $extension->get(SecurityExtension::TAG_AUTHORIZATOR);
+		} elseif ($extension = $this->getExtension('Arachne\DIHelpers\DI\DIHelpersExtension', false)) {
+			$firewallResolver = $extension->getResolver(SecurityExtension::TAG_FIREWALL);
+			$authorizatorResolver = $extension->getResolver(SecurityExtension::TAG_AUTHORIZATOR);
+		} else {
+			throw new AssertionException('Cannot get resolvers because arachne/di-helpers is not properly installed.');
+		}
 
 		$builder->getDefinition($this->prefix('handler.identity'))
 			->setArguments([
-				'firewallResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_FIREWALL),
+				'firewallResolver' => '@' . $firewallResolver,
 			]);
 
 		$builder->getDefinition($this->prefix('handler.noIdentity'))
 			->setArguments([
-				'firewallResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_FIREWALL),
+				'firewallResolver' => '@' . $firewallResolver,
 			]);
 
 		$builder->getDefinition($this->prefix('handler.privilege'))
 			->setArguments([
-				'authorizatorResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_AUTHORIZATOR),
+				'authorizatorResolver' => '@' . $authorizatorResolver,
 			]);
 
 		$builder->getDefinition($this->prefix('handler.role'))
 			->setArguments([
-				'firewallResolver' => '@' . $extension->getResolver(SecurityExtension::TAG_FIREWALL),
+				'firewallResolver' => '@' . $firewallResolver,
 			]);
 	}
 

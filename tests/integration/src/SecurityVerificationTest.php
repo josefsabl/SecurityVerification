@@ -25,7 +25,7 @@ class SecurityVerificationTest extends Test
 	{
 		$this->guy
 			->grabService(Container::class)
-			->getService('arachne.dihelpers.resolver.arachne.security.firewall')
+			->getService('arachne.dihelpers.resolvers.tag.arachne.security.firewall')
 			->resolve('Admin')
 			->login(new Identity(1, [ 'redactor' ]));
 
