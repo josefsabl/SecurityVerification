@@ -7,7 +7,7 @@ use Arachne\Security\FirewallInterface;
 use Arachne\SecurityVerification\Rules\NoIdentity;
 use Arachne\SecurityVerification\Rules\NoIdentityRuleHandler;
 use Arachne\Verifier\RuleInterface;
-use Codeception\TestCase\Test;
+use Codeception\MockeryModule\Test;
 use Mockery;
 use Mockery\MockInterface;
 use Nette\Application\Request;

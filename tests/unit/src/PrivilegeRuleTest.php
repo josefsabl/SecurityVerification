@@ -8,7 +8,7 @@ use Arachne\SecurityVerification\Rules\Privilege;
 use Arachne\SecurityVerification\Rules\PrivilegeRuleHandler;
 use Arachne\Verifier\Exception\VerificationException;
 use Arachne\Verifier\RuleInterface;
-use Codeception\TestCase\Test;
+use Codeception\MockeryModule\Test;
 use Mockery;
 use Mockery\MockInterface;
 use Nette\Application\Request;
