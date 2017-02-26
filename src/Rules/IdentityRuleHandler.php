@@ -17,7 +17,6 @@ use Nette\Object;
  */
 class IdentityRuleHandler extends Object implements RuleHandlerInterface
 {
-
     /** @var ResolverInterface */
     private $firewallResolver;
 
@@ -31,14 +30,15 @@ class IdentityRuleHandler extends Object implements RuleHandlerInterface
 
     /**
      * @param Identity $rule
-     * @param Request $request
-     * @param string $component
+     * @param Request  $request
+     * @param string   $component
+     *
      * @throws VerificationException
      */
     public function checkRule(RuleInterface $rule, Request $request, $component = null)
     {
         if (!$rule instanceof Identity) {
-            throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
+            throw new InvalidArgumentException('Unknown rule \''.get_class($rule).'\' given.');
         }
 
         $name = $rule->firewall ?: Helpers::getTopModuleName($request->getPresenterName());
@@ -51,5 +51,4 @@ class IdentityRuleHandler extends Object implements RuleHandlerInterface
             throw new VerificationException($rule, 'User must be logged in for this request.');
         }
     }
-
 }

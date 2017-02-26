@@ -18,7 +18,6 @@ use Nette\Application\Request;
  */
 class RoleRuleTest extends Test
 {
-
     /** @var RoleRuleHandler */
     private $handler;
 
@@ -47,7 +46,7 @@ class RoleRuleTest extends Test
         $this->firewall
             ->shouldReceive('getIdentity->getRoles')
             ->once()
-            ->andReturn([ 'role' ]);
+            ->andReturn(['role']);
 
         $this->assertNull($this->handler->checkRule($rule, $request));
     }
@@ -85,5 +84,4 @@ class RoleRuleTest extends Test
 
         $this->handler->checkRule($rule, $request);
     }
-
 }

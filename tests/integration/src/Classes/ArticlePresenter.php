@@ -16,7 +16,6 @@ use Nette\Application\UI\Presenter;
  */
 class ArticlePresenter extends Presenter
 {
-
     /**
      * @Privilege(resource = "Article", privilege = "edit")
      */
@@ -63,5 +62,4 @@ class ArticlePresenter extends Presenter
     public function actionInnerRules()
     {
     }
-
 }

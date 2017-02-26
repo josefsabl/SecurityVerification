@@ -12,7 +12,6 @@ use Nette\Utils\AssertionException;
  */
 class SecurityVerificationExtension extends CompilerExtension
 {
-
     public function loadConfiguration()
     {
         $this->getExtension('Arachne\Security\DI\SecurityExtension');
@@ -60,23 +59,22 @@ class SecurityVerificationExtension extends CompilerExtension
 
         $builder->getDefinition($this->prefix('handler.identity'))
             ->setArguments([
-                'firewallResolver' => '@' . $firewallResolver,
+                'firewallResolver' => '@'.$firewallResolver,
             ]);
 
         $builder->getDefinition($this->prefix('handler.noIdentity'))
             ->setArguments([
-                'firewallResolver' => '@' . $firewallResolver,
+                'firewallResolver' => '@'.$firewallResolver,
             ]);
 
         $builder->getDefinition($this->prefix('handler.privilege'))
             ->setArguments([
-                'authorizatorResolver' => '@' . $authorizatorResolver,
+                'authorizatorResolver' => '@'.$authorizatorResolver,
             ]);
 
         $builder->getDefinition($this->prefix('handler.role'))
             ->setArguments([
-                'firewallResolver' => '@' . $firewallResolver,
+                'firewallResolver' => '@'.$firewallResolver,
             ]);
     }
-
 }

@@ -10,7 +10,6 @@ use Nette\Security\IResource;
  */
 class ArticleEntity extends Object implements IResource
 {
-
     private $ownerId;
 
     private $parent;
@@ -35,5 +34,4 @@ class ArticleEntity extends Object implements IResource
     {
         return 'Article';
     }
-
 }

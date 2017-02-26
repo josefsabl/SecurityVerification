@@ -17,7 +17,6 @@ use Nette\Object;
  */
 class RoleRuleHandler extends Object implements RuleHandlerInterface
 {
-
     /** @var ResolverInterface */
     private $firewallResolver;
 
@@ -30,15 +29,16 @@ class RoleRuleHandler extends Object implements RuleHandlerInterface
     }
 
     /**
-     * @param Role $rule
+     * @param Role    $rule
      * @param Request $request
-     * @param string $component
+     * @param string  $component
+     *
      * @throws VerificationException
      */
     public function checkRule(RuleInterface $rule, Request $request, $component = null)
     {
         if (!$rule instanceof Role) {
-            throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
+            throw new InvalidArgumentException('Unknown rule \''.get_class($rule).'\' given.');
         }
 
         $name = $rule->firewall ?: Helpers::getTopModuleName($request->getPresenterName());
@@ -51,5 +51,4 @@ class RoleRuleHandler extends Object implements RuleHandlerInterface
             throw new VerificationException($rule, "Role '$rule->role' is required for this request.");
         }
     }
-
 }

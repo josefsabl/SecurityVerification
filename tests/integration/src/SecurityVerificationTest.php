@@ -2,7 +2,6 @@
 
 namespace Tests\Integration;
 
-use Arachne\Codeception\ConfigFilesInterface;
 use Arachne\Verifier\Verifier;
 use Codeception\TestCase\Test;
 use Nette\Application\Request;
@@ -17,7 +16,6 @@ use Tests\Integration\Classes\ArticlePresenter;
  */
 class SecurityVerificationTest extends Test
 {
-
     /** @var Verifier */
     private $verifier;
 
@@ -27,7 +25,7 @@ class SecurityVerificationTest extends Test
             ->grabService(Container::class)
             ->getService('arachne.dihelpers.resolvers.tag.arachne.security.firewall')
             ->resolve('Admin')
-            ->login(new Identity(1, [ 'redactor' ]));
+            ->login(new Identity(1, ['redactor']));
 
         $this->verifier = $this->guy->grabService(Verifier::class);
     }
@@ -111,5 +109,4 @@ class SecurityVerificationTest extends Test
 
         $this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
-
 }

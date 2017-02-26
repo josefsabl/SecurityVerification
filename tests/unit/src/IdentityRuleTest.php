@@ -18,7 +18,6 @@ use Nette\Security\IIdentity;
  */
 class IdentityRuleTest extends Test
 {
-
     /** @var IdentityRuleHandler */
     private $handler;
 
@@ -78,5 +77,4 @@ class IdentityRuleTest extends Test
 
         $this->handler->checkRule($rule, $request);
     }
-
 }

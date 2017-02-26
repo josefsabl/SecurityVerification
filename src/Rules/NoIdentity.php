@@ -11,8 +11,6 @@ use Arachne\Verifier\Rules\SecurityRule;
  */
 class NoIdentity extends SecurityRule
 {
-
     /** @var string */
     public $firewall;
-
 }

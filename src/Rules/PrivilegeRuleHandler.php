@@ -20,7 +20,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  */
 class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
 {
-
     /** @var ResolverInterface */
     private $authorizatorResolver;
 
@@ -28,7 +27,7 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
     private $propertyAccessor;
 
     /**
-     * @param ResolverInterface $authorizatorResolver
+     * @param ResolverInterface         $authorizatorResolver
      * @param PropertyAccessorInterface $propertyAccessor
      */
     public function __construct(ResolverInterface $authorizatorResolver, PropertyAccessorInterface $propertyAccessor = null)
@@ -39,14 +38,15 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
 
     /**
      * @param Privilege $rule
-     * @param Request $request
-     * @param string $component
+     * @param Request   $request
+     * @param string    $component
+     *
      * @throws VerificationException
      */
     public function checkRule(RuleInterface $rule, Request $request, $component = null)
     {
         if (!$rule instanceof Privilege) {
-            throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
+            throw new InvalidArgumentException('Unknown rule \''.get_class($rule).'\' given.');
         }
 
         $name = $rule->authorizator ?: Helpers::getTopModuleName($request->getPresenterName());
@@ -63,9 +63,10 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
     }
 
     /**
-     * @param string $resource
+     * @param string  $resource
      * @param Request $request
-     * @param string $component
+     * @param string  $component
+     *
      * @return string|IResource
      */
     private function resolveResource($resource, Request $request, $component)
@@ -75,7 +76,7 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
         }
         $parameter = substr($resource, 1);
         if ($component !== null) {
-            $parameter = $component . '-' . $parameter;
+            $parameter = $component.'-'.$parameter;
         }
         if ($parameter === 'this') {
             return Helpers::getPresenterName($request->getPresenterName());
@@ -84,7 +85,7 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
         if (!$object instanceof IResource) {
             throw new InvalidArgumentException("Resource '$resource' is not an instance of Nette\Security\IResource.");
         }
+
         return $object;
     }
-
 }

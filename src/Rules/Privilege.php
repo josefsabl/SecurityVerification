@@ -11,7 +11,6 @@ use Arachne\Verifier\Rules\SecurityRule;
  */
 class Privilege extends SecurityRule
 {
-
     /** @var string */
     public $resource;
 
@@ -20,5 +19,4 @@ class Privilege extends SecurityRule
 
     /** @var string */
     public $authorizator;
-
 }

@@ -19,7 +19,6 @@ use Nette\Security\IResource;
  */
 class PrivilegeRuleTest extends Test
 {
-
     /** @var PrivilegeRuleHandler */
     private $handler;
 
@@ -214,5 +213,4 @@ class PrivilegeRuleTest extends Test
 
         $this->handler->checkRule($rule, $request);
     }
-
 }

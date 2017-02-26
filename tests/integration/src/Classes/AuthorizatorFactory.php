@@ -15,7 +15,6 @@ use Nette\Security\IResource;
  */
 class AuthorizatorFactory extends Object
 {
-
     /**
      * @return AuthorizatorInterface
      */
@@ -31,5 +30,4 @@ class AuthorizatorFactory extends Object
 
         return new PermissionAuthorizator($firewall, $permission);
     }
-
 }
