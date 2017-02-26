@@ -9,7 +9,6 @@ use Arachne\Verifier\Exception\VerificationException;
 use Arachne\Verifier\RuleHandlerInterface;
 use Arachne\Verifier\RuleInterface;
 use Nette\Application\Request;
-use Nette\Object;
 use Nette\Security\IResource;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -17,7 +16,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
+class PrivilegeRuleHandler implements RuleHandlerInterface
 {
     /**
      * @var callable

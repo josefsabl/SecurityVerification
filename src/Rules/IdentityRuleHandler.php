@@ -9,12 +9,11 @@ use Arachne\Verifier\Exception\VerificationException;
 use Arachne\Verifier\RuleHandlerInterface;
 use Arachne\Verifier\RuleInterface;
 use Nette\Application\Request;
-use Nette\Object;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class IdentityRuleHandler extends Object implements RuleHandlerInterface
+class IdentityRuleHandler implements RuleHandlerInterface
 {
     /**
      * @var callable
