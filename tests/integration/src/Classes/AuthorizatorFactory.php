@@ -7,7 +7,6 @@ use Arachne\Security\Authorization\AuthorizatorInterface;
 use Arachne\Security\Authorization\Permission;
 use Arachne\Security\Authorization\PermissionAuthorizator;
 use Nette\Security\IIdentity;
-use Nette\Security\IResource;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
@@ -27,7 +26,7 @@ class AuthorizatorFactory
             null,
             'Article',
             'publish',
-            function (IIdentity $identity, IResource $resource) {
+            function (IIdentity $identity, ArticleEntity $resource) {
                 return $identity->getId() === $resource->getOwnerId();
             }
         );
