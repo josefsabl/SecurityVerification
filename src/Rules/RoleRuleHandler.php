@@ -2,7 +2,6 @@
 
 namespace Arachne\SecurityVerification\Rules;
 
-use Arachne\DIHelpers\ResolverInterface;
 use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\SecurityVerification\Exception\UnexpectedValueException;
 use Arachne\SecurityVerification\Helpers;
@@ -18,14 +17,14 @@ use Nette\Object;
 class RoleRuleHandler extends Object implements RuleHandlerInterface
 {
     /**
-     * @var ResolverInterface
+     * @var callable
      */
     private $firewallResolver;
 
     /**
-     * @param ResolverInterface $firewallResolver
+     * @param callable $firewallResolver
      */
-    public function __construct(ResolverInterface $firewallResolver)
+    public function __construct(callable $firewallResolver)
     {
         $this->firewallResolver = $firewallResolver;
     }
@@ -44,7 +43,7 @@ class RoleRuleHandler extends Object implements RuleHandlerInterface
         }
 
         $name = $rule->firewall ?: Helpers::getTopModuleName($request->getPresenterName());
-        $firewall = $this->firewallResolver->resolve($name);
+        $firewall = call_user_func($this->firewallResolver, $name);
         if (!$firewall) {
             throw new UnexpectedValueException("Could not find firewall named '$name'.");
         }

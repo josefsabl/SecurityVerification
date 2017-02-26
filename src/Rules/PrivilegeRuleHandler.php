@@ -2,7 +2,6 @@
 
 namespace Arachne\SecurityVerification\Rules;
 
-use Arachne\DIHelpers\ResolverInterface;
 use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\SecurityVerification\Exception\UnexpectedValueException;
 use Arachne\SecurityVerification\Helpers;
@@ -21,7 +20,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
 {
     /**
-     * @var ResolverInterface
+     * @var callable
      */
     private $authorizatorResolver;
 
@@ -31,10 +30,10 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
     private $propertyAccessor;
 
     /**
-     * @param ResolverInterface         $authorizatorResolver
+     * @param callable                  $authorizatorResolver
      * @param PropertyAccessorInterface $propertyAccessor
      */
-    public function __construct(ResolverInterface $authorizatorResolver, PropertyAccessorInterface $propertyAccessor = null)
+    public function __construct(callable $authorizatorResolver, PropertyAccessorInterface $propertyAccessor = null)
     {
         $this->authorizatorResolver = $authorizatorResolver;
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
@@ -54,7 +53,7 @@ class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
         }
 
         $name = $rule->authorizator ?: Helpers::getTopModuleName($request->getPresenterName());
-        $authorizator = $this->authorizatorResolver->resolve($name);
+        $authorizator = call_user_func($this->authorizatorResolver, $name);
         if (!$authorizator) {
             throw new UnexpectedValueException("Could not find authorizator named '$name'.");
         }
