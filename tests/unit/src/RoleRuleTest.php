@@ -19,71 +19,71 @@ use Nette\Application\Request;
 class RoleRuleTest extends Test
 {
 
-	/** @var RoleRuleHandler */
-	private $handler;
+    /** @var RoleRuleHandler */
+    private $handler;
 
-	/** @var MockInterface */
-	private $firewall;
+    /** @var MockInterface */
+    private $firewall;
 
-	protected function _before()
-	{
-		$this->firewall = Mockery::mock(FirewallInterface::class);
+    protected function _before()
+    {
+        $this->firewall = Mockery::mock(FirewallInterface::class);
 
-		$firewallResolver = Mockery::mock(ResolverInterface::class);
-		$firewallResolver
-			->shouldReceive('resolve')
-			->with('Admin')
-			->andReturn($this->firewall);
+        $firewallResolver = Mockery::mock(ResolverInterface::class);
+        $firewallResolver
+            ->shouldReceive('resolve')
+            ->with('Admin')
+            ->andReturn($this->firewall);
 
-		$this->handler = new RoleRuleHandler($firewallResolver);
-	}
+        $this->handler = new RoleRuleHandler($firewallResolver);
+    }
 
-	public function testRoleTrue()
-	{
-		$rule = new Role();
-		$rule->role = 'role';
-		$request = new Request('Admin:Test', 'GET', []);
+    public function testRoleTrue()
+    {
+        $rule = new Role();
+        $rule->role = 'role';
+        $request = new Request('Admin:Test', 'GET', []);
 
-		$this->firewall
-			->shouldReceive('getIdentity->getRoles')
-			->once()
-			->andReturn([ 'role' ]);
+        $this->firewall
+            ->shouldReceive('getIdentity->getRoles')
+            ->once()
+            ->andReturn([ 'role' ]);
 
-		$this->assertNull($this->handler->checkRule($rule, $request));
-	}
+        $this->assertNull($this->handler->checkRule($rule, $request));
+    }
 
-	/**
-	 * @expectedException \Arachne\Verifier\Exception\VerificationException
-	 * @expectedExceptionMessage Role 'role' is required for this request.
-	 */
-	public function testRoleFalse()
-	{
-		$rule = new Role();
-		$rule->role = 'role';
-		$request = new Request('Admin:Test', 'GET', []);
+    /**
+     * @expectedException \Arachne\Verifier\Exception\VerificationException
+     * @expectedExceptionMessage Role 'role' is required for this request.
+     */
+    public function testRoleFalse()
+    {
+        $rule = new Role();
+        $rule->role = 'role';
+        $request = new Request('Admin:Test', 'GET', []);
 
-		$this->firewall
-			->shouldReceive('getIdentity->getRoles')
-			->once()
-			->andReturn([]);
+        $this->firewall
+            ->shouldReceive('getIdentity->getRoles')
+            ->once()
+            ->andReturn([]);
 
-		try {
-			$this->handler->checkRule($rule, $request);
-		} catch (VerificationException $e) {
-			$this->assertSame($rule, $e->getRule());
-			throw $e;
-		}
-	}
+        try {
+            $this->handler->checkRule($rule, $request);
+        } catch (VerificationException $e) {
+            $this->assertSame($rule, $e->getRule());
+            throw $e;
+        }
+    }
 
-	/**
-	 * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
-	 */
-	public function testUnknownRule()
-	{
-		$rule = Mockery::mock(RuleInterface::class);
-		$request = new Request('Test', 'GET', []);
+    /**
+     * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
+     */
+    public function testUnknownRule()
+    {
+        $rule = Mockery::mock(RuleInterface::class);
+        $request = new Request('Test', 'GET', []);
 
-		$this->handler->checkRule($rule, $request);
-	}
+        $this->handler->checkRule($rule, $request);
+    }
 
 }

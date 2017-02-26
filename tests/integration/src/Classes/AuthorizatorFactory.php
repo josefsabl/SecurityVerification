@@ -16,20 +16,20 @@ use Nette\Security\IResource;
 class AuthorizatorFactory extends Object
 {
 
-	/**
-	 * @return AuthorizatorInterface
-	 */
-	public function create(FirewallInterface $firewall)
-	{
-		$permission = new Permission();
-		$permission->addRole('redactor');
-		$permission->addResource('Article');
-		$permission->allow('redactor', 'Article', 'edit');
-		$permission->allow(null, 'Article', 'publish', function (IIdentity $identity, IResource $resource) {
-			return $identity->getId() === $resource->getOwnerId();
-		});
+    /**
+     * @return AuthorizatorInterface
+     */
+    public function create(FirewallInterface $firewall)
+    {
+        $permission = new Permission();
+        $permission->addRole('redactor');
+        $permission->addResource('Article');
+        $permission->allow('redactor', 'Article', 'edit');
+        $permission->allow(null, 'Article', 'publish', function (IIdentity $identity, IResource $resource) {
+            return $identity->getId() === $resource->getOwnerId();
+        });
 
-		return new PermissionAuthorizator($firewall, $permission);
-	}
+        return new PermissionAuthorizator($firewall, $permission);
+    }
 
 }

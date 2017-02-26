@@ -11,29 +11,29 @@ use Nette\Security\IResource;
 class ArticleEntity extends Object implements IResource
 {
 
-	private $ownerId;
+    private $ownerId;
 
-	private $parent;
+    private $parent;
 
-	public function __construct($ownerId, ArticleEntity $parent = null)
-	{
-		$this->ownerId = $ownerId;
-		$this->parent = $parent;
-	}
+    public function __construct($ownerId, ArticleEntity $parent = null)
+    {
+        $this->ownerId = $ownerId;
+        $this->parent = $parent;
+    }
 
-	public function getOwnerId()
-	{
-		return $this->ownerId;
-	}
+    public function getOwnerId()
+    {
+        return $this->ownerId;
+    }
 
-	public function getParent()
-	{
-		return $this->parent;
-	}
+    public function getParent()
+    {
+        return $this->parent;
+    }
 
-	public function getResourceId()
-	{
-		return 'Article';
-	}
+    public function getResourceId()
+    {
+        return 'Article';
+    }
 
 }

@@ -20,199 +20,199 @@ use Nette\Security\IResource;
 class PrivilegeRuleTest extends Test
 {
 
-	/** @var PrivilegeRuleHandler */
-	private $handler;
+    /** @var PrivilegeRuleHandler */
+    private $handler;
 
-	/** @var MockInterface */
-	private $authorizator;
+    /** @var MockInterface */
+    private $authorizator;
 
-	protected function _before()
-	{
-		$this->authorizator = Mockery::mock(AuthorizatorInterface::class);
+    protected function _before()
+    {
+        $this->authorizator = Mockery::mock(AuthorizatorInterface::class);
 
-		$authorizatorResolver = Mockery::mock(ResolverInterface::class);
-		$authorizatorResolver
-			->shouldReceive('resolve')
-			->with('Admin')
-			->andReturn($this->authorizator);
+        $authorizatorResolver = Mockery::mock(ResolverInterface::class);
+        $authorizatorResolver
+            ->shouldReceive('resolve')
+            ->with('Admin')
+            ->andReturn($this->authorizator);
 
-		$this->handler = new PrivilegeRuleHandler($authorizatorResolver);
-	}
+        $this->handler = new PrivilegeRuleHandler($authorizatorResolver);
+    }
 
-	public function testPrivilegeTrue()
-	{
-		$rule = new Privilege();
-		$rule->resource = 'resource';
-		$rule->privilege = 'privilege';
-		$request = new Request('Admin:Test', 'GET', []);
+    public function testPrivilegeTrue()
+    {
+        $rule = new Privilege();
+        $rule->resource = 'resource';
+        $rule->privilege = 'privilege';
+        $request = new Request('Admin:Test', 'GET', []);
 
-		$this->authorizator
-			->shouldReceive('isAllowed')
-			->with('resource', 'privilege')
-			->once()
-			->andReturn(true);
+        $this->authorizator
+            ->shouldReceive('isAllowed')
+            ->with('resource', 'privilege')
+            ->once()
+            ->andReturn(true);
 
-		$this->assertNull($this->handler->checkRule($rule, $request));
-	}
+        $this->assertNull($this->handler->checkRule($rule, $request));
+    }
 
-	/**
-	 * @expectedException \Arachne\Verifier\Exception\VerificationException
-	 * @expectedExceptionMessage Required privilege 'resource / privilege' is not granted.
-	 */
-	public function testPrivilegeFalse()
-	{
-		$rule = new Privilege();
-		$rule->resource = 'resource';
-		$rule->privilege = 'privilege';
-		$request = new Request('Admin:Test', 'GET', []);
+    /**
+     * @expectedException \Arachne\Verifier\Exception\VerificationException
+     * @expectedExceptionMessage Required privilege 'resource / privilege' is not granted.
+     */
+    public function testPrivilegeFalse()
+    {
+        $rule = new Privilege();
+        $rule->resource = 'resource';
+        $rule->privilege = 'privilege';
+        $request = new Request('Admin:Test', 'GET', []);
 
-		$this->authorizator
-			->shouldReceive('isAllowed')
-			->with('resource', 'privilege')
-			->once()
-			->andReturn(false);
+        $this->authorizator
+            ->shouldReceive('isAllowed')
+            ->with('resource', 'privilege')
+            ->once()
+            ->andReturn(false);
 
-		try {
-			$this->handler->checkRule($rule, $request);
-		} catch (VerificationException $e) {
-			$this->assertSame($rule, $e->getRule());
-			throw $e;
-		}
-	}
+        try {
+            $this->handler->checkRule($rule, $request);
+        } catch (VerificationException $e) {
+            $this->assertSame($rule, $e->getRule());
+            throw $e;
+        }
+    }
 
-	public function testPrivilegeThis()
-	{
-		$rule = new Privilege();
-		$rule->resource = '$this';
-		$rule->privilege = 'privilege';
-		$request = new Request('Admin:Test', 'GET', []);
+    public function testPrivilegeThis()
+    {
+        $rule = new Privilege();
+        $rule->resource = '$this';
+        $rule->privilege = 'privilege';
+        $request = new Request('Admin:Test', 'GET', []);
 
-		$this->authorizator
-			->shouldReceive('isAllowed')
-			->with('Test', 'privilege')
-			->once()
-			->andReturn(true);
+        $this->authorizator
+            ->shouldReceive('isAllowed')
+            ->with('Test', 'privilege')
+            ->once()
+            ->andReturn(true);
 
-		$this->assertNull($this->handler->checkRule($rule, $request));
-	}
+        $this->assertNull($this->handler->checkRule($rule, $request));
+    }
 
-	/**
-	 * @expectedException \Arachne\Verifier\Exception\VerificationException
-	 * @expectedExceptionMessage Required privilege 'Test / privilege' is not granted.
-	 */
-	public function testPrivilegeThisFalse()
-	{
-		$rule = new Privilege();
-		$rule->resource = '$this';
-		$rule->privilege = 'privilege';
-		$request = new Request('Admin:Test', 'GET', []);
+    /**
+     * @expectedException \Arachne\Verifier\Exception\VerificationException
+     * @expectedExceptionMessage Required privilege 'Test / privilege' is not granted.
+     */
+    public function testPrivilegeThisFalse()
+    {
+        $rule = new Privilege();
+        $rule->resource = '$this';
+        $rule->privilege = 'privilege';
+        $request = new Request('Admin:Test', 'GET', []);
 
-		$this->authorizator
-			->shouldReceive('isAllowed')
-			->with('Test', 'privilege')
-			->once()
-			->andReturn(false);
+        $this->authorizator
+            ->shouldReceive('isAllowed')
+            ->with('Test', 'privilege')
+            ->once()
+            ->andReturn(false);
 
-		try {
-			$this->handler->checkRule($rule, $request);
-		} catch (VerificationException $e) {
-			$this->assertSame($rule, $e->getRule());
-			throw $e;
-		}
-	}
+        try {
+            $this->handler->checkRule($rule, $request);
+        } catch (VerificationException $e) {
+            $this->assertSame($rule, $e->getRule());
+            throw $e;
+        }
+    }
 
-	public function testPrivilegeResource()
-	{
-		$rule = new Privilege();
-		$rule->resource = '$entity';
-		$rule->privilege = 'privilege';
-		$entity = Mockery::mock(IResource::class);
-		$request = new Request('Admin:Test', 'GET', [
-			'entity' => $entity,
-		]);
+    public function testPrivilegeResource()
+    {
+        $rule = new Privilege();
+        $rule->resource = '$entity';
+        $rule->privilege = 'privilege';
+        $entity = Mockery::mock(IResource::class);
+        $request = new Request('Admin:Test', 'GET', [
+            'entity' => $entity,
+        ]);
 
-		$this->authorizator
-			->shouldReceive('isAllowed')
-			->with($entity, 'privilege')
-			->once()
-			->andReturn(true);
+        $this->authorizator
+            ->shouldReceive('isAllowed')
+            ->with($entity, 'privilege')
+            ->once()
+            ->andReturn(true);
 
-		$this->assertNull($this->handler->checkRule($rule, $request));
-	}
+        $this->assertNull($this->handler->checkRule($rule, $request));
+    }
 
-	/**
-	 * @expectedException \Arachne\Verifier\Exception\VerificationException
-	 * @expectedExceptionMessage Required privilege 'entity / privilege' is not granted.
-	 */
-	public function testPrivilegeResourceFalse()
-	{
-		$rule = new Privilege();
-		$rule->resource = '$entity';
-		$rule->privilege = 'privilege';
+    /**
+     * @expectedException \Arachne\Verifier\Exception\VerificationException
+     * @expectedExceptionMessage Required privilege 'entity / privilege' is not granted.
+     */
+    public function testPrivilegeResourceFalse()
+    {
+        $rule = new Privilege();
+        $rule->resource = '$entity';
+        $rule->privilege = 'privilege';
 
-		$entity = Mockery::mock(IResource::class);
-		$entity
-			->shouldReceive('getResourceId')
-			->once()
-			->andReturn('entity');
+        $entity = Mockery::mock(IResource::class);
+        $entity
+            ->shouldReceive('getResourceId')
+            ->once()
+            ->andReturn('entity');
 
-		$request = new Request('Admin:Test', 'GET', [
-			'entity' => $entity,
-		]);
+        $request = new Request('Admin:Test', 'GET', [
+            'entity' => $entity,
+        ]);
 
-		$this->authorizator
-			->shouldReceive('isAllowed')
-			->with($entity, 'privilege')
-			->once()
-			->andReturn(false);
+        $this->authorizator
+            ->shouldReceive('isAllowed')
+            ->with($entity, 'privilege')
+            ->once()
+            ->andReturn(false);
 
-		try {
-			$this->handler->checkRule($rule, $request);
-		} catch (VerificationException $e) {
-			$this->assertSame($rule, $e->getRule());
-			throw $e;
-		}
-	}
+        try {
+            $this->handler->checkRule($rule, $request);
+        } catch (VerificationException $e) {
+            $this->assertSame($rule, $e->getRule());
+            throw $e;
+        }
+    }
 
-	/**
-	 * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-	 */
-	public function testPrivilegeWrongParameter()
-	{
-		$rule = new Privilege();
-		$rule->resource = '$entity';
-		$rule->privilege = 'privilege';
-		$request = new Request('Admin:Test', 'GET', []);
+    /**
+     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
+     */
+    public function testPrivilegeWrongParameter()
+    {
+        $rule = new Privilege();
+        $rule->resource = '$entity';
+        $rule->privilege = 'privilege';
+        $request = new Request('Admin:Test', 'GET', []);
 
-		$this->handler->checkRule($rule, $request);
-	}
+        $this->handler->checkRule($rule, $request);
+    }
 
-	/**
-	 * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
-	 * @expectedExceptionMessage Resource '$entity' is not an instance of Nette\Security\IResource.
-	 */
-	public function testPrivilegedMissingParameter()
-	{
-		$rule = new Privilege();
-		$rule->resource = '$entity';
-		$rule->privilege = 'privilege';
-		$entity = Mockery::mock();
-		$request = new Request('Admin:Test', 'GET', [
-			'entity' => $entity,
-		]);
+    /**
+     * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Resource '$entity' is not an instance of Nette\Security\IResource.
+     */
+    public function testPrivilegedMissingParameter()
+    {
+        $rule = new Privilege();
+        $rule->resource = '$entity';
+        $rule->privilege = 'privilege';
+        $entity = Mockery::mock();
+        $request = new Request('Admin:Test', 'GET', [
+            'entity' => $entity,
+        ]);
 
-		$this->handler->checkRule($rule, $request);
-	}
+        $this->handler->checkRule($rule, $request);
+    }
 
-	/**
-	 * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
-	 */
-	public function testUnknownRule()
-	{
-		$rule = Mockery::mock(RuleInterface::class);
-		$request = new Request('Test', 'GET', []);
+    /**
+     * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
+     */
+    public function testUnknownRule()
+    {
+        $rule = Mockery::mock(RuleInterface::class);
+        $request = new Request('Test', 'GET', []);
 
-		$this->handler->checkRule($rule, $request);
-	}
+        $this->handler->checkRule($rule, $request);
+    }
 
 }

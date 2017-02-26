@@ -19,64 +19,64 @@ use Nette\Security\IIdentity;
 class IdentityRuleTest extends Test
 {
 
-	/** @var IdentityRuleHandler */
-	private $handler;
+    /** @var IdentityRuleHandler */
+    private $handler;
 
-	/** @var MockInterface */
-	private $firewall;
+    /** @var MockInterface */
+    private $firewall;
 
-	protected function _before()
-	{
-		$this->firewall = Mockery::mock(FirewallInterface::class);
+    protected function _before()
+    {
+        $this->firewall = Mockery::mock(FirewallInterface::class);
 
-		$firewallResolver = Mockery::mock(ResolverInterface::class);
-		$firewallResolver
-			->shouldReceive('resolve')
-			->with('Admin')
-			->andReturn($this->firewall);
+        $firewallResolver = Mockery::mock(ResolverInterface::class);
+        $firewallResolver
+            ->shouldReceive('resolve')
+            ->with('Admin')
+            ->andReturn($this->firewall);
 
-		$this->handler = new IdentityRuleHandler($firewallResolver);
-	}
+        $this->handler = new IdentityRuleHandler($firewallResolver);
+    }
 
-	public function testIdentityTrue()
-	{
-		$rule = new Identity();
-		$request = new Request('Admin:Test', 'GET', []);
+    public function testIdentityTrue()
+    {
+        $rule = new Identity();
+        $request = new Request('Admin:Test', 'GET', []);
 
-		$this->firewall
-			->shouldReceive('getIdentity')
-			->once()
-			->andReturn(Mockery::mock(IIdentity::class));
+        $this->firewall
+            ->shouldReceive('getIdentity')
+            ->once()
+            ->andReturn(Mockery::mock(IIdentity::class));
 
-		$this->assertNull($this->handler->checkRule($rule, $request));
-	}
+        $this->assertNull($this->handler->checkRule($rule, $request));
+    }
 
-	/**
-	 * @expectedException \Arachne\Verifier\Exception\VerificationException
-	 * @expectedExceptionMessage User must be logged in for this request.
-	 */
-	public function testIdentityFalse()
-	{
-		$rule = new Identity();
-		$request = new Request('Admin:Test', 'GET', []);
+    /**
+     * @expectedException \Arachne\Verifier\Exception\VerificationException
+     * @expectedExceptionMessage User must be logged in for this request.
+     */
+    public function testIdentityFalse()
+    {
+        $rule = new Identity();
+        $request = new Request('Admin:Test', 'GET', []);
 
-		$this->firewall
-			->shouldReceive('getIdentity')
-			->once()
-			->andReturn();
+        $this->firewall
+            ->shouldReceive('getIdentity')
+            ->once()
+            ->andReturn();
 
-		$this->handler->checkRule($rule, $request);
-	}
+        $this->handler->checkRule($rule, $request);
+    }
 
-	/**
-	 * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
-	 */
-	public function testUnknownRule()
-	{
-		$rule = Mockery::mock(RuleInterface::class);
-		$request = new Request('Test', 'GET', []);
+    /**
+     * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
+     */
+    public function testUnknownRule()
+    {
+        $rule = Mockery::mock(RuleInterface::class);
+        $request = new Request('Test', 'GET', []);
 
-		$this->handler->checkRule($rule, $request);
-	}
+        $this->handler->checkRule($rule, $request);
+    }
 
 }

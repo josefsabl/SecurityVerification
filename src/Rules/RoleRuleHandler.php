@@ -1,13 +1,5 @@
 <?php
 
-/**
- * This file is part of the Arachne
- *
- * Copyright (c) Jáchym Toušek (enumag@gmail.com)
- *
- * For the full copyright and license information, please view the file license.md that was distributed with this source code.
- */
-
 namespace Arachne\SecurityVerification\Rules;
 
 use Arachne\DIHelpers\ResolverInterface;
@@ -26,38 +18,38 @@ use Nette\Object;
 class RoleRuleHandler extends Object implements RuleHandlerInterface
 {
 
-	/** @var ResolverInterface */
-	private $firewallResolver;
+    /** @var ResolverInterface */
+    private $firewallResolver;
 
-	/**
-	 * @param ResolverInterface $firewallResolver
-	 */
-	public function __construct(ResolverInterface $firewallResolver)
-	{
-		$this->firewallResolver = $firewallResolver;
-	}
+    /**
+     * @param ResolverInterface $firewallResolver
+     */
+    public function __construct(ResolverInterface $firewallResolver)
+    {
+        $this->firewallResolver = $firewallResolver;
+    }
 
-	/**
-	 * @param Role $rule
-	 * @param Request $request
-	 * @param string $component
-	 * @throws VerificationException
-	 */
-	public function checkRule(RuleInterface $rule, Request $request, $component = null)
-	{
-		if (!$rule instanceof Role) {
-			throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
-		}
+    /**
+     * @param Role $rule
+     * @param Request $request
+     * @param string $component
+     * @throws VerificationException
+     */
+    public function checkRule(RuleInterface $rule, Request $request, $component = null)
+    {
+        if (!$rule instanceof Role) {
+            throw new InvalidArgumentException('Unknown rule \'' . get_class($rule) . '\' given.');
+        }
 
-		$name = $rule->firewall ?: Helpers::getTopModuleName($request->getPresenterName());
-		$firewall = $this->firewallResolver->resolve($name);
-		if (!$firewall) {
-			throw new UnexpectedValueException("Could not find firewall named '$name'.");
-		}
+        $name = $rule->firewall ?: Helpers::getTopModuleName($request->getPresenterName());
+        $firewall = $this->firewallResolver->resolve($name);
+        if (!$firewall) {
+            throw new UnexpectedValueException("Could not find firewall named '$name'.");
+        }
 
-		if (!in_array($rule->role, $firewall->getIdentity()->getRoles(), true)) {
-			throw new VerificationException($rule, "Role '$rule->role' is required for this request.");
-		}
-	}
+        if (!in_array($rule->role, $firewall->getIdentity()->getRoles(), true)) {
+            throw new VerificationException($rule, "Role '$rule->role' is required for this request.");
+        }
+    }
 
 }
