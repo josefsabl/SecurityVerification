@@ -1,44 +1,27 @@
-common:
-	services:
-		authorizatorFactory: Tests\Integration\Classes\AuthorizatorFactory
-		authorizator:
-			factory: @authorizatorFactory::create( @arachne.security.firewall.Admin )
-			tags:
-				arachne.security.authorizator: Admin
+extensions:
+    nette.application: Nette\Bridges\ApplicationDI\ApplicationExtension
+    nette.cache: Nette\Bridges\CacheDI\CacheExtension(%tempDir%)
+    nette.http: Nette\Bridges\HttpDI\HttpExtension
+    nette.routing: Nette\Bridges\ApplicationDI\RoutingExtension
+    nette.session: Nette\Bridges\HttpDI\SessionExtension
+    kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
+    arachne.dihelpers.iterators: Arachne\DIHelpers\DI\IteratorsExtension
+    arachne.dihelpers.resolvers: Arachne\DIHelpers\DI\ResolversExtension
+    arachne.verifier: Arachne\Verifier\DI\VerifierExtension
+    arachne.security: Arachne\Security\DI\SecurityExtension
+    arachne.securityverification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
 
-	extensions:
-		kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
-		arachne.dihelpers.iterators: Arachne\DIHelpers\DI\IteratorsExtension
-		arachne.dihelpers.resolvers: Arachne\DIHelpers\DI\ResolversExtension
-		arachne.verifier: Arachne\Verifier\DI\VerifierExtension
-		arachne.security: Arachne\Security\DI\SecurityExtension
-		arachne.securityverification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
+nette.application:
+    mapping:
+        Admin: Tests\Integration\Classes\*Presenter
 
-	arachne.security:
-		firewalls:
-			- Admin
+arachne.security:
+    firewalls:
+        - Admin
 
-nette_2.2 < common:
-	extensions:
-		nette: Nette\Bridges\Framework\NetteExtension
-
-	services:
-		authorizator:
-			class: Arachne\Security\Authorization\PermissionAuthorizator
-
-	nette:
-		application:
-			mapping:
-				Admin: Tests\Integration\Classes\*Presenter
-
-nette_2.3 < common:
-	extensions:
-		nette.application: Nette\Bridges\ApplicationDI\ApplicationExtension
-		nette.cache: Nette\Bridges\CacheDI\CacheExtension( %tempDir% )
-		nette.http: Nette\Bridges\HttpDI\HttpExtension
-		nette.routing: Nette\Bridges\ApplicationDI\RoutingExtension
-		nette.session: Nette\Bridges\HttpDI\SessionExtension
-
-	nette.application:
-		mapping:
-			Admin: Tests\Integration\Classes\*Presenter
+services:
+    authorizatorFactory: Tests\Integration\Classes\AuthorizatorFactory
+    authorizator:
+        factory: @authorizatorFactory::create(@arachne.security.firewall.Admin)
+        tags:
+            arachne.security.authorizator: Admin
