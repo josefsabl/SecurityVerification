@@ -5,8 +5,7 @@ extensions:
     nette.routing: Nette\Bridges\ApplicationDI\RoutingExtension
     nette.session: Nette\Bridges\HttpDI\SessionExtension
     kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
-    arachne.dihelpers.iterators: Arachne\DIHelpers\DI\IteratorsExtension
-    arachne.dihelpers.resolvers: Arachne\DIHelpers\DI\ResolversExtension
+    arachne.servicecollections: Arachne\ServiceCollections\DI\ServiceCollectionsExtension
     arachne.verifier: Arachne\Verifier\DI\VerifierExtension
     arachne.security: Arachne\Security\DI\SecurityExtension
     arachne.securityverification: Arachne\SecurityVerification\DI\SecurityVerificationExtension

@@ -3,7 +3,7 @@
 namespace Tests\Integration;
 
 use Arachne\Verifier\Verifier;
-use Codeception\TestCase\Test;
+use Codeception\Test\Unit;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Container;
@@ -14,27 +14,34 @@ use Tests\Integration\Classes\ArticlePresenter;
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class SecurityVerificationTest extends Test
+class SecurityVerificationTest extends Unit
 {
-    /** @var Verifier */
+    protected $tester;
+
+    /**
+     * @var Verifier
+     */
     private $verifier;
 
     public function _before()
     {
-        $this->guy
+        $this->tester
             ->grabService(Container::class)
-            ->getService('arachne.dihelpers.resolvers.tag.arachne.security.firewall')
-            ->resolve('Admin')
+            ->getService('arachne.servicecollections.1.arachne.security.firewall')
+            ->__invoke('Admin')
             ->login(new Identity(1, ['redactor']));
 
-        $this->verifier = $this->guy->grabService(Verifier::class);
+        $this->verifier = $this->tester->grabService(Verifier::class);
     }
 
     public function testActionEdit()
     {
-        $request = new Request('Admin:Article', 'GET', [
-            Presenter::ACTION_KEY => 'edit',
-        ]);
+        $request = new Request(
+            'Admin:Article',
+            'GET', [
+                Presenter::ACTION_KEY => 'edit',
+            ]
+        );
 
         $this->assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
@@ -54,58 +61,82 @@ class SecurityVerificationTest extends Test
      */
     public function testActionDelete()
     {
-        $request = new Request('Admin:Article', 'GET', [
-            Presenter::ACTION_KEY => 'delete',
-        ]);
+        $request = new Request(
+            'Admin:Article',
+            'GET',
+            [
+                Presenter::ACTION_KEY => 'delete',
+            ]
+        );
 
         $this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     public function testActionPublishAllowed()
     {
-        $request = new Request('Admin:Article', 'GET', [
-            Presenter::ACTION_KEY => 'publish',
-            'article' => new ArticleEntity(1),
-        ]);
+        $request = new Request(
+            'Admin:Article',
+            'GET',
+            [
+                Presenter::ACTION_KEY => 'publish',
+                'article' => new ArticleEntity(1),
+            ]
+        );
 
         $this->assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     public function testActionPublishDisallowed()
     {
-        $request = new Request('Admin:Article', 'GET', [
-            Presenter::ACTION_KEY => 'publish',
-            'article' => new ArticleEntity(2),
-        ]);
+        $request = new Request(
+            'Admin:Article',
+            'GET',
+            [
+                Presenter::ACTION_KEY => 'publish',
+                'article' => new ArticleEntity(2),
+            ]
+        );
 
         $this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     public function testActionPublishParentAllowed()
     {
-        $request = new Request('Admin:Article', 'GET', [
-            Presenter::ACTION_KEY => 'publishparent',
-            'article' => new ArticleEntity(2, new ArticleEntity(1)),
-        ]);
+        $request = new Request(
+            'Admin:Article',
+            'GET',
+            [
+                Presenter::ACTION_KEY => 'publishparent',
+                'article' => new ArticleEntity(2, new ArticleEntity(1)),
+            ]
+        );
 
         $this->assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     public function testActionPublishParentDisallowed()
     {
-        $request = new Request('Admin:Article', 'GET', [
-            Presenter::ACTION_KEY => 'publishparent',
-            'article' => new ArticleEntity(1, new ArticleEntity(2)),
-        ]);
+        $request = new Request(
+            'Admin:Article',
+            'GET',
+            [
+                Presenter::ACTION_KEY => 'publishparent',
+                'article' => new ArticleEntity(1, new ArticleEntity(2)),
+            ]
+        );
 
         $this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     public function testInnerRules()
     {
-        $request = new Request('Admin:Article', 'GET', [
-            Presenter::ACTION_KEY => 'innerrules',
-        ]);
+        $request = new Request(
+            'Admin:Article',
+            'GET',
+            [
+                Presenter::ACTION_KEY => 'innerrules',
+            ]
+        );
 
         $this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }

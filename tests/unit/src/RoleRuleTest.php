@@ -2,37 +2,40 @@
 
 namespace Tests\Unit;
 
-use Arachne\DIHelpers\ResolverInterface;
-use Arachne\Security\FirewallInterface;
+use Arachne\Security\Authentication\FirewallInterface;
 use Arachne\SecurityVerification\Rules\Role;
 use Arachne\SecurityVerification\Rules\RoleRuleHandler;
 use Arachne\Verifier\Exception\VerificationException;
 use Arachne\Verifier\RuleInterface;
-use Codeception\MockeryModule\Test;
-use Mockery;
-use Mockery\MockInterface;
+use Codeception\Test\Unit;
+use Eloquent\Phony\Mock\Handle\InstanceHandle;
+use Eloquent\Phony\Phpunit\Phony;
 use Nette\Application\Request;
+use Nette\Security\Identity;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class RoleRuleTest extends Test
+class RoleRuleTest extends Unit
 {
-    /** @var RoleRuleHandler */
+    /**
+     * @var RoleRuleHandler
+     */
     private $handler;
 
-    /** @var MockInterface */
-    private $firewall;
+    /**
+     * @var InstanceHandle
+     */
+    private $firewallHandle;
 
     protected function _before()
     {
-        $this->firewall = Mockery::mock(FirewallInterface::class);
+        $this->firewallHandle = Phony::mock(FirewallInterface::class);
 
-        $firewallResolver = Mockery::mock(ResolverInterface::class);
+        $firewallResolver = Phony::stub();
         $firewallResolver
-            ->shouldReceive('resolve')
             ->with('Admin')
-            ->andReturn($this->firewall);
+            ->returns($this->firewallHandle->get());
 
         $this->handler = new RoleRuleHandler($firewallResolver);
     }
@@ -43,12 +46,11 @@ class RoleRuleTest extends Test
         $rule->role = 'role';
         $request = new Request('Admin:Test', 'GET', []);
 
-        $this->firewall
-            ->shouldReceive('getIdentity->getRoles')
-            ->once()
-            ->andReturn(['role']);
+        $this->firewallHandle
+            ->getIdentity
+            ->returns(new Identity(null, ['role']));
 
-        $this->assertNull($this->handler->checkRule($rule, $request));
+        $this->handler->checkRule($rule, $request);
     }
 
     /**
@@ -61,10 +63,9 @@ class RoleRuleTest extends Test
         $rule->role = 'role';
         $request = new Request('Admin:Test', 'GET', []);
 
-        $this->firewall
-            ->shouldReceive('getIdentity->getRoles')
-            ->once()
-            ->andReturn([]);
+        $this->firewallHandle
+            ->getIdentity
+            ->returns(new Identity(null, []));
 
         try {
             $this->handler->checkRule($rule, $request);
@@ -79,7 +80,7 @@ class RoleRuleTest extends Test
      */
     public function testUnknownRule()
     {
-        $rule = Mockery::mock(RuleInterface::class);
+        $rule = Phony::mock(RuleInterface::class)->get();
         $request = new Request('Test', 'GET', []);
 
         $this->handler->checkRule($rule, $request);

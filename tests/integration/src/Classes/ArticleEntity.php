@@ -2,13 +2,12 @@
 
 namespace Tests\Integration\Classes;
 
-use Nette\Object;
 use Nette\Security\IResource;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class ArticleEntity extends Object implements IResource
+class ArticleEntity implements IResource
 {
     private $ownerId;
 

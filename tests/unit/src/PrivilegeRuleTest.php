@@ -2,38 +2,40 @@
 
 namespace Tests\Unit;
 
-use Arachne\DIHelpers\ResolverInterface;
-use Arachne\Security\AuthorizatorInterface;
+use Arachne\Security\Authorization\AuthorizatorInterface;
 use Arachne\SecurityVerification\Rules\Privilege;
 use Arachne\SecurityVerification\Rules\PrivilegeRuleHandler;
 use Arachne\Verifier\Exception\VerificationException;
 use Arachne\Verifier\RuleInterface;
-use Codeception\MockeryModule\Test;
-use Mockery;
-use Mockery\MockInterface;
+use Codeception\Test\Unit;
+use Eloquent\Phony\Mock\Handle\InstanceHandle;
+use Eloquent\Phony\Phpunit\Phony;
 use Nette\Application\Request;
 use Nette\Security\IResource;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class PrivilegeRuleTest extends Test
+class PrivilegeRuleTest extends Unit
 {
-    /** @var PrivilegeRuleHandler */
+    /**
+     * @var PrivilegeRuleHandler
+     */
     private $handler;
 
-    /** @var MockInterface */
-    private $authorizator;
+    /**
+     * @var InstanceHandle
+     */
+    private $authorizatorHandle;
 
     protected function _before()
     {
-        $this->authorizator = Mockery::mock(AuthorizatorInterface::class);
+        $this->authorizatorHandle = Phony::mock(AuthorizatorInterface::class);
 
-        $authorizatorResolver = Mockery::mock(ResolverInterface::class);
+        $authorizatorResolver = Phony::stub();
         $authorizatorResolver
-            ->shouldReceive('resolve')
             ->with('Admin')
-            ->andReturn($this->authorizator);
+            ->returns($this->authorizatorHandle->get());
 
         $this->handler = new PrivilegeRuleHandler($authorizatorResolver);
     }
@@ -45,11 +47,10 @@ class PrivilegeRuleTest extends Test
         $rule->privilege = 'privilege';
         $request = new Request('Admin:Test', 'GET', []);
 
-        $this->authorizator
-            ->shouldReceive('isAllowed')
+        $this->authorizatorHandle
+            ->isAllowed
             ->with('resource', 'privilege')
-            ->once()
-            ->andReturn(true);
+            ->returns(true);
 
         $this->assertNull($this->handler->checkRule($rule, $request));
     }
@@ -65,11 +66,10 @@ class PrivilegeRuleTest extends Test
         $rule->privilege = 'privilege';
         $request = new Request('Admin:Test', 'GET', []);
 
-        $this->authorizator
-            ->shouldReceive('isAllowed')
+        $this->authorizatorHandle
+            ->isAllowed
             ->with('resource', 'privilege')
-            ->once()
-            ->andReturn(false);
+            ->returns(false);
 
         try {
             $this->handler->checkRule($rule, $request);
@@ -86,11 +86,10 @@ class PrivilegeRuleTest extends Test
         $rule->privilege = 'privilege';
         $request = new Request('Admin:Test', 'GET', []);
 
-        $this->authorizator
-            ->shouldReceive('isAllowed')
+        $this->authorizatorHandle
+            ->isAllowed
             ->with('Test', 'privilege')
-            ->once()
-            ->andReturn(true);
+            ->returns(true);
 
         $this->assertNull($this->handler->checkRule($rule, $request));
     }
@@ -106,11 +105,10 @@ class PrivilegeRuleTest extends Test
         $rule->privilege = 'privilege';
         $request = new Request('Admin:Test', 'GET', []);
 
-        $this->authorizator
-            ->shouldReceive('isAllowed')
+        $this->authorizatorHandle
+            ->isAllowed
             ->with('Test', 'privilege')
-            ->once()
-            ->andReturn(false);
+            ->returns(false);
 
         try {
             $this->handler->checkRule($rule, $request);
@@ -125,16 +123,19 @@ class PrivilegeRuleTest extends Test
         $rule = new Privilege();
         $rule->resource = '$entity';
         $rule->privilege = 'privilege';
-        $entity = Mockery::mock(IResource::class);
-        $request = new Request('Admin:Test', 'GET', [
-            'entity' => $entity,
-        ]);
+        $entity = Phony::mock(IResource::class)->get();
+        $request = new Request(
+            'Admin:Test',
+            'GET',
+            [
+                'entity' => $entity,
+            ]
+        );
 
-        $this->authorizator
-            ->shouldReceive('isAllowed')
+        $this->authorizatorHandle
+            ->isAllowed
             ->with($entity, 'privilege')
-            ->once()
-            ->andReturn(true);
+            ->returns(true);
 
         $this->assertNull($this->handler->checkRule($rule, $request));
     }
@@ -149,21 +150,25 @@ class PrivilegeRuleTest extends Test
         $rule->resource = '$entity';
         $rule->privilege = 'privilege';
 
-        $entity = Mockery::mock(IResource::class);
-        $entity
-            ->shouldReceive('getResourceId')
-            ->once()
-            ->andReturn('entity');
+        $entityHandle = Phony::mock(IResource::class);
+        $entityHandle
+            ->getResourceId
+            ->returns('entity');
 
-        $request = new Request('Admin:Test', 'GET', [
-            'entity' => $entity,
-        ]);
+        $entity = $entityHandle->get();
 
-        $this->authorizator
-            ->shouldReceive('isAllowed')
+        $request = new Request(
+            'Admin:Test',
+            'GET',
+            [
+                'entity' => $entity,
+            ]
+        );
+
+        $this->authorizatorHandle
+            ->isAllowed
             ->with($entity, 'privilege')
-            ->once()
-            ->andReturn(false);
+            ->returns(false);
 
         try {
             $this->handler->checkRule($rule, $request);
@@ -195,10 +200,14 @@ class PrivilegeRuleTest extends Test
         $rule = new Privilege();
         $rule->resource = '$entity';
         $rule->privilege = 'privilege';
-        $entity = Mockery::mock();
-        $request = new Request('Admin:Test', 'GET', [
-            'entity' => $entity,
-        ]);
+        $entity = Phony::mock()->get();
+        $request = new Request(
+            'Admin:Test',
+            'GET',
+            [
+                'entity' => $entity,
+            ]
+        );
 
         $this->handler->checkRule($rule, $request);
     }
@@ -208,7 +217,7 @@ class PrivilegeRuleTest extends Test
      */
     public function testUnknownRule()
     {
-        $rule = Mockery::mock(RuleInterface::class);
+        $rule = Phony::mock(RuleInterface::class)->get();
         $request = new Request('Test', 'GET', []);
 
         $this->handler->checkRule($rule, $request);
