@@ -11,9 +11,13 @@ use Arachne\Verifier\Rules\SecurityRule;
  */
 class Role extends SecurityRule
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     public $role;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $firewall;
 }

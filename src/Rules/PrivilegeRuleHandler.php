@@ -20,10 +20,14 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  */
 class PrivilegeRuleHandler extends Object implements RuleHandlerInterface
 {
-    /** @var ResolverInterface */
+    /**
+     * @var ResolverInterface
+     */
     private $authorizatorResolver;
 
-    /** @var PropertyAccessorInterface */
+    /**
+     * @var PropertyAccessorInterface
+     */
     private $propertyAccessor;
 
     /**

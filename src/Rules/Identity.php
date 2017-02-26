@@ -11,6 +11,8 @@ use Arachne\Verifier\Rules\SecurityRule;
  */
 class Identity extends SecurityRule
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     public $firewall;
 }

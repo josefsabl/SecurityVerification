@@ -11,12 +11,18 @@ use Arachne\Verifier\Rules\SecurityRule;
  */
 class Privilege extends SecurityRule
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     public $resource;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $privilege;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $authorizator;
 }

@@ -17,7 +17,9 @@ use Nette\Object;
  */
 class RoleRuleHandler extends Object implements RuleHandlerInterface
 {
-    /** @var ResolverInterface */
+    /**
+     * @var ResolverInterface
+     */
     private $firewallResolver;
 
     /**
