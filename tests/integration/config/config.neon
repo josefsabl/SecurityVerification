@@ -5,10 +5,10 @@ extensions:
     nette.routing: Nette\Bridges\ApplicationDI\RoutingExtension
     nette.session: Nette\Bridges\HttpDI\SessionExtension
     kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
-    arachne.servicecollections: Arachne\ServiceCollections\DI\ServiceCollectionsExtension
+    arachne.serviceCollections: Arachne\ServiceCollections\DI\ServiceCollectionsExtension
     arachne.verifier: Arachne\Verifier\DI\VerifierExtension
     arachne.security: Arachne\Security\DI\SecurityExtension
-    arachne.securityverification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
+    arachne.securityVerification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
 
 nette.application:
     mapping:

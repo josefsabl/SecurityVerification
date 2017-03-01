@@ -27,7 +27,7 @@ class SecurityVerificationTest extends Unit
     {
         $this->tester
             ->grabService(Container::class)
-            ->getService('arachne.servicecollections.1.arachne.security.firewall')
+            ->getService('arachne.serviceCollections.1.arachne.security.firewall')
             ->__invoke('Admin')
             ->login(new Identity(1, ['redactor']));
 
