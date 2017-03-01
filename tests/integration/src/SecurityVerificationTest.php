@@ -43,7 +43,7 @@ class SecurityVerificationTest extends Unit
             ]
         );
 
-        $this->assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
+        self::assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     public function testActionHide()
@@ -52,7 +52,7 @@ class SecurityVerificationTest extends Unit
             Presenter::ACTION_KEY => 'hide',
         ]);
 
-        $this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
+        self::assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     /**
@@ -69,7 +69,7 @@ class SecurityVerificationTest extends Unit
             ]
         );
 
-        $this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
+        self::assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     public function testActionPublishAllowed()
@@ -83,7 +83,7 @@ class SecurityVerificationTest extends Unit
             ]
         );
 
-        $this->assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
+        self::assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     public function testActionPublishDisallowed()
@@ -97,7 +97,7 @@ class SecurityVerificationTest extends Unit
             ]
         );
 
-        $this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
+        self::assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     public function testActionPublishParentAllowed()
@@ -111,7 +111,7 @@ class SecurityVerificationTest extends Unit
             ]
         );
 
-        $this->assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
+        self::assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     public function testActionPublishParentDisallowed()
@@ -125,7 +125,7 @@ class SecurityVerificationTest extends Unit
             ]
         );
 
-        $this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
+        self::assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
     public function testInnerRules()
@@ -138,6 +138,6 @@ class SecurityVerificationTest extends Unit
             ]
         );
 
-        $this->assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
+        self::assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 }

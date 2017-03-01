@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Arachne\Security\Authentication\FirewallInterface;
+use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\SecurityVerification\Rules\Role;
 use Arachne\SecurityVerification\Rules\RoleRuleHandler;
 use Arachne\Verifier\Exception\VerificationException;
@@ -53,10 +54,6 @@ class RoleRuleTest extends Unit
         $this->handler->checkRule($rule, $request);
     }
 
-    /**
-     * @expectedException \Arachne\Verifier\Exception\VerificationException
-     * @expectedExceptionMessage Role 'role' is required for this request.
-     */
     public function testRoleFalse()
     {
         $rule = new Role();
@@ -69,20 +66,22 @@ class RoleRuleTest extends Unit
 
         try {
             $this->handler->checkRule($rule, $request);
+            self::fail();
         } catch (VerificationException $e) {
-            $this->assertSame($rule, $e->getRule());
-            throw $e;
+            self::assertSame('Role \'role\' is required for this request.', $e->getMessage());
+            self::assertSame($rule, $e->getRule());
         }
     }
 
-    /**
-     * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
-     */
     public function testUnknownRule()
     {
         $rule = Phony::mock(RuleInterface::class)->get();
         $request = new Request('Test', 'GET', []);
 
-        $this->handler->checkRule($rule, $request);
+        try {
+            $this->handler->checkRule($rule, $request);
+            self::fail();
+        } catch (InvalidArgumentException $e) {
+        }
     }
 }

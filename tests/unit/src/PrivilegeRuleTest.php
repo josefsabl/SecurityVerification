@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Arachne\Security\Authorization\AuthorizatorInterface;
+use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\SecurityVerification\Rules\Privilege;
 use Arachne\SecurityVerification\Rules\PrivilegeRuleHandler;
 use Arachne\Verifier\Exception\VerificationException;
@@ -12,6 +13,7 @@ use Eloquent\Phony\Mock\Handle\InstanceHandle;
 use Eloquent\Phony\Phpunit\Phony;
 use Nette\Application\Request;
 use Nette\Security\IResource;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
@@ -52,13 +54,9 @@ class PrivilegeRuleTest extends Unit
             ->with('resource', 'privilege')
             ->returns(true);
 
-        $this->assertNull($this->handler->checkRule($rule, $request));
+        $this->handler->checkRule($rule, $request);
     }
 
-    /**
-     * @expectedException \Arachne\Verifier\Exception\VerificationException
-     * @expectedExceptionMessage Required privilege 'resource / privilege' is not granted.
-     */
     public function testPrivilegeFalse()
     {
         $rule = new Privilege();
@@ -73,9 +71,10 @@ class PrivilegeRuleTest extends Unit
 
         try {
             $this->handler->checkRule($rule, $request);
+            self::fail();
         } catch (VerificationException $e) {
-            $this->assertSame($rule, $e->getRule());
-            throw $e;
+            self::assertSame('Required privilege \'resource / privilege\' is not granted.', $e->getMessage());
+            self::assertSame($rule, $e->getRule());
         }
     }
 
@@ -91,13 +90,9 @@ class PrivilegeRuleTest extends Unit
             ->with('Test', 'privilege')
             ->returns(true);
 
-        $this->assertNull($this->handler->checkRule($rule, $request));
+        $this->handler->checkRule($rule, $request);
     }
 
-    /**
-     * @expectedException \Arachne\Verifier\Exception\VerificationException
-     * @expectedExceptionMessage Required privilege 'Test / privilege' is not granted.
-     */
     public function testPrivilegeThisFalse()
     {
         $rule = new Privilege();
@@ -112,9 +107,10 @@ class PrivilegeRuleTest extends Unit
 
         try {
             $this->handler->checkRule($rule, $request);
+            self::fail();
         } catch (VerificationException $e) {
-            $this->assertSame($rule, $e->getRule());
-            throw $e;
+            self::assertSame('Required privilege \'Test / privilege\' is not granted.', $e->getMessage());
+            self::assertSame($rule, $e->getRule());
         }
     }
 
@@ -137,13 +133,9 @@ class PrivilegeRuleTest extends Unit
             ->with($entity, 'privilege')
             ->returns(true);
 
-        $this->assertNull($this->handler->checkRule($rule, $request));
+        $this->handler->checkRule($rule, $request);
     }
 
-    /**
-     * @expectedException \Arachne\Verifier\Exception\VerificationException
-     * @expectedExceptionMessage Required privilege 'entity / privilege' is not granted.
-     */
     public function testPrivilegeResourceFalse()
     {
         $rule = new Privilege();
@@ -172,15 +164,13 @@ class PrivilegeRuleTest extends Unit
 
         try {
             $this->handler->checkRule($rule, $request);
+            self::fail();
         } catch (VerificationException $e) {
-            $this->assertSame($rule, $e->getRule());
-            throw $e;
+            self::assertSame('Required privilege \'entity / privilege\' is not granted.', $e->getMessage());
+            self::assertSame($rule, $e->getRule());
         }
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     */
     public function testPrivilegeWrongParameter()
     {
         $rule = new Privilege();
@@ -188,13 +178,13 @@ class PrivilegeRuleTest extends Unit
         $rule->privilege = 'privilege';
         $request = new Request('Admin:Test', 'GET', []);
 
-        $this->handler->checkRule($rule, $request);
+        try {
+            $this->handler->checkRule($rule, $request);
+            self::fail();
+        } catch (NoSuchPropertyException $e) {
+        }
     }
 
-    /**
-     * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Resource '$entity' is not an instance of Nette\Security\IResource.
-     */
     public function testPrivilegedMissingParameter()
     {
         $rule = new Privilege();
@@ -209,17 +199,23 @@ class PrivilegeRuleTest extends Unit
             ]
         );
 
-        $this->handler->checkRule($rule, $request);
+        try {
+            $this->handler->checkRule($rule, $request);
+            self::fail();
+        } catch (InvalidArgumentException $e) {
+            self::assertSame('Resource \'$entity\' is not an instance of Nette\Security\IResource.', $e->getMessage());
+        }
     }
 
-    /**
-     * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
-     */
     public function testUnknownRule()
     {
         $rule = Phony::mock(RuleInterface::class)->get();
         $request = new Request('Test', 'GET', []);
 
-        $this->handler->checkRule($rule, $request);
+        try {
+            $this->handler->checkRule($rule, $request);
+            self::fail();
+        } catch (InvalidArgumentException $e) {
+        }
     }
 }

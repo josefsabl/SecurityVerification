@@ -3,8 +3,10 @@
 namespace Tests\Unit;
 
 use Arachne\Security\Authentication\FirewallInterface;
+use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\SecurityVerification\Rules\NoIdentity;
 use Arachne\SecurityVerification\Rules\NoIdentityRuleHandler;
+use Arachne\Verifier\Exception\VerificationException;
 use Arachne\Verifier\RuleInterface;
 use Codeception\Test\Unit;
 use Eloquent\Phony\Mock\Handle\InstanceHandle;
@@ -48,13 +50,9 @@ class NoIdentityRuleTest extends Unit
             ->getIdentity
             ->returns(null);
 
-        $this->assertNull($this->handler->checkRule($rule, $request));
+        $this->handler->checkRule($rule, $request);
     }
 
-    /**
-     * @expectedException \Arachne\Verifier\Exception\VerificationException
-     * @expectedExceptionMessage User must not be logged in for this request.
-     */
     public function testNoIdentityFalse()
     {
         $rule = new NoIdentity();
@@ -64,17 +62,23 @@ class NoIdentityRuleTest extends Unit
             ->getIdentity
             ->returns(Phony::mock(IIdentity::class)->get());
 
-        $this->handler->checkRule($rule, $request);
+        try {
+            $this->handler->checkRule($rule, $request);
+            self::fail();
+        } catch (VerificationException $e) {
+            self::assertSame('User must not be logged in for this request.', $e->getMessage());
+        }
     }
 
-    /**
-     * @expectedException \Arachne\SecurityVerification\Exception\InvalidArgumentException
-     */
     public function testUnknownRule()
     {
         $rule = Phony::mock(RuleInterface::class)->get();
         $request = new Request('Test', 'GET', []);
 
-        $this->handler->checkRule($rule, $request);
+        try {
+            $this->handler->checkRule($rule, $request);
+            self::fail();
+        } catch (InvalidArgumentException $e) {
+        }
     }
 }
