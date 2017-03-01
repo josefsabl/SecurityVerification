@@ -2,6 +2,7 @@
 
 namespace Tests\Integration;
 
+use Arachne\Codeception\Module\NetteDIModule;
 use Arachne\Verifier\Verifier;
 use Codeception\Test\Unit;
 use Nette\Application\Request;
@@ -16,6 +17,9 @@ use Tests\Integration\Classes\ArticlePresenter;
  */
 class SecurityVerificationTest extends Unit
 {
+    /**
+     * @var NetteDIModule
+     */
     protected $tester;
 
     /**
