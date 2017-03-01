@@ -38,17 +38,17 @@ class RoleRuleHandler implements RuleHandlerInterface
     public function checkRule(RuleInterface $rule, Request $request, $component = null)
     {
         if (!$rule instanceof Role) {
-            throw new InvalidArgumentException('Unknown rule \''.get_class($rule).'\' given.');
+            throw new InvalidArgumentException(sprintf('Unknown rule "%s" given.', get_class($rule)));
         }
 
         $name = $rule->firewall ?: Helpers::getTopModuleName($request->getPresenterName());
         $firewall = call_user_func($this->firewallResolver, $name);
         if (!$firewall) {
-            throw new UnexpectedValueException("Could not find firewall named '$name'.");
+            throw new UnexpectedValueException(sprintf('Could not find firewall named "%s".', $name));
         }
 
         if (!in_array($rule->role, $firewall->getIdentity()->getRoles(), true)) {
-            throw new VerificationException($rule, "Role '$rule->role' is required for this request.");
+            throw new VerificationException($rule, sprintf('Role "%s" is required for this request.', $rule->role));
         }
     }
 }

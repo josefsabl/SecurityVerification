@@ -73,7 +73,7 @@ class PrivilegeRuleTest extends Unit
             $this->handler->checkRule($rule, $request);
             self::fail();
         } catch (VerificationException $e) {
-            self::assertSame('Required privilege \'resource / privilege\' is not granted.', $e->getMessage());
+            self::assertSame('Required privilege "resource / privilege" is not granted.', $e->getMessage());
             self::assertSame($rule, $e->getRule());
         }
     }
@@ -109,7 +109,7 @@ class PrivilegeRuleTest extends Unit
             $this->handler->checkRule($rule, $request);
             self::fail();
         } catch (VerificationException $e) {
-            self::assertSame('Required privilege \'Test / privilege\' is not granted.', $e->getMessage());
+            self::assertSame('Required privilege "Test / privilege" is not granted.', $e->getMessage());
             self::assertSame($rule, $e->getRule());
         }
     }
@@ -166,7 +166,7 @@ class PrivilegeRuleTest extends Unit
             $this->handler->checkRule($rule, $request);
             self::fail();
         } catch (VerificationException $e) {
-            self::assertSame('Required privilege \'entity / privilege\' is not granted.', $e->getMessage());
+            self::assertSame('Required privilege "entity / privilege" is not granted.', $e->getMessage());
             self::assertSame($rule, $e->getRule());
         }
     }
@@ -203,7 +203,7 @@ class PrivilegeRuleTest extends Unit
             $this->handler->checkRule($rule, $request);
             self::fail();
         } catch (InvalidArgumentException $e) {
-            self::assertSame('Resource \'$entity\' is not an instance of Nette\Security\IResource.', $e->getMessage());
+            self::assertSame('Resource "$entity" is not an instance of Nette\Security\IResource.', $e->getMessage());
         }
     }
 

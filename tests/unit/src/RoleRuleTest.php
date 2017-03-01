@@ -68,7 +68,7 @@ class RoleRuleTest extends Unit
             $this->handler->checkRule($rule, $request);
             self::fail();
         } catch (VerificationException $e) {
-            self::assertSame('Role \'role\' is required for this request.', $e->getMessage());
+            self::assertSame('Role "role" is required for this request.', $e->getMessage());
             self::assertSame($rule, $e->getRule());
         }
     }

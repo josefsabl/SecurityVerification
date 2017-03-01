@@ -48,19 +48,19 @@ class PrivilegeRuleHandler implements RuleHandlerInterface
     public function checkRule(RuleInterface $rule, Request $request, $component = null)
     {
         if (!$rule instanceof Privilege) {
-            throw new InvalidArgumentException('Unknown rule \''.get_class($rule).'\' given.');
+            throw new InvalidArgumentException(sprintf('Unknown rule "%s" given.', get_class($rule)));
         }
 
         $name = $rule->authorizator ?: Helpers::getTopModuleName($request->getPresenterName());
         $authorizator = call_user_func($this->authorizatorResolver, $name);
         if (!$authorizator) {
-            throw new UnexpectedValueException("Could not find authorizator named '$name'.");
+            throw new UnexpectedValueException(sprintf('Could not find authorizator named "%s".', $name));
         }
 
         $resource = $this->resolveResource($rule->resource, $request, $component);
         if (!$authorizator->isAllowed($resource, $rule->privilege)) {
             $resourceId = $resource instanceof IResource ? $resource->getResourceId() : $resource;
-            throw new VerificationException($rule, "Required privilege '$resourceId / $rule->privilege' is not granted.");
+            throw new VerificationException($rule, sprintf('Required privilege "%s / %s" is not granted.', $resourceId, $rule->privilege));
         }
     }
 
@@ -80,12 +80,14 @@ class PrivilegeRuleHandler implements RuleHandlerInterface
         if ($component !== null) {
             $parameter = $component.'-'.$parameter;
         }
+
         if ($parameter === 'this') {
             return Helpers::getPresenterName($request->getPresenterName());
         }
+
         $object = $this->propertyAccessor->getValue((object) $request->getParameters(), $parameter);
         if (!$object instanceof IResource) {
-            throw new InvalidArgumentException("Resource '$resource' is not an instance of Nette\Security\IResource.");
+            throw new InvalidArgumentException(sprintf('Resource "%s" is not an instance of Nette\Security\IResource.', $resource));
         }
 
         return $object;
