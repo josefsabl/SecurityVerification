@@ -15,5 +15,5 @@ Installation
 The best way to install Arachne/SecurityVerification is using [Composer](http://getcomposer.org/):
 
 ```sh
-$ composer require arachne/security-verification
+composer require arachne/security-verification
 ```
