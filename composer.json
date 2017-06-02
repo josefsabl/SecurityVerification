@@ -30,7 +30,10 @@
     "autoload": {
         "psr-4": {
             "Arachne\\SecurityVerification\\": "src"
-        }
+        },
+        "files": [
+            "vendor/codeception/codeception/shim.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
