@@ -39,9 +39,9 @@ class PrivilegeRuleHandler implements RuleHandlerInterface
     }
 
     /**
-     * @param Privilege $rule
-     * @param Request   $request
-     * @param string    $component
+     * @param Privilege   $rule
+     * @param Request     $request
+     * @param string|null $component
      *
      * @throws VerificationException
      */
@@ -65,9 +65,9 @@ class PrivilegeRuleHandler implements RuleHandlerInterface
     }
 
     /**
-     * @param string  $resource
-     * @param Request $request
-     * @param string  $component
+     * @param string      $resource
+     * @param Request     $request
+     * @param string|null $component
      *
      * @return string|IResource
      */
