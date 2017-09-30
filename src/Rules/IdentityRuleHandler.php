@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arachne\SecurityVerification\Rules;
 
 use Arachne\SecurityVerification\Exception\InvalidArgumentException;
