@@ -28,24 +28,18 @@ class PrivilegeRuleHandler implements RuleHandlerInterface
      */
     private $propertyAccessor;
 
-    /**
-     * @param callable                  $authorizatorResolver
-     * @param PropertyAccessorInterface $propertyAccessor
-     */
-    public function __construct(callable $authorizatorResolver, PropertyAccessorInterface $propertyAccessor = null)
+    public function __construct(callable $authorizatorResolver, ?PropertyAccessorInterface $propertyAccessor = null)
     {
         $this->authorizatorResolver = $authorizatorResolver;
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
     }
 
     /**
-     * @param Privilege   $rule
-     * @param Request     $request
-     * @param string|null $component
+     * @param Privilege $rule
      *
      * @throws VerificationException
      */
-    public function checkRule(RuleInterface $rule, Request $request, $component = null)
+    public function checkRule(RuleInterface $rule, Request $request, ?string $component = null): void
     {
         if (!$rule instanceof Privilege) {
             throw new InvalidArgumentException(sprintf('Unknown rule "%s" given.', get_class($rule)));
@@ -65,13 +59,9 @@ class PrivilegeRuleHandler implements RuleHandlerInterface
     }
 
     /**
-     * @param string      $resource
-     * @param Request     $request
-     * @param string|null $component
-     *
      * @return string|IResource
      */
-    private function resolveResource($resource, Request $request, $component)
+    private function resolveResource(string $resource, Request $request, ?string $component)
     {
         if (strncmp($resource, '$', 1) !== 0) {
             return $resource;

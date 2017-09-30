@@ -27,7 +27,7 @@ class SecurityVerificationTest extends Unit
      */
     private $verifier;
 
-    public function _before()
+    public function _before(): void
     {
         $this->tester
             ->grabService(Container::class)
@@ -38,7 +38,7 @@ class SecurityVerificationTest extends Unit
         $this->verifier = $this->tester->grabService(Verifier::class);
     }
 
-    public function testActionEdit()
+    public function testActionEdit(): void
     {
         $request = new Request(
             'Admin:Article',
@@ -50,7 +50,7 @@ class SecurityVerificationTest extends Unit
         self::assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
-    public function testActionHide()
+    public function testActionHide(): void
     {
         $request = new Request('Admin:Article', 'GET', [
             Presenter::ACTION_KEY => 'hide',
@@ -63,7 +63,7 @@ class SecurityVerificationTest extends Unit
      * This test requires all annotations of the same type to be checked, not just the last one.
      * It will fail if Doctrine\Common\Annotations\IndexedReader is used.
      */
-    public function testActionDelete()
+    public function testActionDelete(): void
     {
         $request = new Request(
             'Admin:Article',
@@ -76,7 +76,7 @@ class SecurityVerificationTest extends Unit
         self::assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
-    public function testActionPublishAllowed()
+    public function testActionPublishAllowed(): void
     {
         $request = new Request(
             'Admin:Article',
@@ -90,7 +90,7 @@ class SecurityVerificationTest extends Unit
         self::assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
-    public function testActionPublishDisallowed()
+    public function testActionPublishDisallowed(): void
     {
         $request = new Request(
             'Admin:Article',
@@ -104,7 +104,7 @@ class SecurityVerificationTest extends Unit
         self::assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
-    public function testActionPublishParentAllowed()
+    public function testActionPublishParentAllowed(): void
     {
         $request = new Request(
             'Admin:Article',
@@ -118,7 +118,7 @@ class SecurityVerificationTest extends Unit
         self::assertTrue($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
-    public function testActionPublishParentDisallowed()
+    public function testActionPublishParentDisallowed(): void
     {
         $request = new Request(
             'Admin:Article',
@@ -132,7 +132,7 @@ class SecurityVerificationTest extends Unit
         self::assertFalse($this->verifier->isLinkVerified($request, new ArticlePresenter()));
     }
 
-    public function testInnerRules()
+    public function testInnerRules(): void
     {
         $request = new Request(
             'Admin:Article',

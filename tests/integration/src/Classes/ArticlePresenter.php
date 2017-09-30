@@ -19,14 +19,14 @@ class ArticlePresenter extends Presenter
     /**
      * @Privilege(resource = "Article", privilege = "edit")
      */
-    public function actionEdit($id)
+    public function actionEdit($id): void
     {
     }
 
     /**
      * @Privilege(resource = "Article", privilege = "hide")
      */
-    public function actionHide($id)
+    public function actionHide($id): void
     {
     }
 
@@ -34,21 +34,21 @@ class ArticlePresenter extends Presenter
      * @Privilege(resource = "Article", privilege = "hide")
      * @Privilege(resource = "Article", privilege = "edit")
      */
-    public function actionDelete($id)
+    public function actionDelete($id): void
     {
     }
 
     /**
      * @Privilege(resource = "$article", privilege = "publish")
      */
-    public function actionPublish(ArticleEntity $article)
+    public function actionPublish(ArticleEntity $article): void
     {
     }
 
     /**
      * @Privilege(resource = "$article.parent", privilege = "publish")
      */
-    public function actionPublishParent(ArticleEntity $article)
+    public function actionPublishParent(ArticleEntity $article): void
     {
     }
 
@@ -59,7 +59,7 @@ class ArticlePresenter extends Presenter
      *   @Privilege(resource = "Article", privilege = "hide"),
      * })
      */
-    public function actionInnerRules()
+    public function actionInnerRules(): void
     {
     }
 }

@@ -13,10 +13,7 @@ use Nette\Security\IIdentity;
  */
 class AuthorizatorFactory
 {
-    /**
-     * @return AuthorizatorInterface
-     */
-    public function create(FirewallInterface $firewall)
+    public function create(FirewallInterface $firewall): AuthorizatorInterface
     {
         $permission = new Permission();
         $permission->addRole('redactor');

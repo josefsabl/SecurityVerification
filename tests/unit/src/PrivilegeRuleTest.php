@@ -30,7 +30,7 @@ class PrivilegeRuleTest extends Unit
      */
     private $authorizatorHandle;
 
-    protected function _before()
+    protected function _before(): void
     {
         $this->authorizatorHandle = Phony::mock(AuthorizatorInterface::class);
 
@@ -42,7 +42,7 @@ class PrivilegeRuleTest extends Unit
         $this->handler = new PrivilegeRuleHandler($authorizatorResolver);
     }
 
-    public function testPrivilegeTrue()
+    public function testPrivilegeTrue(): void
     {
         $rule = new Privilege();
         $rule->resource = 'resource';
@@ -57,7 +57,7 @@ class PrivilegeRuleTest extends Unit
         $this->handler->checkRule($rule, $request);
     }
 
-    public function testPrivilegeFalse()
+    public function testPrivilegeFalse(): void
     {
         $rule = new Privilege();
         $rule->resource = 'resource';
@@ -78,7 +78,7 @@ class PrivilegeRuleTest extends Unit
         }
     }
 
-    public function testPrivilegeThis()
+    public function testPrivilegeThis(): void
     {
         $rule = new Privilege();
         $rule->resource = '$this';
@@ -93,7 +93,7 @@ class PrivilegeRuleTest extends Unit
         $this->handler->checkRule($rule, $request);
     }
 
-    public function testPrivilegeThisFalse()
+    public function testPrivilegeThisFalse(): void
     {
         $rule = new Privilege();
         $rule->resource = '$this';
@@ -114,7 +114,7 @@ class PrivilegeRuleTest extends Unit
         }
     }
 
-    public function testPrivilegeResource()
+    public function testPrivilegeResource(): void
     {
         $rule = new Privilege();
         $rule->resource = '$entity';
@@ -136,7 +136,7 @@ class PrivilegeRuleTest extends Unit
         $this->handler->checkRule($rule, $request);
     }
 
-    public function testPrivilegeResourceFalse()
+    public function testPrivilegeResourceFalse(): void
     {
         $rule = new Privilege();
         $rule->resource = '$entity';
@@ -171,7 +171,7 @@ class PrivilegeRuleTest extends Unit
         }
     }
 
-    public function testPrivilegeWrongParameter()
+    public function testPrivilegeWrongParameter(): void
     {
         $rule = new Privilege();
         $rule->resource = '$entity';
@@ -185,7 +185,7 @@ class PrivilegeRuleTest extends Unit
         }
     }
 
-    public function testPrivilegedMissingParameter()
+    public function testPrivilegedMissingParameter(): void
     {
         $rule = new Privilege();
         $rule->resource = '$entity';
@@ -207,7 +207,7 @@ class PrivilegeRuleTest extends Unit
         }
     }
 
-    public function testUnknownRule()
+    public function testUnknownRule(): void
     {
         $rule = Phony::mock(RuleInterface::class)->get();
         $request = new Request('Test', 'GET', []);

@@ -29,7 +29,7 @@ class NoIdentityRuleTest extends Unit
      */
     private $firewallHandle;
 
-    protected function _before()
+    protected function _before(): void
     {
         $this->firewallHandle = Phony::mock(FirewallInterface::class);
 
@@ -41,7 +41,7 @@ class NoIdentityRuleTest extends Unit
         $this->handler = new NoIdentityRuleHandler($firewallResolver);
     }
 
-    public function testNoIdentityTrue()
+    public function testNoIdentityTrue(): void
     {
         $rule = new NoIdentity();
         $request = new Request('Admin:Test', 'GET', []);
@@ -53,7 +53,7 @@ class NoIdentityRuleTest extends Unit
         $this->handler->checkRule($rule, $request);
     }
 
-    public function testNoIdentityFalse()
+    public function testNoIdentityFalse(): void
     {
         $rule = new NoIdentity();
         $request = new Request('Admin:Test', 'GET', []);
@@ -70,7 +70,7 @@ class NoIdentityRuleTest extends Unit
         }
     }
 
-    public function testUnknownRule()
+    public function testUnknownRule(): void
     {
         $rule = Phony::mock(RuleInterface::class)->get();
         $request = new Request('Test', 'GET', []);

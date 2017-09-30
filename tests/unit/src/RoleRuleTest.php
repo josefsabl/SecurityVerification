@@ -29,7 +29,7 @@ class RoleRuleTest extends Unit
      */
     private $firewallHandle;
 
-    protected function _before()
+    protected function _before(): void
     {
         $this->firewallHandle = Phony::mock(FirewallInterface::class);
 
@@ -41,7 +41,7 @@ class RoleRuleTest extends Unit
         $this->handler = new RoleRuleHandler($firewallResolver);
     }
 
-    public function testRoleTrue()
+    public function testRoleTrue(): void
     {
         $rule = new Role();
         $rule->role = 'role';
@@ -54,7 +54,7 @@ class RoleRuleTest extends Unit
         $this->handler->checkRule($rule, $request);
     }
 
-    public function testRoleFalse()
+    public function testRoleFalse(): void
     {
         $rule = new Role();
         $rule->role = 'role';
@@ -73,7 +73,7 @@ class RoleRuleTest extends Unit
         }
     }
 
-    public function testUnknownRule()
+    public function testUnknownRule(): void
     {
         $rule = Phony::mock(RuleInterface::class)->get();
         $request = new Request('Test', 'GET', []);

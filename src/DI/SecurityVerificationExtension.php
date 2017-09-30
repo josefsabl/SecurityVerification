@@ -21,7 +21,7 @@ use Nette\Utils\AssertionException;
  */
 class SecurityVerificationExtension extends CompilerExtension
 {
-    public function loadConfiguration()
+    public function loadConfiguration(): void
     {
         $this->getExtension(SecurityExtension::class);
 
@@ -64,7 +64,7 @@ class SecurityVerificationExtension extends CompilerExtension
             );
     }
 
-    public function beforeCompile()
+    public function beforeCompile(): void
     {
         $builder = $this->getContainerBuilder();
 
@@ -110,12 +110,7 @@ class SecurityVerificationExtension extends CompilerExtension
             );
     }
 
-    /**
-     * @param string $class
-     *
-     * @return CompilerExtension
-     */
-    private function getExtension($class)
+    private function getExtension(string $class): CompilerExtension
     {
         $extensions = $this->compiler->getExtensions($class);
 

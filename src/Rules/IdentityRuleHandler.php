@@ -20,9 +20,6 @@ class IdentityRuleHandler implements RuleHandlerInterface
      */
     private $firewallResolver;
 
-    /**
-     * @param callable $firewallResolver
-     */
     public function __construct(callable $firewallResolver)
     {
         $this->firewallResolver = $firewallResolver;
@@ -30,12 +27,10 @@ class IdentityRuleHandler implements RuleHandlerInterface
 
     /**
      * @param Identity $rule
-     * @param Request  $request
-     * @param string   $component
      *
      * @throws VerificationException
      */
-    public function checkRule(RuleInterface $rule, Request $request, $component = null)
+    public function checkRule(RuleInterface $rule, Request $request, ?string $component = null): void
     {
         if (!$rule instanceof Identity) {
             throw new InvalidArgumentException(sprintf('Unknown rule "%s" given.', get_class($rule)));

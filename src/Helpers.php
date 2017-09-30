@@ -11,12 +11,7 @@ use Arachne\SecurityVerification\Exception\InvalidArgumentException;
  */
 class Helpers
 {
-    /**
-     * @param string $presenter
-     *
-     * @return string
-     */
-    public static function getTopModuleName($presenter)
+    public static function getTopModuleName(string $presenter): string
     {
         $position = strpos($presenter, ':');
         if ($position === false) {
@@ -26,12 +21,7 @@ class Helpers
         return substr($presenter, 0, $position);
     }
 
-    /**
-     * @param string $presenter
-     *
-     * @return string
-     */
-    public static function getPresenterName($presenter)
+    public static function getPresenterName(string $presenter): string
     {
         return substr($presenter, strrpos(':'.$presenter, ':'));
     }
