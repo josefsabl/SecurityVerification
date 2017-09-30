@@ -28,7 +28,7 @@ class SecurityVerificationExtension extends CompilerExtension
         $builder = $this->getContainerBuilder();
 
         $builder->addDefinition($this->prefix('handler.identity'))
-            ->setClass(IdentityRuleHandler::class)
+            ->setType(IdentityRuleHandler::class)
             ->addTag(
                 VerifierExtension::TAG_HANDLER,
                 [
@@ -37,7 +37,7 @@ class SecurityVerificationExtension extends CompilerExtension
             );
 
         $builder->addDefinition($this->prefix('handler.noIdentity'))
-            ->setClass(NoIdentityRuleHandler::class)
+            ->setType(NoIdentityRuleHandler::class)
             ->addTag(
                 VerifierExtension::TAG_HANDLER,
                 [
@@ -46,7 +46,7 @@ class SecurityVerificationExtension extends CompilerExtension
             );
 
         $builder->addDefinition($this->prefix('handler.privilege'))
-            ->setClass(PrivilegeRuleHandler::class)
+            ->setType(PrivilegeRuleHandler::class)
             ->addTag(
                 VerifierExtension::TAG_HANDLER,
                 [
@@ -55,7 +55,7 @@ class SecurityVerificationExtension extends CompilerExtension
             );
 
         $builder->addDefinition($this->prefix('handler.role'))
-            ->setClass(RoleRuleHandler::class)
+            ->setType(RoleRuleHandler::class)
             ->addTag(
                 VerifierExtension::TAG_HANDLER,
                 [
