@@ -21,7 +21,7 @@ class ArticleEntity implements IResource
      */
     private $parent;
 
-    public function __construct(int $ownerId, ?ArticleEntity $parent = null)
+    public function __construct(int $ownerId, ?self $parent = null)
     {
         $this->ownerId = $ownerId;
         $this->parent = $parent;
@@ -32,7 +32,7 @@ class ArticleEntity implements IResource
         return $this->ownerId;
     }
 
-    public function getParent(): ?ArticleEntity
+    public function getParent(): ?self
     {
         return $this->parent;
     }
