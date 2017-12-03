@@ -9,7 +9,6 @@ use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\SecurityVerification\Rules\Privilege;
 use Arachne\SecurityVerification\Rules\PrivilegeRuleHandler;
 use Arachne\Verifier\Exception\VerificationException;
-use Arachne\Verifier\RuleInterface;
 use Codeception\Test\Unit;
 use Eloquent\Phony\Mock\Handle\InstanceHandle;
 use Eloquent\Phony\Phpunit\Phony;
@@ -206,18 +205,6 @@ class PrivilegeRuleTest extends Unit
             self::fail();
         } catch (InvalidArgumentException $e) {
             self::assertSame('Resource "$entity" is not an instance of Nette\Security\IResource.', $e->getMessage());
-        }
-    }
-
-    public function testUnknownRule(): void
-    {
-        $rule = Phony::mock(RuleInterface::class)->get();
-        $request = new Request('Test', 'GET', []);
-
-        try {
-            $this->handler->checkRule($rule, $request);
-            self::fail();
-        } catch (InvalidArgumentException $e) {
         }
     }
 }

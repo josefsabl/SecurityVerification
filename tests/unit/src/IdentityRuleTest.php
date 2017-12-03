@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use Arachne\Security\Authentication\FirewallInterface;
-use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\SecurityVerification\Rules\Identity;
 use Arachne\SecurityVerification\Rules\IdentityRuleHandler;
 use Arachne\Verifier\Exception\VerificationException;
-use Arachne\Verifier\RuleInterface;
 use Codeception\Test\Unit;
 use Eloquent\Phony\Mock\Handle\InstanceHandle;
 use Eloquent\Phony\Phpunit\Phony;
@@ -69,18 +67,6 @@ class IdentityRuleTest extends Unit
             self::fail();
         } catch (VerificationException $e) {
             self::assertSame('User must be logged in for this request.', $e->getMessage());
-        }
-    }
-
-    public function testUnknownRule(): void
-    {
-        $rule = Phony::mock(RuleInterface::class)->get();
-        $request = new Request('Test', 'GET', []);
-
-        try {
-            $this->handler->checkRule($rule, $request);
-            self::fail();
-        } catch (InvalidArgumentException $e) {
         }
     }
 }
