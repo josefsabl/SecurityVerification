@@ -15,3 +15,10 @@ The best way to install Arachne/SecurityVerification is using [Composer](http://
 ```sh
 composer require arachne/security-verification
 ```
+
+Now you need to register the extension using your [neon](https://ne-on.org) config file.
+
+```neon
+extensions:
+    arachne.securityVerification: Arachne\SecurityVerification\DI\SecurityVerificationExtension
+```
