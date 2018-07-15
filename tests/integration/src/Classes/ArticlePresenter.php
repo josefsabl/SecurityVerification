@@ -21,14 +21,14 @@ class ArticlePresenter extends Presenter
     /**
      * @Privilege(resource = "Article", privilege = "edit")
      */
-    public function actionEdit($id): void
+    public function actionEdit(int $id): void
     {
     }
 
     /**
      * @Privilege(resource = "Article", privilege = "hide")
      */
-    public function actionHide($id): void
+    public function actionHide(int $id): void
     {
     }
 
@@ -36,7 +36,7 @@ class ArticlePresenter extends Presenter
      * @Privilege(resource = "Article", privilege = "hide")
      * @Privilege(resource = "Article", privilege = "edit")
      */
-    public function actionDelete($id): void
+    public function actionDelete(int $id): void
     {
     }
 

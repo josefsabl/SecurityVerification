@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arachne\SecurityVerification\Rules;
 
+use Arachne\Security\Authorization\AuthorizatorInterface;
 use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\SecurityVerification\Exception\UnexpectedValueException;
 use Arachne\SecurityVerification\Helpers;
@@ -37,8 +38,6 @@ class PrivilegeRuleHandler implements RuleHandlerInterface
     }
 
     /**
-     * @param Privilege $rule
-     *
      * @throws VerificationException
      */
     public function checkRule(RuleInterface $rule, Request $request, ?string $component = null): void
@@ -49,7 +48,7 @@ class PrivilegeRuleHandler implements RuleHandlerInterface
 
         $name = $rule->authorizator ?: Helpers::getTopModuleName($request->getPresenterName());
         $authorizator = call_user_func($this->authorizatorResolver, $name);
-        if (!$authorizator) {
+        if (!$authorizator instanceof AuthorizatorInterface) {
             throw new UnexpectedValueException(sprintf('Could not find authorizator named "%s".', $name));
         }
 

@@ -25,6 +25,6 @@ class Helpers
 
     public static function getPresenterName(string $presenter): string
     {
-        return substr($presenter, strrpos(':'.$presenter, ':'));
+        return substr($presenter, (int) strrpos(':'.$presenter, ':'));
     }
 }
