@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arachne\SecurityVerification\Rules;
 
+use Arachne\Security\Authentication\FirewallInterface;
 use Arachne\SecurityVerification\Exception\InvalidArgumentException;
 use Arachne\SecurityVerification\Exception\UnexpectedValueException;
 use Arachne\SecurityVerification\Helpers;
@@ -28,8 +29,6 @@ class IdentityRuleHandler implements RuleHandlerInterface
     }
 
     /**
-     * @param Identity $rule
-     *
      * @throws VerificationException
      */
     public function checkRule(RuleInterface $rule, Request $request, ?string $component = null): void
@@ -40,11 +39,11 @@ class IdentityRuleHandler implements RuleHandlerInterface
 
         $name = $rule->firewall ?: Helpers::getTopModuleName($request->getPresenterName());
         $firewall = call_user_func($this->firewallResolver, $name);
-        if (!$firewall) {
+        if (!$firewall instanceof FirewallInterface) {
             throw new UnexpectedValueException(sprintf('Could not find firewall named "%s".', $name));
         }
 
-        if (!$firewall->getIdentity()) {
+        if ($firewall->getIdentity() === null) {
             throw new VerificationException($rule, 'User must be logged in for this request.');
         }
     }
